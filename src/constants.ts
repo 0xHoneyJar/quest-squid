@@ -7,6 +7,7 @@ import * as erc721Abi from "./abi/erc721";
 import * as hookVaultAbi from "./abi/hookVault";
 import * as simplifiedUniswapAbi from "./abi/simplifiedUniswap";
 import * as uniswapAbi from "./abi/uniswap";
+import * as bgtAbi from "./abi/bgt";
 
 export enum CHAINS {
   BASE = "base",
@@ -30,6 +31,7 @@ export enum QUESTS {
   ZORB_MANIA = "Zorb Mania",
   OOGA_BOOGA_TRIBE = "Ooga Booga Tribe",
   UNION_FUR_AND_FRIENDSHIP = "Bera Union: Fur and Friendship",
+  DELEGATOOOR = "Delegatooor",
 }
 
 export enum QUEST_TYPES {
@@ -40,6 +42,7 @@ export enum QUEST_TYPES {
   TOKENS_MINTED = "TOKENS_MINTED",
   TOKENS_DEPOSITED = "TOKENS_DEPOSITED",
   UNISWAP_MINT = "UNISWAP_MINT",
+  DELEGATE = "DELEGATE",
 }
 
 type AbiWithEvents = {
@@ -79,6 +82,10 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.UNISWAP_MINT]: {
     eventName: "Mint",
     abi: simplifiedUniswapAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.DELEGATE]: {
+    eventName: "ActivateBoost",
+    abi: bgtAbi as AbiWithEvents,
   },
 } as const;
 
