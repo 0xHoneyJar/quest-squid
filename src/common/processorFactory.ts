@@ -22,7 +22,12 @@ export function createProcessor(chain: CHAINS) {
   const questConfig = QUESTS_CONFIG[chain];
   const addressToTopics: Record<
     string,
-    { topics: string[]; includeTransaction: boolean }
+    {
+      topics0: string[];
+      topics1?: string[];
+      topics2?: string[];
+      includeTransaction: boolean;
+    }
   > = {};
 
   // Collect relevant addresses and topics
@@ -30,14 +35,27 @@ export function createProcessor(chain: CHAINS) {
     for (const step of quest.steps) {
       const address = step.address.toLowerCase();
       if (!addressToTopics[address]) {
-        addressToTopics[address] = { topics: [], includeTransaction: false };
+        addressToTopics[address] = {
+          topics0: [],
+          topics1: [],
+          topics2: [],
+          includeTransaction: false,
+        };
       }
 
       const questTypeInfo = QUEST_TYPE_INFO[step.type as QUEST_TYPES];
       const topic = questTypeInfo.abi.events[questTypeInfo.eventName].topic;
 
-      if (!addressToTopics[address].topics.includes(topic)) {
-        addressToTopics[address].topics.push(topic);
+      if (!addressToTopics[address].topics0.includes(topic)) {
+        addressToTopics[address].topics0.push(topic);
+      }
+
+      if (step.filterCriteria?.topic1) {
+        addressToTopics[address].topics1 = [step.filterCriteria.topic1];
+      }
+
+      if (step.filterCriteria?.topic2) {
+        addressToTopics[address].topics2 = [step.filterCriteria.topic2];
       }
 
       // Set includeTransaction flag if specified in the step config
@@ -61,12 +79,15 @@ export function createProcessor(chain: CHAINS) {
     .setBlockRange({ from: BLOCK_RANGES[chain].from });
 
   // Add logs for each address with its specific topics and include transaction if specified
-  for (const [address, { topics, includeTransaction }] of Object.entries(
-    addressToTopics
-  )) {
+  for (const [
+    address,
+    { topics0, topics1, topics2, includeTransaction },
+  ] of Object.entries(addressToTopics)) {
     processor.addLog({
       address: [address],
-      topic0: topics,
+      topic0: topics0,
+      topic1: topics1,
+      topic2: topics2,
       transaction: includeTransaction,
     });
   }

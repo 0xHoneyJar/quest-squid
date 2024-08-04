@@ -1,13 +1,14 @@
 import { AbiEvent } from "@subsquid/evm-abi";
 import { parseEther, zeroAddress } from "viem";
+import * as bgtAbi from "./abi/bgt";
 import * as boogaBearsAbi from "./abi/boogaBears";
 import * as erc1155Abi from "./abi/erc1155";
 import * as erc20Abi from "./abi/erc20";
 import * as erc721Abi from "./abi/erc721";
 import * as hookVaultAbi from "./abi/hookVault";
+import * as rewardsVaultAbi from "./abi/rewardsVault";
 import * as simplifiedUniswapAbi from "./abi/simplifiedUniswap";
 import * as uniswapAbi from "./abi/uniswap";
-import * as bgtAbi from "./abi/bgt";
 
 export enum CHAINS {
   BASE = "base",
@@ -32,6 +33,7 @@ export enum QUESTS {
   OOGA_BOOGA_TRIBE = "Ooga Booga Tribe",
   UNION_FUR_AND_FRIENDSHIP = "Bera Union: Fur and Friendship",
   DELEGATOOOR = "Delegatooor",
+  STAKOOOR = "Stakooor",
 }
 
 export enum QUEST_TYPES {
@@ -43,6 +45,8 @@ export enum QUEST_TYPES {
   TOKENS_DEPOSITED = "TOKENS_DEPOSITED",
   UNISWAP_MINT = "UNISWAP_MINT",
   DELEGATE = "DELEGATE",
+  STAKE = "STAKE",
+  CLAIM_BGT_REWARD = "CLAIM_BGT_REWARD",
 }
 
 type AbiWithEvents = {
@@ -87,6 +91,14 @@ export const QUEST_TYPE_INFO: Record<
     eventName: "ActivateBoost",
     abi: bgtAbi as AbiWithEvents,
   },
+  [QUEST_TYPES.STAKE]: {
+    eventName: "Staked",
+    abi: rewardsVaultAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.CLAIM_BGT_REWARD]: {
+    eventName: "RewardPaid",
+    abi: rewardsVaultAbi as AbiWithEvents,
+  },
 } as const;
 
 export const APICULTURE_ADDRESS = "0x6cfb9280767a3596ee6af887d900014a755ffc75";
@@ -99,6 +111,10 @@ export const BOOGA_BEARS_ADDRESS = "0x6Ba79f573EdFE305e7Dbd79902BC69436e197834";
 export const MYSTERY_BOX_ADDRESS = "0xBB7B805B257d7C76CA9435B3ffe780355E4C4B17";
 export const STDV4TNT_ADDRESS = "0x355bb949d80331516Fc7F4CF81229021187d67d2";
 export const KODIAK_POOL_ADDRESS = "0xF331ABFfE9cB2b966Ab4C102ee268f4e1ad8e24b";
+export const BGT_ADDRESS = "0xbDa130737BDd9618301681329bF2e46A016ff9Ad";
+// HONEY-WBERA Rewards Vault
+export const REWARDS_VAULT_ADDRESS =
+  "0xAD57d7d39a487C04a44D3522b910421888Fb9C6d";
 
 type QuestStepConfig = {
   readonly type: QUEST_TYPES;
@@ -116,6 +132,30 @@ type QuestConfig = {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
+    [QUESTS.STAKOOOR]: {
+      steps: [
+        {
+          type: QUEST_TYPES.STAKE,
+          address: REWARDS_VAULT_ADDRESS,
+        },
+        {
+          type: QUEST_TYPES.CLAIM_BGT_REWARD,
+          address: REWARDS_VAULT_ADDRESS,
+        },
+      ],
+    },
+    [QUESTS.DELEGATOOOR]: {
+      steps: [
+        {
+          type: QUEST_TYPES.DELEGATE,
+          address: BGT_ADDRESS,
+          filterCriteria: {
+            topic2: "0x40495A781095932e2FC8dccA69F5e358711Fdd41",
+          },
+        },
+      ],
+      startTime: 1722183600,
+    },
     [QUESTS.RUN_IT_BACK_TURBO]: {
       steps: [
         {
