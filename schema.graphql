@@ -40,3 +40,22 @@ type StepProgress @entity {
   progressAmount: BigInt!
   completed: Boolean! @index
 }
+
+type Mission @entity {
+  id: ID!
+  name: String! @index
+  chain: String!
+  address: String!
+  startTime: Int!
+  startStreak: String!
+  endStreak: String!
+}
+
+type UserMissionProgress @entity {
+  id: ID!
+  address: String! @index
+  mission: Mission!
+  lastActivationTimestamp: Int!
+  currentStreak: Int!
+  longestStreak: Int!
+}

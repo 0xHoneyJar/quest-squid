@@ -49,6 +49,11 @@ export enum QUEST_TYPES {
   CLAIM_BGT_REWARD = "CLAIM_BGT_REWARD",
 }
 
+export enum MISSION_TYPES {
+  ACTIVATE_BOOST = "ACTIVATE_BOOST",
+  DROP_BOOST = "DROP_BOOST",
+}
+
 type AbiWithEvents = {
   events: {
     [eventName: string]: AbiEvent<any>;
@@ -101,6 +106,20 @@ export const QUEST_TYPE_INFO: Record<
   },
 } as const;
 
+export const MISSION_TYPE_INFO: Record<
+  MISSION_TYPES,
+  { eventName: string; abi: AbiWithEvents }
+> = {
+  [MISSION_TYPES.ACTIVATE_BOOST]: {
+    eventName: "ActivateBoost",
+    abi: bgtAbi as AbiWithEvents,
+  },
+  [MISSION_TYPES.DROP_BOOST]: {
+    eventName: "DropBoost",
+    abi: bgtAbi as AbiWithEvents,
+  },
+};
+
 export const APICULTURE_ADDRESS = "0x6cfb9280767a3596ee6af887d900014a755ffc75";
 export const BULLAS_ADDRESS = "0x98F6b7Db312dD276b9a7bD08e3937e68e662202C";
 export const EGGS_ADDRESS = "0x30b8c95a6e7170a1322453b47722f10fea185b0f";
@@ -128,6 +147,13 @@ type QuestConfig = {
   steps: QuestStepConfig[];
   startTime?: number;
   endTime?: number;
+};
+
+type MissionConfig = {
+  address: string;
+  startTime: number;
+  startStreak: MISSION_TYPES;
+  endStreak: MISSION_TYPES;
 };
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
@@ -338,6 +364,17 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
 } as const;
+
+export const MISSIONS_CONFIG: Record<string, Record<string, MissionConfig>> = {
+  [CHAINS.BERACHAIN]: {
+    "Daily Boost Activation": {
+      address: BGT_ADDRESS,
+      startTime: 1720461600,
+      startStreak: MISSION_TYPES.ACTIVATE_BOOST,
+      endStreak: MISSION_TYPES.DROP_BOOST,
+    },
+  },
+};
 
 export const BLOCK_RANGES = {
   [CHAINS.BASE]: {

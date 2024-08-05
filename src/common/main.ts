@@ -1,17 +1,29 @@
 import { AbiEvent } from "@subsquid/evm-abi";
+import { Log } from "@subsquid/evm-processor";
 import {
   CHAINS,
+  MISSIONS_CONFIG,
+  MISSION_TYPES,
+  MISSION_TYPE_INFO,
   QUESTS_CONFIG,
   QUEST_TYPES,
   QUEST_TYPE_INFO,
 } from "../constants";
-import { Quest, QuestStep, StepProgress, UserQuestProgress } from "../model";
+import {
+  Mission,
+  Quest,
+  QuestStep,
+  StepProgress,
+  UserMissionProgress,
+  UserQuestProgress,
+} from "../model";
 import { Context } from "./processorFactory";
 
 export function createMain(chain: CHAINS) {
   return async (ctx: Context) => {
     const quests: Map<string, Quest> = new Map();
     const questSteps: Map<string, QuestStep> = new Map();
+    const missions: Map<string, Mission> = new Map();
 
     // Initialize quests and quest steps
     for (const [questName, questConfig] of Object.entries(
@@ -41,6 +53,19 @@ export function createMain(chain: CHAINS) {
       });
 
       quests.set(questName, quest);
+    }
+
+    // Initialize missions
+    for (const [missionName, missionConfig] of Object.entries(
+      MISSIONS_CONFIG[chain] || {}
+    )) {
+      const mission = new Mission({ id: missionName });
+      mission.name = missionName;
+      mission.chain = chain;
+      mission.startTime = missionConfig.startTime;
+      mission.startStreak = missionConfig.startStreak;
+      mission.endStreak = missionConfig.endStreak;
+      missions.set(missionName, mission);
     }
 
     for (let block of ctx.blocks) {
@@ -114,11 +139,52 @@ export function createMain(chain: CHAINS) {
             }
           }
         }
+
+        // Process missions
+        for (const [missionName, mission] of missions) {
+          const missionConfig = MISSIONS_CONFIG[chain][missionName];
+          if (
+            log.address.toLowerCase() === missionConfig.address.toLowerCase()
+          ) {
+            const activateBoostInfo =
+              MISSION_TYPE_INFO[MISSION_TYPES.ACTIVATE_BOOST];
+            const dropBoostInfo = MISSION_TYPE_INFO[MISSION_TYPES.DROP_BOOST];
+
+            if (
+              activateBoostInfo.abi.events[activateBoostInfo.eventName].is(log)
+            ) {
+              const decodedLog =
+                activateBoostInfo.abi.events[
+                  activateBoostInfo.eventName
+                ].decode(log);
+              await handleMissionEvent(
+                ctx,
+                mission,
+                decodedLog,
+                log,
+                MISSION_TYPES.ACTIVATE_BOOST
+              );
+            } else if (
+              dropBoostInfo.abi.events[dropBoostInfo.eventName].is(log)
+            ) {
+              const decodedLog =
+                dropBoostInfo.abi.events[dropBoostInfo.eventName].decode(log);
+              await handleMissionEvent(
+                ctx,
+                mission,
+                decodedLog,
+                log,
+                MISSION_TYPES.DROP_BOOST
+              );
+            }
+          }
+        }
       }
     }
 
     await ctx.store.save([...quests.values()]);
     await ctx.store.save([...questSteps.values()]);
+    await ctx.store.save([...missions.values()]);
   };
 }
 
@@ -250,4 +316,53 @@ async function updateUserQuestProgress(
 
   await ctx.store.save(stepProgress);
   await ctx.store.save(userQuestProgress);
+}
+
+async function handleMissionEvent(
+  ctx: Context,
+  mission: Mission,
+  decodedLog: any,
+  log: Log,
+  eventType: MISSION_TYPES
+): Promise<void> {
+  const currentTimestamp = Math.floor(log.block.timestamp / 1000);
+  const userAddress = log.getTransaction()?.from.toLowerCase() || "";
+  const validator = decodedLog.validator.toLowerCase();
+
+  let userMissionProgress = await ctx.store.get(
+    UserMissionProgress,
+    `${userAddress}-${mission.id}`
+  );
+
+  if (!userMissionProgress) {
+    userMissionProgress = new UserMissionProgress({
+      id: `${userAddress}-${mission.id}`,
+      address: userAddress,
+      mission,
+      lastActivationTimestamp: 0,
+      currentStreak: 0,
+      longestStreak: 0,
+    });
+  }
+
+  if (eventType === MISSION_TYPES.ACTIVATE_BOOST) {
+    if (userMissionProgress.lastActivationTimestamp === 0) {
+      // First activation
+      userMissionProgress.currentStreak = 1;
+    } else {
+      // Increment streak
+      userMissionProgress.currentStreak += 1;
+    }
+    userMissionProgress.longestStreak = Math.max(
+      userMissionProgress.longestStreak,
+      userMissionProgress.currentStreak
+    );
+    userMissionProgress.lastActivationTimestamp = currentTimestamp;
+  } else if (eventType === MISSION_TYPES.DROP_BOOST) {
+    // Reset streak on boost drop (cancel)
+    userMissionProgress.currentStreak = 0;
+    userMissionProgress.lastActivationTimestamp = 0;
+  }
+
+  await ctx.store.save(userMissionProgress);
 }

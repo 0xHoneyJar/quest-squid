@@ -12,6 +12,8 @@ import {
   ARCHIVE_GATEWAYS,
   BLOCK_RANGES,
   CHAINS,
+  MISSIONS_CONFIG,
+  MISSION_TYPE_INFO,
   QUESTS_CONFIG,
   QUEST_TYPES,
   QUEST_TYPE_INFO,
@@ -89,6 +91,24 @@ export function createProcessor(chain: CHAINS) {
       topic1: topics1,
       topic2: topics2,
       transaction: includeTransaction,
+    });
+  }
+
+  // Add Mission events
+  for (const [missionName, missionConfig] of Object.entries(
+    MISSIONS_CONFIG[chain] || {}
+  )) {
+    processor.addLog({
+      address: [missionConfig.address],
+      topic0: [
+        MISSION_TYPE_INFO[missionConfig.startStreak].abi.events[
+          MISSION_TYPE_INFO[missionConfig.startStreak].eventName
+        ].topic,
+        MISSION_TYPE_INFO[missionConfig.endStreak].abi.events[
+          MISSION_TYPE_INFO[missionConfig.endStreak].eventName
+        ].topic,
+      ],
+      transaction: true,
     });
   }
 
