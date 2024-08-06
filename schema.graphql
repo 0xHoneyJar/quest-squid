@@ -47,8 +47,8 @@ type Mission @entity {
   chain: String!
   address: String!
   startTime: Int!
-  startStreak: String!
-  endStreak: String!
+  startStreak: JSON!
+  endStreak: JSON!
 }
 
 type UserMissionProgress @entity {
@@ -56,6 +56,7 @@ type UserMissionProgress @entity {
   address: String! @index
   mission: Mission!
   lastActivationTimestamp: Int!
+  lastStreakUpdateTimestamp: Int!
   currentStreak: Int!
   longestStreak: Int!
 }

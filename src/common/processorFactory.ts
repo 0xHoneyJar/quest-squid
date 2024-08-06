@@ -101,11 +101,11 @@ export function createProcessor(chain: CHAINS) {
     processor.addLog({
       address: [missionConfig.address],
       topic0: [
-        MISSION_TYPE_INFO[missionConfig.startStreak].abi.events[
-          MISSION_TYPE_INFO[missionConfig.startStreak].eventName
+        MISSION_TYPE_INFO[missionConfig.startStreak.type].abi.events[
+          MISSION_TYPE_INFO[missionConfig.startStreak.type].eventName
         ].topic,
-        MISSION_TYPE_INFO[missionConfig.endStreak].abi.events[
-          MISSION_TYPE_INFO[missionConfig.endStreak].eventName
+        MISSION_TYPE_INFO[missionConfig.endStreak.type].abi.events[
+          MISSION_TYPE_INFO[missionConfig.endStreak.type].eventName
         ].topic,
       ],
       transaction: true,

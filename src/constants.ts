@@ -36,6 +36,10 @@ export enum QUESTS {
   STAKOOOR = "Stakooor",
 }
 
+export enum MISSIONS {
+  BERA_METAL_SOLID = "Bera Metal Solid",
+}
+
 export enum QUEST_TYPES {
   ERC721_MINT = "ERC721_MINT",
   ERC1155_MINT = "ERC1155_MINT",
@@ -134,6 +138,8 @@ export const BGT_ADDRESS = "0xbDa130737BDd9618301681329bF2e46A016ff9Ad";
 // HONEY-WBERA Rewards Vault
 export const REWARDS_VAULT_ADDRESS =
   "0xAD57d7d39a487C04a44D3522b910421888Fb9C6d";
+export const THJ_VALIDATOR_ADDRESS =
+  "0x40495A781095932e2FC8dccA69F5e358711Fdd41";
 
 type QuestStepConfig = {
   readonly type: QUEST_TYPES;
@@ -152,8 +158,14 @@ type QuestConfig = {
 type MissionConfig = {
   address: string;
   startTime: number;
-  startStreak: MISSION_TYPES;
-  endStreak: MISSION_TYPES;
+  startStreak: {
+    type: MISSION_TYPES;
+    filterCriteria: Record<string, any>;
+  };
+  endStreak: {
+    type: MISSION_TYPES;
+    filterCriteria: Record<string, any>;
+  };
 };
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
@@ -176,7 +188,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           type: QUEST_TYPES.DELEGATE,
           address: BGT_ADDRESS,
           filterCriteria: {
-            topic2: "0x40495A781095932e2FC8dccA69F5e358711Fdd41",
+            validator: THJ_VALIDATOR_ADDRESS,
           },
         },
       ],
@@ -367,11 +379,21 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
 
 export const MISSIONS_CONFIG: Record<string, Record<string, MissionConfig>> = {
   [CHAINS.BERACHAIN]: {
-    "Daily Boost Activation": {
+    [MISSIONS.BERA_METAL_SOLID]: {
       address: BGT_ADDRESS,
       startTime: 1720461600,
-      startStreak: MISSION_TYPES.ACTIVATE_BOOST,
-      endStreak: MISSION_TYPES.DROP_BOOST,
+      startStreak: {
+        type: MISSION_TYPES.ACTIVATE_BOOST,
+        filterCriteria: {
+          validator: THJ_VALIDATOR_ADDRESS,
+        },
+      },
+      endStreak: {
+        type: MISSION_TYPES.DROP_BOOST,
+        filterCriteria: {
+          validator: THJ_VALIDATOR_ADDRESS,
+        },
+      },
     },
   },
 };

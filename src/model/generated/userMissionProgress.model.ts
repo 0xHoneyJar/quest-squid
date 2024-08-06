@@ -22,6 +22,9 @@ export class UserMissionProgress {
     lastActivationTimestamp!: number
 
     @IntColumn_({nullable: false})
+    lastStreakUpdateTimestamp!: number
+
+    @IntColumn_({nullable: false})
     currentStreak!: number
 
     @IntColumn_({nullable: false})

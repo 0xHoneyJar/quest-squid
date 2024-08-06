@@ -1,4 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, Index as Index_, IntColumn as IntColumn_} from "@subsquid/typeorm-store"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, Index as Index_, IntColumn as IntColumn_, JSONColumn as JSONColumn_} from "@subsquid/typeorm-store"
 
 @Entity_()
 export class Mission {
@@ -22,9 +22,9 @@ export class Mission {
     @IntColumn_({nullable: false})
     startTime!: number
 
-    @StringColumn_({nullable: false})
-    startStreak!: string
+    @JSONColumn_({nullable: false})
+    startStreak!: unknown
 
-    @StringColumn_({nullable: false})
-    endStreak!: string
+    @JSONColumn_({nullable: false})
+    endStreak!: unknown
 }

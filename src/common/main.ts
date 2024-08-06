@@ -63,10 +63,14 @@ export function createMain(chain: CHAINS) {
       mission.name = missionName;
       mission.chain = chain;
       mission.startTime = missionConfig.startTime;
+      mission.address = missionConfig.address;
       mission.startStreak = missionConfig.startStreak;
       mission.endStreak = missionConfig.endStreak;
       missions.set(missionName, mission);
     }
+
+    // Save all missions
+    await ctx.store.save([...missions.values()]);
 
     for (let block of ctx.blocks) {
       for (let log of block.logs) {
@@ -76,9 +80,10 @@ export function createMain(chain: CHAINS) {
           )
         );
 
+        const currentTimestamp = Math.floor(block.header.timestamp / 1000);
+
         for (const matchingQuest of matchingQuests) {
           // Check if the log is within the quest's time range
-          const currentTimestamp = Math.floor(block.header.timestamp / 1000);
           if (
             (matchingQuest.startTime &&
               currentTimestamp < matchingQuest.startTime) ||
@@ -143,43 +148,53 @@ export function createMain(chain: CHAINS) {
         // Process missions
         for (const [missionName, mission] of missions) {
           const missionConfig = MISSIONS_CONFIG[chain][missionName];
+
+          if (
+            missionConfig.startTime &&
+            currentTimestamp < missionConfig.startTime
+          ) {
+            continue;
+          }
+
           if (
             log.address.toLowerCase() === missionConfig.address.toLowerCase()
           ) {
-            const activateBoostInfo =
-              MISSION_TYPE_INFO[MISSION_TYPES.ACTIVATE_BOOST];
-            const dropBoostInfo = MISSION_TYPE_INFO[MISSION_TYPES.DROP_BOOST];
+            const startStreakInfo =
+              MISSION_TYPE_INFO[missionConfig.startStreak.type];
+            const endStreakInfo =
+              MISSION_TYPE_INFO[missionConfig.endStreak.type];
 
-            if (
-              activateBoostInfo.abi.events[activateBoostInfo.eventName].is(log)
-            ) {
+            if (startStreakInfo.abi.events[startStreakInfo.eventName].is(log)) {
               const decodedLog =
-                activateBoostInfo.abi.events[
-                  activateBoostInfo.eventName
-                ].decode(log);
+                startStreakInfo.abi.events[startStreakInfo.eventName].decode(
+                  log
+                );
               await handleMissionEvent(
                 ctx,
                 mission,
                 decodedLog,
                 log,
-                MISSION_TYPES.ACTIVATE_BOOST
+                missionConfig.startStreak
               );
             } else if (
-              dropBoostInfo.abi.events[dropBoostInfo.eventName].is(log)
+              endStreakInfo.abi.events[endStreakInfo.eventName].is(log)
             ) {
               const decodedLog =
-                dropBoostInfo.abi.events[dropBoostInfo.eventName].decode(log);
+                endStreakInfo.abi.events[endStreakInfo.eventName].decode(log);
               await handleMissionEvent(
                 ctx,
                 mission,
                 decodedLog,
                 log,
-                MISSION_TYPES.DROP_BOOST
+                missionConfig.endStreak
               );
             }
           }
         }
       }
+
+      // Update daily streaks for all active missions
+      await updateDailyStreaks(ctx, missions, block.header.timestamp);
     }
 
     await ctx.store.save([...quests.values()]);
@@ -197,7 +212,7 @@ async function handleQuestEvent(
 ): Promise<boolean> {
   if (step.filterCriteria) {
     for (const [key, value] of Object.entries(step.filterCriteria)) {
-      if (decodedLog[key] !== value) {
+      if (decodedLog[key] !== value.toLowerCase()) {
         // console.log(
         //   `Filter mismatch for ${key}: ${decodedLog[key]} !== ${value}`
         // );
@@ -323,11 +338,30 @@ async function handleMissionEvent(
   mission: Mission,
   decodedLog: any,
   log: Log,
-  eventType: MISSION_TYPES
+  eventType: { type: MISSION_TYPES; filterCriteria: Record<string, any> }
 ): Promise<void> {
+  // Check filter criteria
+  if (eventType.filterCriteria) {
+    for (const [key, value] of Object.entries(eventType.filterCriteria)) {
+      if (decodedLog[key] !== value.toLowerCase()) {
+        console.log(
+          `Filter mismatch for ${key}: ${decodedLog[key]} !== ${value}`
+        );
+        return; // Exit if filter criteria don't match
+      }
+    }
+  }
+
   const currentTimestamp = Math.floor(log.block.timestamp / 1000);
   const userAddress = log.getTransaction()?.from.toLowerCase() || "";
-  const validator = decodedLog.validator.toLowerCase();
+
+  if (!userAddress) {
+    console.log(`No user address found for mission event: ${eventType.type}`);
+    return;
+  }
+
+  // Ensure the Mission is saved first
+  await ctx.store.save(mission);
 
   let userMissionProgress = await ctx.store.get(
     UserMissionProgress,
@@ -340,29 +374,76 @@ async function handleMissionEvent(
       address: userAddress,
       mission,
       lastActivationTimestamp: 0,
+      lastStreakUpdateTimestamp: 0,
       currentStreak: 0,
       longestStreak: 0,
     });
   }
 
-  if (eventType === MISSION_TYPES.ACTIVATE_BOOST) {
+  if (eventType.type === (mission.startStreak as any).type) {
     if (userMissionProgress.lastActivationTimestamp === 0) {
-      // First activation
+      // First activation or reactivation after a drop
       userMissionProgress.currentStreak = 1;
+      userMissionProgress.lastStreakUpdateTimestamp = currentTimestamp;
     } else {
-      // Increment streak
-      userMissionProgress.currentStreak += 1;
+      // Boost was already active, update streak if necessary
+      const daysSinceLastUpdate = Math.floor(
+        (currentTimestamp - userMissionProgress.lastStreakUpdateTimestamp) /
+          (24 * 60 * 60)
+      );
+      if (daysSinceLastUpdate > 0) {
+        userMissionProgress.currentStreak += daysSinceLastUpdate;
+        userMissionProgress.lastStreakUpdateTimestamp = currentTimestamp;
+      }
     }
-    userMissionProgress.longestStreak = Math.max(
-      userMissionProgress.longestStreak,
-      userMissionProgress.currentStreak
-    );
     userMissionProgress.lastActivationTimestamp = currentTimestamp;
-  } else if (eventType === MISSION_TYPES.DROP_BOOST) {
-    // Reset streak on boost drop (cancel)
+  } else if (eventType.type === (mission.endStreak as any).type) {
+    // Reset streak on end event
     userMissionProgress.currentStreak = 0;
     userMissionProgress.lastActivationTimestamp = 0;
+    userMissionProgress.lastStreakUpdateTimestamp = 0;
   }
 
+  userMissionProgress.longestStreak = Math.max(
+    userMissionProgress.longestStreak,
+    userMissionProgress.currentStreak
+  );
+
   await ctx.store.save(userMissionProgress);
+}
+
+async function updateDailyStreaks(
+  ctx: Context,
+  missions: Map<string, Mission>,
+  blockTimestamp: number
+): Promise<void> {
+  const currentTimestamp = Math.floor(blockTimestamp / 1000);
+  const oneDayInSeconds = 24 * 60 * 60;
+
+  for (const [missionName, mission] of missions) {
+    const userMissionProgresses = await ctx.store.find(UserMissionProgress, {
+      where: { mission: { id: mission.id } },
+    });
+
+    for (const progress of userMissionProgresses) {
+      if (
+        progress.lastActivationTimestamp > 0 &&
+        currentTimestamp - progress.lastStreakUpdateTimestamp >= oneDayInSeconds
+      ) {
+        const daysPassed = Math.floor(
+          (currentTimestamp - progress.lastStreakUpdateTimestamp) /
+            oneDayInSeconds
+        );
+        progress.currentStreak += daysPassed;
+        progress.longestStreak = Math.max(
+          progress.longestStreak,
+          progress.currentStreak
+        );
+        progress.lastStreakUpdateTimestamp =
+          progress.lastStreakUpdateTimestamp + daysPassed * oneDayInSeconds;
+
+        await ctx.store.save(progress);
+      }
+    }
+  }
 }
