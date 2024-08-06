@@ -19,11 +19,44 @@ import {
 } from "../model";
 import { Context } from "./processorFactory";
 
+function addEntityToSave(
+  entitiesToSave: (
+    | Quest
+    | QuestStep
+    | Mission
+    | UserQuestProgress
+    | StepProgress
+    | UserMissionProgress
+  )[],
+  entity:
+    | Quest
+    | QuestStep
+    | Mission
+    | UserQuestProgress
+    | StepProgress
+    | UserMissionProgress
+) {
+  const existingIndex = entitiesToSave.findIndex((e) => e.id === entity.id);
+  if (existingIndex !== -1) {
+    entitiesToSave[existingIndex] = entity;
+  } else {
+    entitiesToSave.push(entity);
+  }
+}
+
 export function createMain(chain: CHAINS) {
   return async (ctx: Context) => {
     const quests: Map<string, Quest> = new Map();
     const questSteps: Map<string, QuestStep> = new Map();
     const missions: Map<string, Mission> = new Map();
+    const entitiesToSave: (
+      | Quest
+      | QuestStep
+      | Mission
+      | UserQuestProgress
+      | StepProgress
+      | UserMissionProgress
+    )[] = [];
 
     // Initialize quests and quest steps
     for (const [questName, questConfig] of Object.entries(
@@ -132,6 +165,7 @@ export function createMain(chain: CHAINS) {
               matchingQuest,
               matchingStep,
               decodedLog,
+              entitiesToSave,
               matchingStep.includeTransaction
                 ? log.getTransaction().from
                 : undefined
@@ -174,7 +208,8 @@ export function createMain(chain: CHAINS) {
                 mission,
                 decodedLog,
                 log,
-                missionConfig.startStreak
+                missionConfig.startStreak,
+                entitiesToSave
               );
             } else if (
               endStreakInfo.abi.events[endStreakInfo.eventName].is(log)
@@ -186,7 +221,8 @@ export function createMain(chain: CHAINS) {
                 mission,
                 decodedLog,
                 log,
-                missionConfig.endStreak
+                missionConfig.endStreak,
+                entitiesToSave
               );
             }
           }
@@ -194,12 +230,16 @@ export function createMain(chain: CHAINS) {
       }
 
       // Update daily streaks for all active missions
-      await updateDailyStreaks(ctx, missions, block.header.timestamp);
+      await updateDailyStreaks(
+        ctx,
+        missions,
+        block.header.timestamp,
+        entitiesToSave
+      );
     }
 
-    await ctx.store.save([...quests.values()]);
-    await ctx.store.save([...questSteps.values()]);
-    await ctx.store.save([...missions.values()]);
+    // Batch save all entities at the end
+    await ctx.store.save(entitiesToSave);
   };
 }
 
@@ -208,6 +248,14 @@ async function handleQuestEvent(
   quest: Quest,
   step: QuestStep,
   decodedLog: any,
+  entitiesToSave: (
+    | Quest
+    | QuestStep
+    | Mission
+    | UserQuestProgress
+    | StepProgress
+    | UserMissionProgress
+  )[],
   sender?: string
 ): Promise<boolean> {
   if (step.filterCriteria) {
@@ -255,7 +303,14 @@ async function handleQuestEvent(
       return false;
   }
 
-  await updateUserQuestProgress(ctx, userAddress, quest, step, amount);
+  await updateUserQuestProgress(
+    ctx,
+    userAddress,
+    quest,
+    step,
+    amount,
+    entitiesToSave
+  );
   return true;
 }
 
@@ -264,11 +319,16 @@ async function updateUserQuestProgress(
   userAddress: string,
   quest: Quest,
   completedStep: QuestStep,
-  amount: bigint
+  amount: bigint,
+  entitiesToSave: (
+    | Quest
+    | QuestStep
+    | Mission
+    | UserQuestProgress
+    | StepProgress
+    | UserMissionProgress
+  )[]
 ) {
-  // Ensure the Quest is saved first
-  await ctx.store.save(quest);
-
   let userQuestProgress = await ctx.store.get(
     UserQuestProgress,
     `${userAddress}-${quest.id}`
@@ -283,11 +343,8 @@ async function updateUserQuestProgress(
       completed: false,
     });
     quest.totalParticipants += 1;
-    await ctx.store.save(quest);
+    addEntityToSave(entitiesToSave, quest);
   }
-
-  // Save UserQuestProgress before creating StepProgress
-  await ctx.store.save(userQuestProgress);
 
   let stepProgress = await ctx.store.get(
     StepProgress,
@@ -304,16 +361,15 @@ async function updateUserQuestProgress(
     });
   }
 
-  // Add the valid amount to progressAmount
   stepProgress.progressAmount += amount;
 
-  if (stepProgress.progressAmount >= completedStep.requiredAmount) {
-    if (!stepProgress.completed) {
-      stepProgress.completed = true;
-      userQuestProgress.completedSteps += 1;
-    }
+  if (
+    stepProgress.progressAmount >= completedStep.requiredAmount &&
+    !stepProgress.completed
+  ) {
+    stepProgress.completed = true;
+    userQuestProgress.completedSteps += 1;
 
-    // Check if all steps are completed
     const allStepsCompleted = await Promise.all(
       quest.steps.map(async (step) => {
         const stepProgressId = `${userQuestProgress.id}-step-${step.stepNumber}`;
@@ -325,12 +381,12 @@ async function updateUserQuestProgress(
     if (allStepsCompleted.every(Boolean)) {
       userQuestProgress.completed = true;
       quest.totalCompletions += 1;
-      await ctx.store.save(quest);
+      addEntityToSave(entitiesToSave, quest);
     }
   }
 
-  await ctx.store.save(stepProgress);
-  await ctx.store.save(userQuestProgress);
+  addEntityToSave(entitiesToSave, stepProgress);
+  addEntityToSave(entitiesToSave, userQuestProgress);
 }
 
 async function handleMissionEvent(
@@ -338,15 +394,23 @@ async function handleMissionEvent(
   mission: Mission,
   decodedLog: any,
   log: Log,
-  eventType: { type: MISSION_TYPES; filterCriteria: Record<string, any> }
+  eventType: { type: MISSION_TYPES; filterCriteria: Record<string, any> },
+  entitiesToSave: (
+    | Quest
+    | QuestStep
+    | Mission
+    | UserQuestProgress
+    | StepProgress
+    | UserMissionProgress
+  )[]
 ): Promise<void> {
   // Check filter criteria
   if (eventType.filterCriteria) {
     for (const [key, value] of Object.entries(eventType.filterCriteria)) {
       if (decodedLog[key] !== value.toLowerCase()) {
-        console.log(
-          `Filter mismatch for ${key}: ${decodedLog[key]} !== ${value}`
-        );
+        // console.log(
+        //   `Filter mismatch for ${key}: ${decodedLog[key]} !== ${value}`
+        // );
         return; // Exit if filter criteria don't match
       }
     }
@@ -359,9 +423,6 @@ async function handleMissionEvent(
     console.log(`No user address found for mission event: ${eventType.type}`);
     return;
   }
-
-  // Ensure the Mission is saved first
-  await ctx.store.save(mission);
 
   let userMissionProgress = await ctx.store.get(
     UserMissionProgress,
@@ -409,13 +470,21 @@ async function handleMissionEvent(
     userMissionProgress.currentStreak
   );
 
-  await ctx.store.save(userMissionProgress);
+  addEntityToSave(entitiesToSave, userMissionProgress);
 }
 
 async function updateDailyStreaks(
   ctx: Context,
   missions: Map<string, Mission>,
-  blockTimestamp: number
+  blockTimestamp: number,
+  entitiesToSave: (
+    | Quest
+    | QuestStep
+    | Mission
+    | UserQuestProgress
+    | StepProgress
+    | UserMissionProgress
+  )[]
 ): Promise<void> {
   const currentTimestamp = Math.floor(blockTimestamp / 1000);
   const oneDayInSeconds = 24 * 60 * 60;
@@ -442,7 +511,7 @@ async function updateDailyStreaks(
         progress.lastStreakUpdateTimestamp =
           progress.lastStreakUpdateTimestamp + daysPassed * oneDayInSeconds;
 
-        await ctx.store.save(progress);
+        addEntityToSave(entitiesToSave, progress);
       }
     }
   }

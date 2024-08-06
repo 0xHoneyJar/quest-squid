@@ -1,5 +1,5 @@
-module.exports = class Data1722915147652 {
-    name = 'Data1722915147652'
+module.exports = class Data1722983302844 {
+    name = 'Data1722983302844'
 
     async up(db) {
         await db.query(`CREATE TABLE "quest_step" ("id" character varying NOT NULL, "step_number" integer NOT NULL, "type" text NOT NULL, "address" text NOT NULL, "token_id" numeric, "filter_criteria" jsonb, "required_amount" numeric NOT NULL, "include_transaction" boolean NOT NULL, "quest_id" character varying, CONSTRAINT "PK_2701eac9024314902255b9efaf7" PRIMARY KEY ("id"))`)
@@ -15,7 +15,7 @@ module.exports = class Data1722915147652 {
         await db.query(`CREATE INDEX "IDX_05eab2fd50df506ab9088765b5" ON "user_quest_progress" ("completed") `)
         await db.query(`CREATE INDEX "IDX_fcfe4389dd2ff4ecbdff7cf5de" ON "user_quest_progress" ("id", "completed") `)
         await db.query(`CREATE INDEX "IDX_ad2f24a57265ad902e5b0fc44b" ON "user_quest_progress" ("id", "address") `)
-        await db.query(`CREATE TABLE "mission" ("id" character varying NOT NULL, "name" text NOT NULL, "chain" text NOT NULL, "address" text NOT NULL, "start_time" integer NOT NULL, "start_streak" text NOT NULL, "end_streak" text NOT NULL, CONSTRAINT "PK_54f1391034bc7dd30666dee0d4c" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "mission" ("id" character varying NOT NULL, "name" text NOT NULL, "chain" text NOT NULL, "address" text NOT NULL, "start_time" integer NOT NULL, "start_streak" jsonb NOT NULL, "end_streak" jsonb NOT NULL, CONSTRAINT "PK_54f1391034bc7dd30666dee0d4c" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_4176d9ad36dd27bf916ec856f4" ON "mission" ("name") `)
         await db.query(`CREATE TABLE "user_mission_progress" ("id" character varying NOT NULL, "address" text NOT NULL, "last_activation_timestamp" integer NOT NULL, "last_streak_update_timestamp" integer NOT NULL, "current_streak" integer NOT NULL, "longest_streak" integer NOT NULL, "mission_id" character varying, CONSTRAINT "PK_32c70682357109cad7c420a6da5" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_8ca88a883da001db7e8f01fa20" ON "user_mission_progress" ("address") `)

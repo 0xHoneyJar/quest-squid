@@ -1,10 +1,10 @@
 type Quest @entity {
   id: ID!
   name: String! @index
-  chain: String!
+  chain: String! @index
   steps: [QuestStep!]! @derivedFrom(field: "quest")
-  startTime: Int
-  endTime: Int
+  startTime: Int @index
+  endTime: Int @index
   totalParticipants: Int!
   totalCompletions: Int!
 }
@@ -12,9 +12,9 @@ type Quest @entity {
 type QuestStep @entity {
   id: ID!
   quest: Quest!
-  stepNumber: Int!
-  type: String!
-  address: String!
+  stepNumber: Int! @index
+  type: String! @index
+  address: String! @index
   tokenId: BigInt
   filterCriteria: JSON
   requiredAmount: BigInt!
@@ -23,12 +23,12 @@ type QuestStep @entity {
 
 type UserQuestProgress
   @entity
-  @index(fields: ["id", "address"])
-  @index(fields: ["id", "completed"]) {
+  @index(fields: ["address", "quest"])
+  @index(fields: ["completed", "quest"]) {
   id: ID! @index
   address: String! @index
   quest: Quest!
-  completedSteps: Int!
+  completedSteps: Int! @index
   completed: Boolean! @index
   stepProgresses: [StepProgress!]! @derivedFrom(field: "userQuestProgress")
 }
@@ -36,7 +36,7 @@ type UserQuestProgress
 type StepProgress @entity {
   id: ID!
   userQuestProgress: UserQuestProgress!
-  stepNumber: Int!
+  stepNumber: Int! @index
   progressAmount: BigInt!
   completed: Boolean! @index
 }
@@ -44,9 +44,9 @@ type StepProgress @entity {
 type Mission @entity {
   id: ID!
   name: String! @index
-  chain: String!
-  address: String!
-  startTime: Int!
+  chain: String! @index
+  address: String! @index
+  startTime: Int! @index
   startStreak: JSON!
   endStreak: JSON!
 }
@@ -55,8 +55,8 @@ type UserMissionProgress @entity {
   id: ID!
   address: String! @index
   mission: Mission!
-  lastActivationTimestamp: Int!
-  lastStreakUpdateTimestamp: Int!
-  currentStreak: Int!
-  longestStreak: Int!
+  lastActivationTimestamp: Int! @index
+  lastStreakUpdateTimestamp: Int! @index
+  currentStreak: Int! @index
+  longestStreak: Int! @index
 }
