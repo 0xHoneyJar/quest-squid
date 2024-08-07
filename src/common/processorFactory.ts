@@ -6,7 +6,6 @@ import {
   Log as _Log,
   Transaction as _Transaction,
 } from "@subsquid/evm-processor";
-import { Store } from "@subsquid/typeorm-store";
 import { assertNotNull } from "@subsquid/util-internal";
 import {
   ARCHIVE_GATEWAYS,
@@ -118,7 +117,7 @@ export function createProcessor(chain: CHAINS) {
 export type Fields = EvmBatchProcessorFields<
   ReturnType<typeof createProcessor>
 >;
-export type Context = DataHandlerContext<Store, Fields>;
+export type ProcessorContext<Store> = DataHandlerContext<Store, Fields>;
 export type Block = BlockHeader<Fields>;
 export type Log = _Log<Fields>;
 export type Transaction = _Transaction<Fields>;
