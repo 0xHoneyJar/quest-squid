@@ -34,6 +34,7 @@ export enum QUESTS {
   UNION_FUR_AND_FRIENDSHIP = "Bera Union: Fur and Friendship",
   DELEGATOOOR = "Delegatooor",
   STAKOOOR = "Stakooor",
+  THE_HONEY_SITE = "The Honey Site",
 }
 
 export enum MISSIONS {
@@ -140,6 +141,7 @@ export const REWARDS_VAULT_ADDRESS =
   "0xAD57d7d39a487C04a44D3522b910421888Fb9C6d";
 export const THJ_VALIDATOR_ADDRESS =
   "0x40495A781095932e2FC8dccA69F5e358711Fdd41";
+export const HONEY_SITE_ADDRESS = "0x491e1d15f2a78799520937c02bb03a952140ac46";
 
 type QuestStepConfig = {
   readonly type: QUEST_TYPES;
@@ -329,6 +331,18 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.ARBITRUM]: {
+    [QUESTS.THE_HONEY_SITE]: {
+      steps: [
+        {
+          type: QUEST_TYPES.ERC1155_MINT,
+          address: HONEY_SITE_ADDRESS,
+          filterCriteria: {
+            from: "0x0000000000000000000000000000000000000000",
+          },
+        },
+      ],
+      endTime: 1723917600,
+    },
     [QUESTS.PROOF_OF_BOOGA]: {
       steps: [
         {

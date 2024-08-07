@@ -1,7 +1,6 @@
 import { StoreWithCache } from "@belopash/typeorm-store";
 import { AbiEvent } from "@subsquid/evm-abi";
 import { DataHandlerContext, Log } from "@subsquid/evm-processor";
-import { In } from "typeorm";
 import {
   CHAINS,
   MISSIONS_CONFIG,
@@ -22,18 +21,24 @@ import {
 import { ProcessorContext } from "./processorFactory";
 
 type Task = () => Promise<void>;
-type MappingContext = ProcessorContext<StoreWithCache> & { queue: Task[] };
+type MappingContext = ProcessorContext<StoreWithCache> & {
+  queue: Task[];
+  userMissionProgressCache: Map<string, UserMissionProgress>;
+  quests: Map<string, Quest>;
+  questSteps: Map<string, QuestStep>;
+  missions: Map<string, Mission>;
+};
 
 export function createMain(chain: CHAINS) {
   return async (ctx: DataHandlerContext<StoreWithCache>) => {
     const mctx: MappingContext = {
       ...ctx,
       queue: [],
+      userMissionProgressCache: new Map(),
+      quests: new Map(),
+      questSteps: new Map(),
+      missions: new Map(),
     };
-
-    const quests: Map<string, Quest> = new Map();
-    const questSteps: Map<string, QuestStep> = new Map();
-    const missions: Map<string, Mission> = new Map();
 
     // Initialize quests and quest steps
     for (const [questName, questConfig] of Object.entries(
@@ -59,10 +64,10 @@ export function createMain(chain: CHAINS) {
         questStep.requiredAmount = stepConfig.requiredAmount || 1n;
         questStep.includeTransaction = stepConfig.includeTransaction || false;
         quest.steps.push(questStep);
-        questSteps.set(stepId, questStep);
+        mctx.questSteps.set(stepId, questStep);
       });
 
-      quests.set(questName, quest);
+      mctx.quests.set(questName, quest);
     }
 
     // Initialize missions
@@ -76,26 +81,27 @@ export function createMain(chain: CHAINS) {
       mission.address = missionConfig.address;
       mission.startStreak = missionConfig.startStreak;
       mission.endStreak = missionConfig.endStreak;
-      missions.set(missionName, mission);
+      mctx.missions.set(missionName, mission);
       console.log(`Initialized mission: ${JSON.stringify(mission)}`);
     }
 
     // Check if missions were initialized
-    if (missions.size === 0) {
+    if (mctx.missions.size === 0) {
       console.warn(`No missions initialized for chain: ${chain}`);
     }
 
     // Save all missions
     mctx.queue.push(async () => {
-      await mctx.store.upsert([...missions.values()]);
+      await mctx.store.upsert([...mctx.missions.values()]);
     });
 
     for (let block of ctx.blocks) {
       for (let log of block.logs) {
-        const matchingQuests = Array.from(quests.values()).filter((quest) =>
-          quest.steps.some(
-            (step) => step.address.toLowerCase() === log.address.toLowerCase()
-          )
+        const matchingQuests = Array.from(mctx.quests.values()).filter(
+          (quest) =>
+            quest.steps.some(
+              (step) => step.address.toLowerCase() === log.address.toLowerCase()
+            )
         );
 
         const currentTimestamp = Math.floor(block.header.timestamp / 1000);
@@ -156,11 +162,11 @@ export function createMain(chain: CHAINS) {
         }
 
         // Process missions
-        await handleMissionEvents(mctx, missions, block.logs);
+        await handleMissionEvents(mctx, mctx.missions, block.logs);
       }
 
       // Update daily streaks for all active missions
-      await updateDailyStreaks(mctx, missions, block.header.timestamp);
+      await updateDailyStreaks(mctx, mctx.missions, block.header.timestamp);
     }
 
     // Execute all queued tasks
@@ -297,7 +303,6 @@ async function handleMissionEvents(
   logs: Log[]
 ): Promise<void> {
   const currentTimestamp = Math.floor(logs[0].block.timestamp / 1000);
-  const userMissionProgressCache = new Map<string, UserMissionProgress>();
 
   for (const log of logs) {
     for (const [missionName, mission] of missions) {
@@ -343,7 +348,7 @@ async function handleMissionEvents(
       }
 
       const progressId = `${userAddress}-${mission.id}`;
-      let userMissionProgress = userMissionProgressCache.get(progressId);
+      let userMissionProgress = mctx.userMissionProgressCache.get(progressId);
 
       if (!userMissionProgress) {
         userMissionProgress = await mctx.store.get(
@@ -364,7 +369,7 @@ async function handleMissionEvents(
         if (!userMissionProgress.mission) {
           userMissionProgress.mission = mission;
         }
-        userMissionProgressCache.set(progressId, userMissionProgress);
+        mctx.userMissionProgressCache.set(progressId, userMissionProgress);
       }
 
       updateUserMissionProgress(
@@ -376,7 +381,7 @@ async function handleMissionEvents(
   }
 
   // Add all updated UserMissionProgress entities to the store
-  for (const progress of userMissionProgressCache.values()) {
+  for (const progress of mctx.userMissionProgressCache.values()) {
     mctx.queue.push(async () => {
       await mctx.store.upsert(progress);
     });
@@ -451,14 +456,9 @@ async function updateDailyStreaks(
   const currentTimestamp = Math.floor(blockTimestamp / 1000);
   const oneDayInSeconds = 24 * 60 * 60;
 
-  const userMissionProgresses = await mctx.store.find(UserMissionProgress, {
-    where: {
-      mission: { id: In(Array.from(missions.keys())) } as any,
-    },
-  });
-
-  for (const progress of userMissionProgresses) {
+  for (const progress of mctx.userMissionProgressCache.values()) {
     if (
+      missions.has(progress.mission.id) &&
       progress.lastActivationTimestamp > 0 &&
       currentTimestamp - progress.lastStreakUpdateTimestamp >= oneDayInSeconds
     ) {
