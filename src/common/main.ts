@@ -179,7 +179,7 @@ export function createMain(chain: CHAINS) {
       await updateDailyStreaks(mctx, mctx.missions, block.header.timestamp);
     }
 
-    // Execute all queued tasks
+    // Execute all queued tasks after processing all blocks
     for (const task of mctx.queue) {
       await task();
     }
@@ -390,7 +390,7 @@ async function handleMissionEvents(
     }
   }
 
-  // Add all updated UserMissionProgress entities to the store
+  // Add all updated UserMissionProgress entities to the queue
   for (const progress of mctx.userMissionProgress.values()) {
     mctx.queue.push(async () => {
       await mctx.store.upsert(progress);
