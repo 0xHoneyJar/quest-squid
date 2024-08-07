@@ -228,6 +228,18 @@ async function handleQuestEvent(
       userAddress = decodedLog.depositor.toLowerCase();
       amount = decodedLog.depositAmount;
       break;
+    case QUEST_TYPES.DELEGATE:
+      userAddress = decodedLog.sender.toLowerCase();
+      amount = decodedLog.amount;
+      break;
+    case QUEST_TYPES.STAKE:
+      userAddress = decodedLog.account.toLowerCase();
+      amount = decodedLog.amount;
+      break;
+    case QUEST_TYPES.CLAIM_BGT_REWARD:
+      userAddress = decodedLog.to.toLowerCase();
+      amount = decodedLog.reward;
+      break;
     default:
       console.log(`Unsupported quest type: ${step.type}`);
       return false;
