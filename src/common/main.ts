@@ -21,10 +21,9 @@ import {
 import { ProcessorContext } from "./processorFactory";
 
 type Task = () => Promise<void>;
-type UserMissionProgressCache = Map<string, UserMissionProgress>;
 type MappingContext = ProcessorContext<StoreWithCache> & {
   queue: Task[];
-  userMissionProgressCache: UserMissionProgressCache;
+  userMissionProgress: Map<string, UserMissionProgress>;
   quests: Map<string, Quest>;
   questSteps: Map<string, QuestStep>;
   missions: Map<string, Mission>;
@@ -35,7 +34,7 @@ export function createMain(chain: CHAINS) {
     const mctx: MappingContext = {
       ...ctx,
       queue: [],
-      userMissionProgressCache: new Map(),
+      userMissionProgress: new Map(),
       quests: new Map(),
       questSteps: new Map(),
       missions: new Map(),
@@ -101,7 +100,9 @@ export function createMain(chain: CHAINS) {
       await mctx.store.upsert(questSteps);
       await mctx.store.upsert(missions);
 
-      console.log(`Inserted ${quests.length} quests, ${questSteps.length} quest steps, and ${missions.length} missions into the store.`);
+      console.log(
+        `Inserted ${quests.length} quests, ${questSteps.length} quest steps, and ${missions.length} missions into the store.`
+      );
     });
 
     for (let block of ctx.blocks) {
@@ -357,7 +358,7 @@ async function handleMissionEvents(
       }
 
       const progressId = `${userAddress}-${mission.id}`;
-      let userMissionProgress = mctx.userMissionProgressCache.get(progressId);
+      let userMissionProgress = mctx.userMissionProgress.get(progressId);
 
       if (!userMissionProgress) {
         userMissionProgress = await mctx.store.get(
@@ -378,7 +379,7 @@ async function handleMissionEvents(
         if (!userMissionProgress.mission) {
           userMissionProgress.mission = mission;
         }
-        mctx.userMissionProgressCache.set(progressId, userMissionProgress);
+        mctx.userMissionProgress.set(progressId, userMissionProgress);
       }
 
       updateUserMissionProgress(
@@ -390,7 +391,7 @@ async function handleMissionEvents(
   }
 
   // Add all updated UserMissionProgress entities to the store
-  for (const progress of mctx.userMissionProgressCache.values()) {
+  for (const progress of mctx.userMissionProgress.values()) {
     mctx.queue.push(async () => {
       await mctx.store.upsert(progress);
     });
@@ -465,7 +466,7 @@ async function updateDailyStreaks(
   const currentTimestamp = Math.floor(blockTimestamp / 1000);
   const oneDayInSeconds = 24 * 60 * 60;
 
-  for (const progress of mctx.userMissionProgressCache.values()) {
+  for (const progress of mctx.userMissionProgress.values()) {
     if (
       missions.has(progress.mission.id) &&
       progress.lastActivationTimestamp > 0 &&
