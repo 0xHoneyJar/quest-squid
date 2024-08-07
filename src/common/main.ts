@@ -21,9 +21,10 @@ import {
 import { ProcessorContext } from "./processorFactory";
 
 type Task = () => Promise<void>;
+type UserMissionProgressCache = Map<string, UserMissionProgress>;
 type MappingContext = ProcessorContext<StoreWithCache> & {
   queue: Task[];
-  userMissionProgressCache: Map<string, UserMissionProgress>;
+  userMissionProgressCache: UserMissionProgressCache;
   quests: Map<string, Quest>;
   questSteps: Map<string, QuestStep>;
   missions: Map<string, Mission>;
@@ -90,9 +91,17 @@ export function createMain(chain: CHAINS) {
       console.warn(`No missions initialized for chain: ${chain}`);
     }
 
-    // Save all missions
+    // Save all quests, quest steps, and missions
     mctx.queue.push(async () => {
-      await mctx.store.upsert([...mctx.missions.values()]);
+      const quests = Array.from(mctx.quests.values());
+      const questSteps = Array.from(mctx.questSteps.values());
+      const missions = Array.from(mctx.missions.values());
+
+      await mctx.store.upsert(quests);
+      await mctx.store.upsert(questSteps);
+      await mctx.store.upsert(missions);
+
+      console.log(`Inserted ${quests.length} quests, ${questSteps.length} quest steps, and ${missions.length} missions into the store.`);
     });
 
     for (let block of ctx.blocks) {
