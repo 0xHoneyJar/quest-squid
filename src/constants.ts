@@ -121,7 +121,12 @@ type AbiWithEvents = {
 
 export const QUEST_TYPE_INFO: Record<
   QUEST_TYPES,
-  { eventName: string | string[]; abi: AbiWithEvents; topic1?: string; topic2?: string }
+  {
+    eventName: string | string[];
+    abi: AbiWithEvents;
+    topic1?: string;
+    topic2?: string;
+  }
 > = {
   [QUEST_TYPES.ERC721_MINT]: {
     eventName: "Transfer",
@@ -256,7 +261,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       startTime: 1724673600 - ONE_DAY_IN_SECONDS, // 1 day before
-      endTime: 1725192000,
+      endTime: 1725912000,
     },
     [QUESTS.HONEY_HEIST]: {
       steps: [
