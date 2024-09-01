@@ -50,6 +50,7 @@ export const HONEYPOT_POT_ADDRESS =
 export const HONEYPOT_JANI_ADDRESS =
   "0x2c504e661750e03aa9252c67e771dc059a521863";
 export const BRUUVVPRINT_ADDRESS = "0xe93435C4FD05A566f4EB20e1fCbbb83F95886e08";
+export const LEFT_CURVE_ADDRESS = "0x737732bA94b868E5115cCE477BFb171Ae9069d88";
 
 export enum CHAINS {
   BASE = "base",
@@ -80,6 +81,7 @@ export enum QUESTS {
   HONEY_HEIST = "Honey Heist",
   BRUUVVPRINT = "Bruuvvprint!",
   JANI_VS_POT = "Jani vs. Pot",
+  LEFT_CURVE_BERAS = "Left Curve Beras",
 }
 
 export enum MISSIONS {
@@ -119,14 +121,14 @@ type AbiWithEvents = {
 
 export const QUEST_TYPE_INFO: Record<
   QUEST_TYPES,
-  { eventName: string; abi: AbiWithEvents; topic1?: string; topic2?: string }
+  { eventName: string | string[]; abi: AbiWithEvents; topic1?: string; topic2?: string }
 > = {
   [QUEST_TYPES.ERC721_MINT]: {
     eventName: "Transfer",
     abi: erc721Abi,
   },
   [QUEST_TYPES.ERC1155_MINT]: {
-    eventName: "TransferSingle",
+    eventName: ["TransferSingle", "TransferBatch"],
     abi: erc1155Abi as AbiWithEvents,
   },
   [QUEST_TYPES.ERC20_MINT]: {
@@ -165,7 +167,6 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.DIRAC_DEPOSIT]: {
     eventName: "Deposit",
     abi: diracVaultAbi as AbiWithEvents,
-    topic1: THJ_VALIDATOR_ADDRESS,
   },
   [QUEST_TYPES.ZERU_DEPOSIT]: {
     eventName: "Deposit",
@@ -360,6 +361,17 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.LEFT_CURVE_BERAS]: {
+      steps: [
+        {
+          type: QUEST_TYPES.ERC1155_MINT,
+          address: LEFT_CURVE_ADDRESS,
+          filterCriteria: {
+            from: zeroAddress,
+          },
+        },
+      ],
+    },
     [QUESTS.OOGA_BOOGA_TRIBE]: {
       steps: [
         {

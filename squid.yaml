@@ -1,6 +1,6 @@
 manifestVersion: subsquid.io/v0.1
 name: quest-squid
-version: 24
+version: 26
 description: A squid that indexes quest events for Cub Scouts
 build:
 deploy:
@@ -42,6 +42,8 @@ deploy:
       - serve:prod
 scale:
   dedicated: true
+  # api:
+  #   profile: medium
   addons:
     postgres:
       profile: medium

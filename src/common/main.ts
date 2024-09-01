@@ -80,28 +80,28 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
 
   for (let log of block.logs) {
     const logAddress = log.address.toLowerCase();
+    const matchingQuests = questsArray.filter(
+      (quest) =>
+        quest.steps.some((step) => step.address === logAddress) &&
+        (!quest.startTime || currentTimestamp >= quest.startTime) &&
+        (!quest.endTime || currentTimestamp <= quest.endTime)
+    );
 
-    for (let log of block.logs) {
-      const logAddress = log.address.toLowerCase();
-      const matchingQuests = questsArray.filter(
-        (quest) =>
-          quest.steps.some((step) => step.address === logAddress) &&
-          (!quest.startTime || currentTimestamp >= quest.startTime) &&
-          (!quest.endTime || currentTimestamp <= quest.endTime)
+    for (const matchingQuest of matchingQuests) {
+      const matchingSteps = matchingQuest.steps.filter(
+        (step) => step.address === logAddress
       );
 
-      for (const matchingQuest of matchingQuests) {
-        const matchingSteps = matchingQuest.steps.filter(
-          (step) => step.address === logAddress
-        );
+      for (const matchingStep of matchingSteps) {
+        const questTypeInfo =
+          QUEST_TYPE_INFO[matchingStep.type as QUEST_TYPES];
+        const eventNames = Array.isArray(questTypeInfo.eventName)
+          ? questTypeInfo.eventName
+          : [questTypeInfo.eventName];
 
-        for (const matchingStep of matchingSteps) {
-          const questTypeInfo =
-            QUEST_TYPE_INFO[matchingStep.type as QUEST_TYPES];
-          const { abi, eventName } = questTypeInfo;
-
-          if (abi.events && eventName in abi.events) {
-            const event = abi.events[eventName] as AbiEvent<any>;
+        for (const eventName of eventNames) {
+          if (questTypeInfo.abi.events && eventName in questTypeInfo.abi.events) {
+            const event = questTypeInfo.abi.events[eventName] as AbiEvent<any>;
             if (event.is(log)) {
               const decodedLog = event.decode(log);
               const sender = matchingStep.includeTransaction
@@ -113,8 +113,10 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
                 matchingQuest,
                 matchingStep,
                 decodedLog,
-                sender
+                sender,
+                eventName
               );
+              break; // Exit the loop if we've found a matching event
             }
           }
         }
@@ -127,7 +129,8 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
     quest: Quest,
     step: QuestStep,
     decodedLog: any,
-    sender?: string
+    sender?: string,
+    eventName?: string
   ): Promise<void> {
     if (step.filterCriteria) {
       for (const [key, value] of Object.entries(step.filterCriteria)) {
@@ -150,7 +153,8 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
     const { userAddress, amount } = getUserAddressAndAmount(
       step.type as QUEST_TYPES,
       decodedLog,
-      sender
+      sender,
+      eventName
     );
 
     if (!userAddress) {
@@ -216,7 +220,8 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
   function getUserAddressAndAmount(
     questType: QUEST_TYPES,
     decodedLog: any,
-    sender?: string
+    sender?: string,
+    eventName?: string
   ): { userAddress: string | null; amount: bigint } {
     let userAddress: string | null = null;
     let amount: bigint = 1n;
@@ -232,7 +237,12 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         break;
       case QUEST_TYPES.ERC1155_MINT:
         userAddress = decodedLog.to.toLowerCase();
-        amount = decodedLog.amount;
+        if (eventName === "TransferSingle") {
+          amount = decodedLog.amount;
+        } else if (eventName === "TransferBatch") {
+          // Sum up all amounts in the batch
+          amount = decodedLog.amounts.reduce((sum: bigint, val: bigint) => sum + val, 0n);
+        }
         break;
       case QUEST_TYPES.UNISWAP_SWAP:
         userAddress = decodedLog.recipient.toLowerCase();
@@ -263,6 +273,15 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         break;
       case QUEST_TYPES.FTO_DEPOSIT:
         userAddress = decodedLog.depositer.toLowerCase();
+        break;
+      case QUEST_TYPES.ZERU_DEPOSIT:
+        userAddress = decodedLog.user.toLowerCase();
+        break;
+      case QUEST_TYPES.ZERU_BORROW:
+        userAddress = decodedLog.user.toLowerCase();
+        break;
+      case QUEST_TYPES.ZERU_OPEN_POSITION:
+        userAddress = decodedLog.user.toLowerCase();
         break;
       default:
         return { userAddress: null, amount: 0n };

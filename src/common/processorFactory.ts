@@ -34,10 +34,16 @@ export function createProcessor(chain: CHAINS) {
       }
 
       const questTypeInfo = QUEST_TYPE_INFO[step.type as QUEST_TYPES];
-      const topic0 = questTypeInfo.abi.events[questTypeInfo.eventName].topic;
+      const eventNames = Array.isArray(questTypeInfo.eventName)
+        ? questTypeInfo.eventName
+        : [questTypeInfo.eventName];
 
-      if (!addressToTopics[address].topic0.includes(topic0)) {
-        addressToTopics[address].topic0.push(topic0);
+      for (const eventName of eventNames) {
+        const topic0 = questTypeInfo.abi.events[eventName].topic;
+
+        if (!addressToTopics[address].topic0.includes(topic0)) {
+          addressToTopics[address].topic0.push(topic0);
+        }
       }
 
       if (questTypeInfo.topic1) {
@@ -47,8 +53,6 @@ export function createProcessor(chain: CHAINS) {
       if (questTypeInfo.topic2) {
         addressToTopics[address].topic2 = questTypeInfo.topic2;
       }
-
-      console.log(`Added topic ${topic0} for address ${address}`);
     }
   }
 
@@ -74,11 +78,6 @@ export function createProcessor(chain: CHAINS) {
       topic2: topics.topic2 ? [topics.topic2] : undefined,
       transaction: true, // Include transaction for all logs to be safe
     });
-    console.log(
-      `Processor listening for address ${address} with topics: ${topics.topic0.join(
-        ", "
-      )}${topics.topic1 ? ` and topic1: ${topics.topic1}` : ""}`
-    );
   }
 
   return processor;
