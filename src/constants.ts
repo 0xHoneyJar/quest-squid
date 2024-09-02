@@ -49,9 +49,11 @@ export const HONEYPOT_POT_ADDRESS =
   "0x93f8beabd145a61067ef2fca38c4c9c31d47ab7e";
 export const HONEYPOT_JANI_ADDRESS =
   "0x2c504e661750e03aa9252c67e771dc059a521863";
+export const JANI_ADDRESS = "0x180f30908B7c92Ff2d65609088Ad17BF923b42Dc";
+export const POT_ADDRESS = "0xfad73c80D67d3cb4A929d1c0fAF33A820620aE41";
 export const BRUUVVPRINT_ADDRESS = "0xe93435C4FD05A566f4EB20e1fCbbb83F95886e08";
 export const LEFT_CURVE_ADDRESS = "0x737732bA94b868E5115cCE477BFb171Ae9069d88";
-
+export const OHA_BERA_ADDRESS = "0x0264D933F13eE993270591668CfF87b8D35Dd3b4";
 export enum CHAINS {
   BASE = "base",
   ARBITRUM = "arbitrum",
@@ -82,6 +84,8 @@ export enum QUESTS {
   BRUUVVPRINT = "Bruuvvprint!",
   JANI_VS_POT = "Jani vs. Pot",
   LEFT_CURVE_BERAS = "Left Curve Beras",
+  A_VASE_FULL_OF_HONEY = "A Vase full of Honey",
+  OHA_BERA = "おはベラ!",
 }
 
 export enum MISSIONS {
@@ -104,7 +108,6 @@ export enum QUEST_TYPES {
   ZERU_BORROW = "ZERU_BORROW",
   ZERU_OPEN_POSITION = "ZERU_OPEN_POSITION",
   MEMESWAP_DEPLOY = "MEMESWAP_DEPLOY",
-  // TPOT_FAUCET = "TPOT_FAUCET",
   FTO_DEPOSIT = "FTO_DEPOSIT",
 }
 
@@ -113,7 +116,7 @@ export enum MISSION_TYPES {
   DROP_BOOST = "DROP_BOOST",
 }
 
-type AbiWithEvents = {
+export type AbiWithEvents = {
   events: {
     [eventName: string]: AbiEvent<any>;
   };
@@ -195,7 +198,7 @@ export const QUEST_TYPE_INFO: Record<
   },
 } as const;
 
-export const MISSION_TYPE_INFO: Record<
+const MISSION_TYPE_INFO: Record<
   MISSION_TYPES,
   { eventName: string; abi: AbiWithEvents }
 > = {
@@ -210,12 +213,14 @@ export const MISSION_TYPE_INFO: Record<
 };
 
 type QuestStepConfig = {
-  readonly type: QUEST_TYPES;
-  readonly address: string;
-  readonly filterCriteria?: Record<string, any>;
+  readonly types: QUEST_TYPES[];
+  readonly addresses: string[];
+  readonly filterCriteria?: {
+    [K in QUEST_TYPES]?: Record<string, any>;
+  };
   readonly requiredAmount?: bigint;
   readonly includeTransaction?: boolean;
-  readonly path?: string; // Add this line
+  readonly path?: string;
 };
 
 type QuestConfig = {
@@ -242,63 +247,69 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.BRUUVVPRINT]: {
       steps: [
         {
-          type: QUEST_TYPES.MEMESWAP_DEPLOY,
-          address: BRUUVVPRINT_ADDRESS,
+          types: [QUEST_TYPES.MEMESWAP_DEPLOY],
+          addresses: [BRUUVVPRINT_ADDRESS],
         },
       ],
     },
     [QUESTS.JANI_VS_POT]: {
       steps: [
         {
-          type: QUEST_TYPES.FTO_DEPOSIT,
-          address: HONEYPOT_JANI_ADDRESS,
-          path: "Jani", // Add this line
+          types: [QUEST_TYPES.FTO_DEPOSIT, QUEST_TYPES.ERC20_MINT],
+          addresses: [HONEYPOT_JANI_ADDRESS, JANI_ADDRESS],
+          path: "Jani",
         },
         {
-          type: QUEST_TYPES.FTO_DEPOSIT,
-          address: HONEYPOT_POT_ADDRESS,
-          path: "Pot", // Add this line
+          types: [QUEST_TYPES.FTO_DEPOSIT, QUEST_TYPES.ERC20_MINT],
+          addresses: [HONEYPOT_POT_ADDRESS, POT_ADDRESS],
+          path: "Pot",
         },
       ],
-      startTime: 1724673600 - ONE_DAY_IN_SECONDS, // 1 day before
+      startTime: 1724673600 - ONE_DAY_IN_SECONDS,
       endTime: 1725912000,
     },
     [QUESTS.HONEY_HEIST]: {
       steps: [
         {
-          type: QUEST_TYPES.ZERU_DEPOSIT,
-          address: ZERU_LENDING_POOL,
+          types: [QUEST_TYPES.ZERU_DEPOSIT],
+          addresses: [ZERU_LENDING_POOL],
           filterCriteria: {
-            reserve: HONEY_ADDRESS,
+            [QUEST_TYPES.ZERU_DEPOSIT]: {
+              reserve: HONEY_ADDRESS,
+            },
           },
         },
         {
-          type: QUEST_TYPES.ZERU_BORROW,
-          address: ZERU_LENDING_POOL,
+          types: [QUEST_TYPES.ZERU_BORROW],
+          addresses: [ZERU_LENDING_POOL],
           filterCriteria: {
-            reserve: WBERA_ADDRESS,
+            [QUEST_TYPES.ZERU_BORROW]: {
+              reserve: WBERA_ADDRESS,
+            },
           },
         },
         {
-          type: QUEST_TYPES.ZERU_OPEN_POSITION,
-          address: ZERU_STRATEGIES_CONTROLLER,
+          types: [QUEST_TYPES.ZERU_OPEN_POSITION],
+          addresses: [ZERU_STRATEGIES_CONTROLLER],
           filterCriteria: {
-            strategyId: "1", // Change this to a string
+            [QUEST_TYPES.ZERU_OPEN_POSITION]: {
+              strategyId: "1",
+            },
           },
         },
       ],
-      startTime: 1724673600 - ONE_DAY_IN_SECONDS, // 1 day before
+      startTime: 1724673600 - ONE_DAY_IN_SECONDS,
       endTime: 1725192000,
     },
     [QUESTS.BERAC_POL]: {
       steps: [
         {
-          type: QUEST_TYPES.DIRAC_DEPOSIT,
-          address: IBGT_DIRAC_VAULT_ADDRESS,
+          types: [QUEST_TYPES.DIRAC_DEPOSIT],
+          addresses: [IBGT_DIRAC_VAULT_ADDRESS],
         },
         {
-          type: QUEST_TYPES.DIRAC_DEPOSIT,
-          address: NECT_DIRAC_VAULT_ADDRESS,
+          types: [QUEST_TYPES.DIRAC_DEPOSIT],
+          addresses: [NECT_DIRAC_VAULT_ADDRESS],
         },
       ],
       startTime: 1724367186,
@@ -333,14 +344,16 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.RUN_IT_BACK_TURBO]: {
       steps: [
         {
-          type: QUEST_TYPES.UNISWAP_SWAP,
-          address: "0x8a960A6e5f224D0a88BaD10463bDAD161b68C144",
+          types: [QUEST_TYPES.UNISWAP_SWAP],
+          addresses: ["0x8a960A6e5f224D0a88BaD10463bDAD161b68C144"],
         },
         {
-          type: QUEST_TYPES.ERC721_MINT,
-          address: "0xBd10c70e94aCA5c0b9Eb434A62f2D8444Ec0649D",
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: ["0xBd10c70e94aCA5c0b9Eb434A62f2D8444Ec0649D"],
           filterCriteria: {
-            from: "0x0000000000000000000000000000000000000000",
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: "0x0000000000000000000000000000000000000000",
+            },
           },
         },
       ],
@@ -349,16 +362,18 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.UNION_FUR_AND_FRIENDSHIP]: {
       steps: [
         {
-          type: QUEST_TYPES.ERC20_MINT,
-          address: STDV4TNT_ADDRESS,
+          types: [QUEST_TYPES.ERC20_MINT],
+          addresses: [STDV4TNT_ADDRESS],
           filterCriteria: {
-            from: zeroAddress,
+            [QUEST_TYPES.ERC20_MINT]: {
+              from: zeroAddress,
+            },
           },
           requiredAmount: 1n,
         },
         {
-          type: QUEST_TYPES.UNISWAP_MINT,
-          address: KODIAK_POOL_ADDRESS,
+          types: [QUEST_TYPES.UNISWAP_MINT],
+          addresses: [KODIAK_POOL_ADDRESS],
           includeTransaction: true,
         },
       ],
@@ -366,13 +381,29 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.OHA_BERA]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [APICULTURE_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC1155_MINT]: {
+              id: 4n,
+            },
+          },
+        },
+      ],
+      startTime: 1725364800,
+    },
     [QUESTS.LEFT_CURVE_BERAS]: {
       steps: [
         {
-          type: QUEST_TYPES.ERC1155_MINT,
-          address: LEFT_CURVE_ADDRESS,
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [LEFT_CURVE_ADDRESS],
           filterCriteria: {
-            from: zeroAddress,
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: zeroAddress,
+            },
           },
         },
       ],
@@ -380,8 +411,8 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.OOGA_BOOGA_TRIBE]: {
       steps: [
         {
-          type: QUEST_TYPES.ERC1155_MINT,
-          address: MYSTERY_BOX_ADDRESS,
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [MYSTERY_BOX_ADDRESS],
           requiredAmount: 1n,
         },
       ],
@@ -390,8 +421,8 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.HONEY_HOOKS_AND_CUTLASSES]: {
       steps: [
         {
-          type: QUEST_TYPES.TOKENS_DEPOSITED,
-          address: HOOK_VAULT_ADDRESS,
+          types: [QUEST_TYPES.TOKENS_DEPOSITED],
+          addresses: [HOOK_VAULT_ADDRESS],
           requiredAmount: parseEther("0.025"),
         },
       ],
@@ -399,18 +430,22 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.THE_REVENGE_OF_THE_BULLAS]: {
       steps: [
         {
-          type: QUEST_TYPES.ERC1155_MINT,
-          address: BULLAS_ADDRESS,
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [BULLAS_ADDRESS],
           filterCriteria: {
-            from: zeroAddress,
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: zeroAddress,
+            },
           },
           requiredAmount: 1n,
         },
         {
-          type: QUEST_TYPES.ERC1155_MINT,
-          address: BULLAS_ADDRESS,
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [BULLAS_ADDRESS],
           filterCriteria: {
-            from: zeroAddress,
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: zeroAddress,
+            },
           },
           requiredAmount: 5n,
         },
@@ -420,18 +455,22 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.JANI_LOVE_EGGS]: {
       steps: [
         {
-          type: QUEST_TYPES.ERC1155_MINT,
-          address: EGGS_ADDRESS,
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [EGGS_ADDRESS],
           filterCriteria: {
-            from: "0x0000000000000000000000000000000000000000",
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: "0x0000000000000000000000000000000000000000",
+            },
           },
           requiredAmount: 1n,
         },
         {
-          type: QUEST_TYPES.ERC1155_MINT,
-          address: EGGS_ADDRESS,
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [EGGS_ADDRESS],
           filterCriteria: {
-            from: "0x0000000000000000000000000000000000000000",
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: "0x0000000000000000000000000000000000000000",
+            },
           },
           requiredAmount: 10n,
         },
@@ -441,10 +480,12 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.CLASS_IS_IN_SESSION]: {
       steps: [
         {
-          type: QUEST_TYPES.ERC1155_MINT,
-          address: HOOKED_ADDRESS,
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [HOOKED_ADDRESS],
           filterCriteria: {
-            from: "0x0000000000000000000000000000000000000000",
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: "0x0000000000000000000000000000000000000000",
+            },
           },
         },
       ],
@@ -453,10 +494,12 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.HENLO_6_9]: {
       steps: [
         {
-          type: QUEST_TYPES.ERC1155_MINT,
-          address: APICULTURE_ADDRESS,
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [APICULTURE_ADDRESS],
           filterCriteria: {
-            from: "0x0000000000000000000000000000000000000000",
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: "0x0000000000000000000000000000000000000000",
+            },
           },
         },
       ],
@@ -465,10 +508,12 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.OURS_DE_LA_RENAISSANCE]: {
       steps: [
         {
-          type: QUEST_TYPES.ERC1155_MINT,
-          address: APICULTURE_ADDRESS,
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [APICULTURE_ADDRESS],
           filterCriteria: {
-            from: "0x0000000000000000000000000000000000000000",
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: "0x0000000000000000000000000000000000000000",
+            },
           },
         },
       ],
@@ -476,13 +521,26 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.ARBITRUM]: {
+    [QUESTS.A_VASE_FULL_OF_HONEY]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.TOKENS_MINTED],
+          addresses: [BOOGA_BEARS_ADDRESS],
+          requiredAmount: 1n,
+        },
+      ],
+      startTime: 1725393600,
+      endTime: 1726257600,
+    },
     [QUESTS.THE_HONEY_SITE]: {
       steps: [
         {
-          type: QUEST_TYPES.ERC1155_MINT,
-          address: HONEY_SITE_ADDRESS,
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [HONEY_SITE_ADDRESS],
           filterCriteria: {
-            from: "0x0000000000000000000000000000000000000000",
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: "0x0000000000000000000000000000000000000000",
+            },
           },
         },
       ],
@@ -491,8 +549,8 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.PROOF_OF_BOOGA]: {
       steps: [
         {
-          type: QUEST_TYPES.TOKENS_MINTED,
-          address: BOOGA_BEARS_ADDRESS,
+          types: [QUEST_TYPES.TOKENS_MINTED],
+          addresses: [BOOGA_BEARS_ADDRESS],
           requiredAmount: 1n,
         },
       ],
@@ -502,10 +560,12 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.THJ_101]: {
       steps: [
         {
-          type: QUEST_TYPES.ERC721_MINT,
-          address: "0x9bc2C48189Ff3865875E4A85AfEb6d6ba848739B",
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: ["0x9bc2C48189Ff3865875E4A85AfEb6d6ba848739B"],
           filterCriteria: {
-            from: "0x0000000000000000000000000000000000000000",
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: "0x0000000000000000000000000000000000000000",
+            },
           },
         },
       ],
@@ -515,18 +575,22 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.ZORB_MANIA]: {
       steps: [
         {
-          type: QUEST_TYPES.ERC1155_MINT,
-          address: ZORB_ADDRESS,
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [ZORB_ADDRESS],
           filterCriteria: {
-            from: "0x0000000000000000000000000000000000000000",
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: "0x0000000000000000000000000000000000000000",
+            },
           },
           requiredAmount: 1n,
         },
         {
-          type: QUEST_TYPES.ERC1155_MINT,
-          address: ZORB_ADDRESS,
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [ZORB_ADDRESS],
           filterCriteria: {
-            from: "0x0000000000000000000000000000000000000000",
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: "0x0000000000000000000000000000000000000000",
+            },
           },
           requiredAmount: 3n,
         },
@@ -537,24 +601,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
 } as const;
 
 export const MISSIONS_CONFIG: Record<string, Record<string, MissionConfig>> = {
-  [CHAINS.BERACHAIN]: {
-    // [MISSIONS.BERA_METAL_SOLID]: {
-    //   address: BGT_ADDRESS,
-    //   startTime: 1720461600,
-    //   startStreak: {
-    //     type: MISSION_TYPES.ACTIVATE_BOOST,
-    //     filterCriteria: {
-    //       validator: THJ_VALIDATOR_ADDRESS,
-    //     },
-    //   },
-    //   endStreak: {
-    //     type: MISSION_TYPES.DROP_BOOST,
-    //     filterCriteria: {
-    //       validator: THJ_VALIDATOR_ADDRESS,
-    //     },
-    //   },
-    // },
-  },
+  [CHAINS.BERACHAIN]: {},
 };
 
 export const BLOCK_RANGES = {

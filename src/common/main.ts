@@ -61,8 +61,10 @@ function scheduleInit(
       const questStep = new QuestStep({ id: stepId });
       questStep.quest = quest;
       questStep.stepNumber = index + 1;
-      questStep.type = stepConfig.type;
-      questStep.address = stepConfig.address.toLowerCase();
+      questStep.types = stepConfig.types;
+      questStep.addresses = stepConfig.addresses.map((address) =>
+        address.toLowerCase()
+      );
       questStep.filterCriteria = stepConfig.filterCriteria;
       questStep.requiredAmount = stepConfig.requiredAmount || 1n;
       questStep.includeTransaction = stepConfig.includeTransaction || false;
@@ -80,43 +82,60 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
 
   for (let log of block.logs) {
     const logAddress = log.address.toLowerCase();
+    console.log(`Processing log for address: ${logAddress}`);
+
     const matchingQuests = questsArray.filter(
       (quest) =>
-        quest.steps.some((step) => step.address === logAddress) &&
+        quest.steps.some((step) =>
+          step.addresses.some((address) => address.toLowerCase() === logAddress)
+        ) &&
         (!quest.startTime || currentTimestamp >= quest.startTime) &&
         (!quest.endTime || currentTimestamp <= quest.endTime)
     );
 
+    console.log(
+      `Matching quests: ${matchingQuests.map((q) => q.name).join(", ")}`
+    );
+
     for (const matchingQuest of matchingQuests) {
-      const matchingSteps = matchingQuest.steps.filter(
-        (step) => step.address === logAddress
+      const matchingSteps = matchingQuest.steps.filter((step) =>
+        step.addresses.includes(logAddress)
       );
 
       for (const matchingStep of matchingSteps) {
-        const questTypeInfo =
-          QUEST_TYPE_INFO[matchingStep.type as QUEST_TYPES];
-        const eventNames = Array.isArray(questTypeInfo.eventName)
-          ? questTypeInfo.eventName
-          : [questTypeInfo.eventName];
+        const questTypes = matchingStep.types;
 
-        for (const eventName of eventNames) {
-          if (questTypeInfo.abi.events && eventName in questTypeInfo.abi.events) {
-            const event = questTypeInfo.abi.events[eventName] as AbiEvent<any>;
-            if (event.is(log)) {
-              const decodedLog = event.decode(log);
-              const sender = matchingStep.includeTransaction
-                ? log.getTransaction().from
-                : undefined;
+        for (const questType of questTypes) {
+          const questTypeInfo = QUEST_TYPE_INFO[questType as QUEST_TYPES];
+          const eventNames = Array.isArray(questTypeInfo.eventName)
+            ? questTypeInfo.eventName
+            : [questTypeInfo.eventName];
 
-              handleQuestEvent(
-                ctx,
-                matchingQuest,
-                matchingStep,
-                decodedLog,
-                sender,
+          for (const eventName of eventNames) {
+            if (
+              questTypeInfo.abi.events &&
+              eventName in questTypeInfo.abi.events
+            ) {
+              const event = questTypeInfo.abi.events[
                 eventName
-              );
-              break; // Exit the loop if we've found a matching event
+              ] as AbiEvent<any>;
+              if (event.is(log)) {
+                const decodedLog = event.decode(log);
+                const sender = matchingStep.includeTransaction
+                  ? log.getTransaction().from
+                  : undefined;
+
+                handleQuestEvent(
+                  ctx,
+                  matchingQuest,
+                  matchingStep,
+                  decodedLog,
+                  sender,
+                  eventName,
+                  questType as QUEST_TYPES
+                );
+                break; // Exit the loop if we've found a matching event
+              }
             }
           }
         }
@@ -130,32 +149,60 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
     step: QuestStep,
     decodedLog: any,
     sender?: string,
-    eventName?: string
+    eventName?: string,
+    questType?: QUEST_TYPES
   ): Promise<void> {
+    console.log(
+      `Handling event for quest: ${quest.name}, step: ${step.stepNumber}, event: ${eventName}`
+    );
+
     if (step.filterCriteria) {
-      for (const [key, value] of Object.entries(step.filterCriteria)) {
-        let logValue = decodedLog[key];
-        let criteriaValue = value;
+      const filterCriteria = step.filterCriteria as Record<string, any>;
 
-        if (typeof logValue === "bigint") {
-          logValue = logValue.toString();
-        }
-        if (typeof criteriaValue === "bigint") {
-          criteriaValue = criteriaValue.toString();
-        }
+      if (filterCriteria[questType as QUEST_TYPES]) {
+        const criteria = filterCriteria[questType as QUEST_TYPES];
+        for (const [key, value] of Object.entries(criteria)) {
+          let logValue = decodedLog[key];
+          let criteriaValue = value;
 
-        if (logValue.toLowerCase() !== criteriaValue.toLowerCase()) {
-          return;
+          if (typeof logValue === "bigint") {
+            logValue = logValue.toString();
+          }
+          if (typeof criteriaValue === "bigint") {
+            criteriaValue = criteriaValue.toString();
+          }
+
+          if (Array.isArray(criteriaValue)) {
+            if (
+              !criteriaValue.some(
+                (v) => v.toLowerCase() === logValue.toLowerCase()
+              )
+            ) {
+              return;
+            }
+          } else if (
+            typeof logValue === "string" &&
+            typeof criteriaValue === "string"
+          ) {
+            if (logValue.toLowerCase() !== criteriaValue.toLowerCase()) {
+              return;
+            }
+          } else {
+            // If types don't match, consider it a failure
+            return;
+          }
         }
       }
     }
 
     const { userAddress, amount } = getUserAddressAndAmount(
-      step.type as QUEST_TYPES,
+      questType as QUEST_TYPES,
       decodedLog,
       sender,
       eventName
     );
+
+    console.log(`User address: ${userAddress}, amount: ${amount}`);
 
     if (!userAddress) {
       return;
@@ -241,7 +288,10 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
           amount = decodedLog.amount;
         } else if (eventName === "TransferBatch") {
           // Sum up all amounts in the batch
-          amount = decodedLog.amounts.reduce((sum: bigint, val: bigint) => sum + val, 0n);
+          amount = decodedLog.amounts.reduce(
+            (sum: bigint, val: bigint) => sum + val,
+            0n
+          );
         }
         break;
       case QUEST_TYPES.UNISWAP_SWAP:

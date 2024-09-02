@@ -1,8 +1,8 @@
-module.exports = class Data1725057458126 {
-    name = 'Data1725057458126'
+module.exports = class Data1725343351319 {
+    name = 'Data1725343351319'
 
     async up(db) {
-        await db.query(`CREATE TABLE "quest_step" ("id" character varying NOT NULL, "step_number" integer NOT NULL, "type" text NOT NULL, "address" text NOT NULL, "token_id" numeric, "filter_criteria" jsonb, "required_amount" numeric NOT NULL, "include_transaction" boolean NOT NULL, "path" text, "quest_id" character varying, CONSTRAINT "PK_2701eac9024314902255b9efaf7" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "quest_step" ("id" character varying NOT NULL, "step_number" integer NOT NULL, "types" text array NOT NULL, "addresses" text array NOT NULL, "filter_criteria" jsonb, "required_amount" numeric NOT NULL, "include_transaction" boolean NOT NULL, "path" text, "quest_id" character varying, CONSTRAINT "PK_2701eac9024314902255b9efaf7" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_9dc3e0b37118e6c7035a54d9d9" ON "quest_step" ("quest_id") `)
         await db.query(`CREATE TABLE "quest" ("id" character varying NOT NULL, "name" text NOT NULL, "chain" text NOT NULL, "start_time" integer, "end_time" integer, "total_participants" integer NOT NULL, "total_completions" integer NOT NULL, CONSTRAINT "PK_0d6873502a58302d2ae0b82631c" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_27eab628270ea2fa9e514693e4" ON "quest" ("name") `)

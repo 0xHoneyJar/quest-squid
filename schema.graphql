@@ -13,9 +13,8 @@ type QuestStep @entity {
   id: ID!
   quest: Quest!
   stepNumber: Int!
-  type: String!
-  address: String!
-  tokenId: BigInt
+  types: [String!]!
+  addresses: [String!]!
   filterCriteria: JSON
   requiredAmount: BigInt!
   includeTransaction: Boolean!
