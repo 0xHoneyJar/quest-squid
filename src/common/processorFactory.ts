@@ -13,7 +13,6 @@ import {
   BLOCK_RANGES,
   CHAINS,
   QUESTS_CONFIG,
-  QUEST_TYPES,
   QUEST_TYPE_INFO,
   RPC_ENDPOINTS,
 } from "../constants";
@@ -28,30 +27,35 @@ export function createProcessor(chain: CHAINS) {
   // Collect relevant addresses and topics
   for (const quest of Object.values(questConfig)) {
     for (const step of quest.steps) {
-      const address = step.address.toLowerCase();
-      if (!addressToTopics[address]) {
-        addressToTopics[address] = { topic0: [] };
-      }
-
-      const questTypeInfo = QUEST_TYPE_INFO[step.type as QUEST_TYPES];
-      const eventNames = Array.isArray(questTypeInfo.eventName)
-        ? questTypeInfo.eventName
-        : [questTypeInfo.eventName];
-
-      for (const eventName of eventNames) {
-        const topic0 = questTypeInfo.abi.events[eventName].topic;
-
-        if (!addressToTopics[address].topic0.includes(topic0)) {
-          addressToTopics[address].topic0.push(topic0);
+      const questTypes = step.types;
+      for (const address of step.addresses) {
+        const lowerCaseAddress = address.toLowerCase();
+        if (!addressToTopics[lowerCaseAddress]) {
+          addressToTopics[lowerCaseAddress] = { topic0: [] };
         }
-      }
 
-      if (questTypeInfo.topic1) {
-        addressToTopics[address].topic1 = questTypeInfo.topic1;
-      }
+        for (const questType of questTypes) {
+          const questTypeInfo = QUEST_TYPE_INFO[questType];
+          const eventNames = Array.isArray(questTypeInfo.eventName)
+            ? questTypeInfo.eventName
+            : [questTypeInfo.eventName];
 
-      if (questTypeInfo.topic2) {
-        addressToTopics[address].topic2 = questTypeInfo.topic2;
+          for (const eventName of eventNames) {
+            const topic0 = questTypeInfo.abi.events[eventName].topic;
+
+            if (!addressToTopics[lowerCaseAddress].topic0.includes(topic0)) {
+              addressToTopics[lowerCaseAddress].topic0.push(topic0);
+            }
+          }
+
+          if (questTypeInfo.topic1) {
+            addressToTopics[lowerCaseAddress].topic1 = questTypeInfo.topic1;
+          }
+
+          if (questTypeInfo.topic2) {
+            addressToTopics[lowerCaseAddress].topic2 = questTypeInfo.topic2;
+          }
+        }
       }
     }
   }
