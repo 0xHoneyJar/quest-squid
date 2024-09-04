@@ -26,7 +26,7 @@ export function createProcessor(chain: CHAINS) {
       topic1?: string; 
       topic2?: string;
       range?: { from: number; to?: number };
-      includeTransaction: boolean; // Add this line
+      includeTransaction: boolean;
     }
   > = {};
 
@@ -39,16 +39,14 @@ export function createProcessor(chain: CHAINS) {
         if (!addressToTopics[lowerCaseAddress]) {
           addressToTopics[lowerCaseAddress] = { 
             topic0: [], 
-            includeTransaction: false // Initialize to false
+            includeTransaction: false
           };
         }
 
-        // Add range if startBlock is defined
         if (step.startBlock) {
           addressToTopics[lowerCaseAddress].range = { from: step.startBlock };
         }
 
-        // Set includeTransaction if it's true in the step
         if (step.includeTransaction) {
           addressToTopics[lowerCaseAddress].includeTransaction = true;
         }
@@ -60,7 +58,7 @@ export function createProcessor(chain: CHAINS) {
             : [questTypeInfo.eventName];
 
           for (const eventName of eventNames) {
-            const topic0 = questTypeInfo.abi.events[eventName].topic;
+            const topic0 = questTypeInfo.abi.events[eventName].topic.toLowerCase();
 
             if (!addressToTopics[lowerCaseAddress].topic0.includes(topic0)) {
               addressToTopics[lowerCaseAddress].topic0.push(topic0);
@@ -68,11 +66,11 @@ export function createProcessor(chain: CHAINS) {
           }
 
           if (questTypeInfo.topic1) {
-            addressToTopics[lowerCaseAddress].topic1 = questTypeInfo.topic1;
+            addressToTopics[lowerCaseAddress].topic1 = formatAddressTopic(questTypeInfo.topic1);
           }
 
           if (questTypeInfo.topic2) {
-            addressToTopics[lowerCaseAddress].topic2 = questTypeInfo.topic2;
+            addressToTopics[lowerCaseAddress].topic2 = formatAddressTopic(questTypeInfo.topic2);
           }
         }
       }
@@ -100,11 +98,15 @@ export function createProcessor(chain: CHAINS) {
       topic1: topics.topic1 ? [topics.topic1] : undefined,
       topic2: topics.topic2 ? [topics.topic2] : undefined,
       range: topics.range,
-      transaction: topics.includeTransaction, // Use the flag here
+      transaction: topics.includeTransaction,
     });
   }
 
   return processor;
+}
+
+function formatAddressTopic(address: string): string {
+  return '0x' + address.replace('0x', '').padStart(64, '0').toLowerCase();
 }
 
 export type Fields = EvmBatchProcessorFields<

@@ -312,7 +312,11 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       case QUEST_TYPES.CLAIM_BGT_REWARD:
         userAddress = decodedLog.account.toLowerCase();
         break;
-      case QUEST_TYPES.DELEGATE:
+      case QUEST_TYPES.DELEGATE_QUEUE:
+        userAddress = decodedLog.sender.toLowerCase();
+        amount = decodedLog.amount;
+        break;
+      case QUEST_TYPES.DELEGATE_ACTIVATE:
         userAddress = decodedLog.sender.toLowerCase();
         amount = decodedLog.amount;
         break;

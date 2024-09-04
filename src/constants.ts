@@ -101,7 +101,8 @@ export enum QUEST_TYPES {
   TOKENS_MINTED = "TOKENS_MINTED",
   TOKENS_DEPOSITED = "TOKENS_DEPOSITED",
   UNISWAP_MINT = "UNISWAP_MINT",
-  DELEGATE = "DELEGATE",
+  DELEGATE_QUEUE = "DELEGATE_QUEUE",
+  DELEGATE_ACTIVATE = "DELEGATE_ACTIVATE",
   STAKE = "STAKE",
   CLAIM_BGT_REWARD = "CLAIM_BGT_REWARD",
   DIRAC_DEPOSIT = "DIRAC_DEPOSIT",
@@ -160,8 +161,13 @@ export const QUEST_TYPE_INFO: Record<
     eventName: "Mint",
     abi: simplifiedUniswapAbi as AbiWithEvents,
   },
-  [QUEST_TYPES.DELEGATE]: {
+  [QUEST_TYPES.DELEGATE_ACTIVATE]: {
     eventName: "ActivateBoost",
+    abi: bgtAbi as AbiWithEvents,
+    topic2: THJ_VALIDATOR_ADDRESS,
+  },
+  [QUEST_TYPES.DELEGATE_QUEUE]: {
+    eventName: "QueueBoost",
     abi: bgtAbi as AbiWithEvents,
     topic2: THJ_VALIDATOR_ADDRESS,
   },
@@ -335,10 +341,21 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           startBlock: 3853226,
         },
         {
-          types: [QUEST_TYPES.DELEGATE],
+          types: [QUEST_TYPES.DELEGATE_QUEUE],
           addresses: [BGT_ADDRESS],
           filterCriteria: {
-            [QUEST_TYPES.DELEGATE]: {
+            [QUEST_TYPES.DELEGATE_QUEUE]: {
+              validator: THJ_VALIDATOR_ADDRESS,
+            },
+          },
+          requiredAmount: parseEther("1"),
+          startBlock: 3853226,
+        },
+        {
+          types: [QUEST_TYPES.DELEGATE_ACTIVATE],
+          addresses: [BGT_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.DELEGATE_ACTIVATE]: {
               validator: THJ_VALIDATOR_ADDRESS,
             },
           },
