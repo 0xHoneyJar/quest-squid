@@ -32,6 +32,9 @@ export class QuestStep {
     @BooleanColumn_({nullable: false})
     includeTransaction!: boolean
 
+    @IntColumn_({nullable: true})
+    startBlock!: number | undefined | null
+
     @StringColumn_({nullable: true})
     path!: string | undefined | null
 }

@@ -69,6 +69,7 @@ function scheduleInit(
       questStep.requiredAmount = stepConfig.requiredAmount || 1n;
       questStep.includeTransaction = stepConfig.includeTransaction || false;
       questStep.path = stepConfig.path;
+      questStep.startBlock = stepConfig.startBlock; // Add this line
       quest.steps.push(questStep);
       questSteps.set(stepId, questStep);
     });

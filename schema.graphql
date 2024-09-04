@@ -18,6 +18,7 @@ type QuestStep @entity {
   filterCriteria: JSON
   requiredAmount: BigInt!
   includeTransaction: Boolean!
+  startBlock: Int
   path: String
 }
 
