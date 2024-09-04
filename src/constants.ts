@@ -86,6 +86,7 @@ export enum QUESTS {
   LEFT_CURVE_BERAS = "Left Curve Beras",
   A_VASE_FULL_OF_HONEY = "A Vase full of Honey",
   OHA_BERA = "おはベラ!",
+  BEARDROPS = "Beardrops",
 }
 
 export enum MISSIONS {
@@ -221,6 +222,7 @@ type QuestStepConfig = {
   readonly requiredAmount?: bigint;
   readonly includeTransaction?: boolean;
   readonly path?: string;
+  readonly startBlock?: number;
 };
 
 type QuestConfig = {
@@ -315,32 +317,37 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
       startTime: 1724367186,
       endTime: 1725480000,
     },
-    // [QUESTS.STAKOOOR]: {
-    //   steps: [
-    //     {
-    //       type: QUEST_TYPES.STAKE,
-    //       address: REWARDS_VAULT_ADDRESS,
-    //     },
-    //   ],
-    //   startTime: 1722183600,
-    // },
-    // [QUESTS.DELEGATOOOR]: {
-    //   steps: [
-    //     {
-    //       type: QUEST_TYPES.CLAIM_BGT_REWARD,
-    //       address: REWARDS_VAULT_ADDRESS,
-    //     },
-    //     {
-    //       type: QUEST_TYPES.DELEGATE,
-    //       address: BGT_ADDRESS,
-    //       filterCriteria: {
-    //         validator: THJ_VALIDATOR_ADDRESS,
-    //       },
-    //       requiredAmount: parseEther("1"),
-    //     },
-    //   ],
-    //   startTime: 1722183600,
-    // },
+    [QUESTS.STAKOOOR]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.STAKE],
+          addresses: [REWARDS_VAULT_ADDRESS],
+          startBlock: 3853226,
+        },
+      ],
+      startTime: 1725480000 - ONE_DAY_IN_SECONDS,
+    },
+    [QUESTS.DELEGATOOOR]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.CLAIM_BGT_REWARD],
+          addresses: [REWARDS_VAULT_ADDRESS],
+          startBlock: 3853226,
+        },
+        {
+          types: [QUEST_TYPES.DELEGATE],
+          addresses: [BGT_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.DELEGATE]: {
+              validator: THJ_VALIDATOR_ADDRESS,
+            },
+          },
+          requiredAmount: parseEther("1"),
+          startBlock: 3853226,
+        },
+      ],
+      startTime: 1725480000 - ONE_DAY_IN_SECONDS,
+    },
     [QUESTS.RUN_IT_BACK_TURBO]: {
       steps: [
         {
@@ -521,6 +528,21 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.ARBITRUM]: {
+    [QUESTS.BEARDROPS]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [HONEY_SITE_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC1155_MINT]: {
+              id: 2n,
+            },
+          },
+        },
+      ],
+      startTime: 1725480000 - ONE_DAY_IN_SECONDS,
+      endTime: 1726344000,
+    },
     [QUESTS.A_VASE_FULL_OF_HONEY]: {
       steps: [
         {

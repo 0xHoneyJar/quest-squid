@@ -21,7 +21,13 @@ export function createProcessor(chain: CHAINS) {
   const questConfig = QUESTS_CONFIG[chain];
   const addressToTopics: Record<
     string,
-    { topic0: string[]; topic1?: string; topic2?: string }
+    { 
+      topic0: string[]; 
+      topic1?: string; 
+      topic2?: string;
+      range?: { from: number; to?: number };
+      includeTransaction: boolean; // Add this line
+    }
   > = {};
 
   // Collect relevant addresses and topics
@@ -31,7 +37,20 @@ export function createProcessor(chain: CHAINS) {
       for (const address of step.addresses) {
         const lowerCaseAddress = address.toLowerCase();
         if (!addressToTopics[lowerCaseAddress]) {
-          addressToTopics[lowerCaseAddress] = { topic0: [] };
+          addressToTopics[lowerCaseAddress] = { 
+            topic0: [], 
+            includeTransaction: false // Initialize to false
+          };
+        }
+
+        // Add range if startBlock is defined
+        if (step.startBlock) {
+          addressToTopics[lowerCaseAddress].range = { from: step.startBlock };
+        }
+
+        // Set includeTransaction if it's true in the step
+        if (step.includeTransaction) {
+          addressToTopics[lowerCaseAddress].includeTransaction = true;
         }
 
         for (const questType of questTypes) {
@@ -80,7 +99,8 @@ export function createProcessor(chain: CHAINS) {
       topic0: topics.topic0,
       topic1: topics.topic1 ? [topics.topic1] : undefined,
       topic2: topics.topic2 ? [topics.topic2] : undefined,
-      transaction: true, // Include transaction for all logs to be safe
+      range: topics.range,
+      transaction: topics.includeTransaction, // Use the flag here
     });
   }
 
