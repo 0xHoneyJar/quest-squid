@@ -144,6 +144,65 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
     }
   }
 
+  // Process traces for ETH transfers
+  for (let trace of block.traces) {
+    console.log(trace);
+
+    if (
+      trace.type === "call" &&
+      (trace as any).action?.value &&
+      (trace as any).action.value > 0n &&
+      (trace as any).action?.to &&
+      (trace as any).action?.from
+    ) {
+      console.log(trace);
+      const toAddress = (trace as any).action.to.toLowerCase();
+      console.log(`Processing ETH transfer to: ${toAddress}`);
+      console.log(questsArray);
+
+      const matchingQuests = questsArray.filter(
+        (quest) =>
+          quest.steps.some((step) =>
+            step.addresses.some(
+              (address) => address.toLowerCase() === toAddress
+            )
+          ) &&
+          (!quest.startTime || currentTimestamp >= quest.startTime) &&
+          (!quest.endTime || currentTimestamp <= quest.endTime)
+      );
+
+      console.log(
+        `Matching quests for ETH transfer: ${matchingQuests
+          .map((q) => q.name)
+          .join(", ")}`
+      );
+
+      for (const matchingQuest of matchingQuests) {
+        const matchingSteps = matchingQuest.steps.filter((step) =>
+          step.addresses.includes(toAddress)
+        );
+
+        for (const matchingStep of matchingSteps) {
+          if (matchingStep.types.includes(QUEST_TYPES.ETH_TRANSFER)) {
+            handleQuestEvent(
+              ctx,
+              matchingQuest,
+              matchingStep,
+              {
+                from: (trace as any).action.from,
+                to: (trace as any).action.to,
+                value: (trace as any).action.value,
+              },
+              (trace as any).action.from,
+              "ETH_Transfer",
+              QUEST_TYPES.ETH_TRANSFER
+            );
+          }
+        }
+      }
+    }
+  }
+
   async function handleQuestEvent(
     ctx: MappingContext,
     quest: Quest,
@@ -337,6 +396,10 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         break;
       case QUEST_TYPES.ZERU_OPEN_POSITION:
         userAddress = decodedLog.user.toLowerCase();
+        break;
+      case QUEST_TYPES.ETH_TRANSFER:
+        userAddress = decodedLog.from.toLowerCase();
+        amount = decodedLog.value;
         break;
       default:
         return { userAddress: null, amount: 0n };

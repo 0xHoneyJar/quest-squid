@@ -60,6 +60,7 @@ export enum CHAINS {
   OPTIMISM = "optimism",
   BERACHAIN = "berachain",
   ZORA = "zora",
+  ETHEREUM = "ethereum",
 }
 
 export enum QUESTS {
@@ -87,6 +88,7 @@ export enum QUESTS {
   A_VASE_FULL_OF_HONEY = "A Vase full of Honey",
   OHA_BERA = "おはベラ!",
   BEARDROPS = "Beardrops",
+  CHAOS_SCAVENGER_HUNT = "Chaos Scavenger Hunt",
 }
 
 export enum MISSIONS {
@@ -111,6 +113,7 @@ export enum QUEST_TYPES {
   ZERU_OPEN_POSITION = "ZERU_OPEN_POSITION",
   MEMESWAP_DEPLOY = "MEMESWAP_DEPLOY",
   FTO_DEPOSIT = "FTO_DEPOSIT",
+  ETH_TRANSFER = "ETH_TRANSFER",
 }
 
 export enum MISSION_TYPES {
@@ -202,6 +205,10 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.FTO_DEPOSIT]: {
     eventName: "DepositRaisedToken",
     abi: ftoPairAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.ETH_TRANSFER]: {
+    eventName: "Transfer",
+    abi: {} as AbiWithEvents,
   },
 } as const;
 
@@ -405,6 +412,17 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.CHAOS_SCAVENGER_HUNT]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ETH_TRANSFER],
+          addresses: ["0xf6c3De06D433D48bc984c1aF76Ae6871960396D3"], // Replace with the actual address
+          requiredAmount: parseEther("0.00042"), // Set the required amount, e.g., 0.1 ETH
+        },
+      ],
+      startTime: 1725566400 - ONE_DAY_IN_SECONDS,
+      endTime: 1726430400,
+    },
     [QUESTS.OHA_BERA]: {
       steps: [
         {
@@ -545,6 +563,17 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.ARBITRUM]: {
+    [QUESTS.CHAOS_SCAVENGER_HUNT]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ETH_TRANSFER],
+          addresses: ["0xf6c3De06D433D48bc984c1aF76Ae6871960396D3"], // Replace with the actual address
+          requiredAmount: parseEther("0.00042"), // Set the required amount, e.g., 0.1 ETH
+        },
+      ],
+      startTime: 1725566400 - ONE_DAY_IN_SECONDS,
+      endTime: 1726430400,
+    },
     [QUESTS.BEARDROPS]: {
       steps: [
         {
@@ -637,6 +666,19 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
       endTime: 1722183600,
     },
   },
+  [CHAINS.ETHEREUM]: {
+    [QUESTS.CHAOS_SCAVENGER_HUNT]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ETH_TRANSFER],
+          addresses: ["0xf6c3De06D433D48bc984c1aF76Ae6871960396D3"], // Replace with the actual address
+          requiredAmount: parseEther("0.00042"), // Set the required amount, e.g., 0.1 ETH
+        },
+      ],
+      startTime: 1725566400 - ONE_DAY_IN_SECONDS,
+      endTime: 1726430400,
+    },
+  },
 } as const;
 
 export const MISSIONS_CONFIG: Record<string, Record<string, MissionConfig>> = {
@@ -644,6 +686,9 @@ export const MISSIONS_CONFIG: Record<string, Record<string, MissionConfig>> = {
 };
 
 export const BLOCK_RANGES = {
+  [CHAINS.ETHEREUM]: {
+    from: 20681803,
+  },
   [CHAINS.BASE]: {
     from: 13264923,
   },
@@ -667,6 +712,7 @@ export const RPC_ENDPOINTS = {
   [CHAINS.BERACHAIN]: process.env.RPC_BERA_HTTP,
   [CHAINS.OPTIMISM]: process.env.RPC_OPTIMISM_HTTP,
   [CHAINS.ZORA]: process.env.RPC_ZORA_HTTP,
+  [CHAINS.ETHEREUM]: process.env.RPC_ETH_HTTP,
 } as const;
 
 export const ARCHIVE_GATEWAYS = {
@@ -675,4 +721,5 @@ export const ARCHIVE_GATEWAYS = {
   [CHAINS.OPTIMISM]: "https://v2.archive.subsquid.io/network/optimism-mainnet",
   [CHAINS.ZORA]: "https://v2.archive.subsquid.io/network/zora-mainnet",
   [CHAINS.BERACHAIN]: "https://v2.archive.subsquid.io/network/berachain-bartio",
+  [CHAINS.ETHEREUM]: "https://v2.archive.subsquid.io/network/ethereum-mainnet",
 } as const;
