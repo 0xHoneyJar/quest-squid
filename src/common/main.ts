@@ -401,6 +401,15 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         userAddress = decodedLog.from.toLowerCase();
         amount = decodedLog.value;
         break;
+      case QUEST_TYPES.URSA_ROLL_DEPOSIT:
+        userAddress = decodedLog.player.toLowerCase();
+        break;
+      case QUEST_TYPES.URSA_ROLL_LIQUIDITY_ADDED:
+        userAddress = decodedLog.user.toLowerCase();
+        break;
+      case QUEST_TYPES.GOVERNOR_PROPOSE:
+        userAddress = decodedLog.proposer.toLowerCase();
+        break;
       default:
         return { userAddress: null, amount: 0n };
     }
