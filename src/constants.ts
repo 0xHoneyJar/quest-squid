@@ -7,6 +7,7 @@ import * as erc1155Abi from "./abi/erc1155";
 import * as erc20Abi from "./abi/erc20";
 import * as erc721Abi from "./abi/erc721";
 import * as ftoPairAbi from "./abi/ftoPair";
+import * as governorAbi from "./abi/governor";
 import * as hookVaultAbi from "./abi/hookVault";
 import * as lendingPoolAbi from "./abi/lendingPool";
 import * as memeswapDeployerAbi from "./abi/memeswapDeployer";
@@ -14,6 +15,8 @@ import * as rewardsVaultAbi from "./abi/rewardsVault";
 import * as simplifiedUniswapAbi from "./abi/simplifiedUniswap";
 import * as strategiesControllerAbi from "./abi/strategiesController";
 import * as uniswapAbi from "./abi/uniswap";
+import * as ursaRollAbi from "./abi/ursaRoll";
+import * as ursaVaultAbi from "./abi/ursaVault";
 
 const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
 
@@ -54,6 +57,20 @@ export const POT_ADDRESS = "0xfad73c80D67d3cb4A929d1c0fAF33A820620aE41";
 export const BRUUVVPRINT_ADDRESS = "0xe93435C4FD05A566f4EB20e1fCbbb83F95886e08";
 export const LEFT_CURVE_ADDRESS = "0x737732bA94b868E5115cCE477BFb171Ae9069d88";
 export const OHA_BERA_ADDRESS = "0x0264D933F13eE993270591668CfF87b8D35Dd3b4";
+export const URSA_ROLL_ADDRESS = "0x286E7db45Ebd9cF4426EE617b2e36Cc008CAB063";
+export const URSA_VAULT_ADDRESS = "0x8E3e0A48c8Db7C9AB1419276e12808a53F441B79";
+export const HORSES_ADDRESS = "0xf4DEd30B6ca5a6A40f56D9Fe066A9951571C6E3C";
+export const MIBERA_README_ADDRESS =
+  "0x167D72124B0e9DbC94999b280b2282d8F985a21D";
+export const HENLO_CULT_ADDRESS = "0x90D1F6c8C67BA8b3E9084f8d20E1d9E64359Ec01";
+export const HENLO_CULT_DASHBOARD_ADDRESS =
+  "0xdC6b3687D5D9ADA19fAAd9E782E3eCE41e1DA7Ba";
+export const HONEY_JAR_GEN_4_ADDRESS =
+  "0xe1d16cc75c9f39a2e0f5131eb39d4b634b23f301";
+export const FABLE_BERAS_ADDRESS = "0x06D7ce587bD94583070192caBc5AE3FC06D43A90";
+export const JOKERACE_GOVERNOR_ADDRESS =
+  "0x855B7839fd915BDC6d589cB2D612EEc7f5B0b7cc";
+
 export enum CHAINS {
   BASE = "base",
   ARBITRUM = "arbitrum",
@@ -89,6 +106,15 @@ export enum QUESTS {
   OHA_BERA = "おはベラ!",
   BEARDROPS = "Beardrops",
   CHAOS_SCAVENGER_HUNT = "Chaos Scavenger Hunt",
+  BERA_DREAMER = "Bera Dreamer",
+  GET_TO_THE_STARTIN_LINE = "Get to the Startin' Line",
+  BERAS_BIG_BET = "Bera's Big Bet",
+  BROWN_HOLE_GOES_BRRRR = "Brown Hole Goes Brrrr",
+  ANTI_DERIVATIVE_ANTHROPOLOGY = "Anti-Derivative Anthropology",
+  HENLO_CULT = "Henlo Cult!",
+  THE_FOURTH_GENERATION = "The Fourth Generation",
+  LORE_HARBINGER = "Lore Harbinger",
+  NOTHING_MAKER = "Nothing Maker",
 }
 
 export enum MISSIONS {
@@ -114,6 +140,9 @@ export enum QUEST_TYPES {
   MEMESWAP_DEPLOY = "MEMESWAP_DEPLOY",
   FTO_DEPOSIT = "FTO_DEPOSIT",
   ETH_TRANSFER = "ETH_TRANSFER",
+  URSA_ROLL_DEPOSIT = "URSA_ROLL_DEPOSIT",
+  URSA_ROLL_LIQUIDITY_ADDED = "URSA_ROLL_LIQUIDITY_ADDED",
+  GOVERNOR_PROPOSE = "GOVERNOR_PROPOSE",
 }
 
 export enum MISSION_TYPES {
@@ -210,6 +239,18 @@ export const QUEST_TYPE_INFO: Record<
     eventName: "Transfer",
     abi: {} as AbiWithEvents,
   },
+  [QUEST_TYPES.URSA_ROLL_DEPOSIT]: {
+    eventName: "DepositETH",
+    abi: ursaRollAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.URSA_ROLL_LIQUIDITY_ADDED]: {
+    eventName: "LiquidityAdded",
+    abi: ursaVaultAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.GOVERNOR_PROPOSE]: {
+    eventName: "ProposalCreated",
+    abi: governorAbi as AbiWithEvents,
+  },
 } as const;
 
 const MISSION_TYPE_INFO: Record<
@@ -259,6 +300,20 @@ type MissionConfig = {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
+    [QUESTS.BERAS_BIG_BET]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.URSA_ROLL_DEPOSIT],
+          addresses: [URSA_ROLL_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.URSA_ROLL_LIQUIDITY_ADDED],
+          addresses: [URSA_VAULT_ADDRESS],
+        },
+      ],
+      startTime: 1726164000 - ONE_DAY_IN_SECONDS,
+      endTime: 1726596000,
+    },
     [QUESTS.BRUUVVPRINT]: {
       steps: [
         {
@@ -383,7 +438,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: ["0xBd10c70e94aCA5c0b9Eb434A62f2D8444Ec0649D"],
           filterCriteria: {
             [QUEST_TYPES.ERC721_MINT]: {
-              from: "0x0000000000000000000000000000000000000000",
+              from: zeroAddress,
             },
           },
         },
@@ -412,6 +467,54 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.NOTHING_MAKER]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.GOVERNOR_PROPOSE],
+          addresses: [JOKERACE_GOVERNOR_ADDRESS],
+        },
+      ],
+      endTime: 1727989200,
+    },
+    [QUESTS.HENLO_CULT]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: [HENLO_CULT_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+        },
+        {
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [HENLO_CULT_DASHBOARD_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: zeroAddress,
+            },
+          },
+        },
+      ],
+      // startTime: 1727121600 - ONE_DAY_IN_SECONDS,
+      endTime: 1727985600,
+    },
+    [QUESTS.BERA_DREAMER]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [APICULTURE_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC1155_MINT]: {
+              id: 5n,
+            },
+          },
+        },
+      ],
+      startTime: 1725912000 - ONE_DAY_IN_SECONDS,
+      endTime: 1726776000,
+    },
     [QUESTS.CHAOS_SCAVENGER_HUNT]: {
       steps: [
         {
@@ -421,7 +524,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       startTime: 1725566400 - ONE_DAY_IN_SECONDS,
-      endTime: 1726430400,
+      endTime: 1726434000,
     },
     [QUESTS.OHA_BERA]: {
       steps: [
@@ -501,7 +604,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: [EGGS_ADDRESS],
           filterCriteria: {
             [QUEST_TYPES.ERC1155_MINT]: {
-              from: "0x0000000000000000000000000000000000000000",
+              from: zeroAddress,
             },
           },
           requiredAmount: 1n,
@@ -511,7 +614,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: [EGGS_ADDRESS],
           filterCriteria: {
             [QUEST_TYPES.ERC1155_MINT]: {
-              from: "0x0000000000000000000000000000000000000000",
+              from: zeroAddress,
             },
           },
           requiredAmount: 10n,
@@ -526,7 +629,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: [HOOKED_ADDRESS],
           filterCriteria: {
             [QUEST_TYPES.ERC1155_MINT]: {
-              from: "0x0000000000000000000000000000000000000000",
+              from: zeroAddress,
             },
           },
         },
@@ -540,7 +643,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: [APICULTURE_ADDRESS],
           filterCriteria: {
             [QUEST_TYPES.ERC1155_MINT]: {
-              from: "0x0000000000000000000000000000000000000000",
+              from: zeroAddress,
             },
           },
         },
@@ -554,7 +657,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: [APICULTURE_ADDRESS],
           filterCriteria: {
             [QUEST_TYPES.ERC1155_MINT]: {
-              from: "0x0000000000000000000000000000000000000000",
+              from: zeroAddress,
             },
           },
         },
@@ -563,6 +666,32 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.ARBITRUM]: {
+    [QUESTS.LORE_HARBINGER]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: [FABLE_BERAS_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+        },
+      ],
+      startTime: 1727460000 - ONE_DAY_IN_SECONDS,
+      endTime: 1728064800,
+    },
+    [QUESTS.BROWN_HOLE_GOES_BRRRR]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ETH_TRANSFER],
+          addresses: ["0x79D08e5Aa6b0E61F56A7FE2c6B8a8d3326589E6C"], // Replace with the actual address
+          requiredAmount: parseEther("0.00042"), // Set the required amount, e.g., 0.1 ETH
+        },
+      ],
+      startTime: 1726423200 - ONE_DAY_IN_SECONDS,
+      endTime: 1727028000,
+    },
     [QUESTS.CHAOS_SCAVENGER_HUNT]: {
       steps: [
         {
@@ -572,7 +701,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       startTime: 1725566400 - ONE_DAY_IN_SECONDS,
-      endTime: 1726430400,
+      endTime: 1726434000,
     },
     [QUESTS.BEARDROPS]: {
       steps: [
@@ -607,7 +736,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: [HONEY_SITE_ADDRESS],
           filterCriteria: {
             [QUEST_TYPES.ERC1155_MINT]: {
-              from: "0x0000000000000000000000000000000000000000",
+              from: zeroAddress,
             },
           },
         },
@@ -625,6 +754,34 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.OPTIMISM]: {
+    [QUESTS.THE_FOURTH_GENERATION]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: [HONEY_JAR_GEN_4_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+        },
+      ],
+      endTime: 1727985600,
+    },
+    [QUESTS.ANTI_DERIVATIVE_ANTHROPOLOGY]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: [MIBERA_README_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+        },
+      ],
+      endTime: 1727640000,
+    },
     [QUESTS.THJ_101]: {
       steps: [
         {
@@ -632,7 +789,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: ["0x9bc2C48189Ff3865875E4A85AfEb6d6ba848739B"],
           filterCriteria: {
             [QUEST_TYPES.ERC721_MINT]: {
-              from: "0x0000000000000000000000000000000000000000",
+              from: zeroAddress,
             },
           },
         },
@@ -647,7 +804,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: [ZORB_ADDRESS],
           filterCriteria: {
             [QUEST_TYPES.ERC1155_MINT]: {
-              from: "0x0000000000000000000000000000000000000000",
+              from: zeroAddress,
             },
           },
           requiredAmount: 1n,
@@ -657,7 +814,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: [ZORB_ADDRESS],
           filterCriteria: {
             [QUEST_TYPES.ERC1155_MINT]: {
-              from: "0x0000000000000000000000000000000000000000",
+              from: zeroAddress,
             },
           },
           requiredAmount: 3n,
@@ -667,6 +824,22 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.ETHEREUM]: {
+    [QUESTS.GET_TO_THE_STARTIN_LINE]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: [HORSES_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 20729110,
+        },
+      ],
+      startTime: 1726164000 - ONE_DAY_IN_SECONDS,
+      endTime: 1727028000,
+    },
     [QUESTS.CHAOS_SCAVENGER_HUNT]: {
       steps: [
         {
@@ -676,7 +849,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       startTime: 1725566400 - ONE_DAY_IN_SECONDS,
-      endTime: 1726430400,
+      endTime: 1726434000,
     },
   },
 } as const;
