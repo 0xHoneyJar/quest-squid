@@ -114,7 +114,7 @@ export enum QUESTS {
   HENLO_CULT = "Henlo Cult!",
   THE_FOURTH_GENERATION = "The Fourth Generation",
   LORE_HARBINGER = "Lore Harbinger",
-  NOTHING_MAKER = "Nothing Maker",
+  MEME_MADNESS = "Meme Madness",
 }
 
 export enum MISSIONS {
@@ -467,7 +467,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
-    [QUESTS.NOTHING_MAKER]: {
+    [QUESTS.MEME_MADNESS]: {
       steps: [
         {
           types: [QUEST_TYPES.GOVERNOR_PROPOSE],
