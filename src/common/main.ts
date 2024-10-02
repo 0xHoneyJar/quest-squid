@@ -413,6 +413,9 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       case QUEST_TYPES.GOLDILOCKS_STAKE:
         userAddress = decodedLog.user.toLowerCase();
         break;
+      case QUEST_TYPES.GOLDILOCKS_BUY:
+        userAddress = decodedLog.user.toLowerCase();
+        break;
       case QUEST_TYPES.AQUABERA_DEPOSIT:
         userAddress = decodedLog.to.toLowerCase();
         break;

@@ -8,7 +8,8 @@ import * as erc1155Abi from "./abi/erc1155";
 import * as erc20Abi from "./abi/erc20";
 import * as erc721Abi from "./abi/erc721";
 import * as ftoPairAbi from "./abi/ftoPair";
-import * as goldilocksAbi from "./abi/goldilocks";
+import * as goldilockedAbi from "./abi/goldilocked";
+import * as goldiswapAbi from "./abi/goldiswap";
 import * as governorAbi from "./abi/governor";
 import * as hookVaultAbi from "./abi/hookVault";
 import * as lendingPoolAbi from "./abi/lendingPool";
@@ -73,7 +74,8 @@ export const FABLE_BERAS_ADDRESS = "0x06D7ce587bD94583070192caBc5AE3FC06D43A90";
 export const JOKERACE_GOVERNOR_ADDRESS =
   "0x855B7839fd915BDC6d589cB2D612EEc7f5B0b7cc";
 export const AQUABERA_ADDRESS = "0x0Dad5a47adbec92E7472F6F34AC066798dEdEE40";
-export const GOLDILOCKS_ADDRESS = "0x7d91Bf5851B3A8bCf8C39A69AF2F0F98A4e2202A";
+export const GOLDILOCKS_ADDRESS = "0xe2cA693a47C32bd33949120d31d42b9e5Ef5c7Ef";
+export const GOLDISWAP_ADDRESS = "0xC94ecBfE16E337f6e606dcd86B8A5eaDbAe7A337";
 export const BOARDING_PASS_ADDRESS =
   "0x154a563Ab6C037BD0f041ac91600FfA9FE2f5fa0";
 
@@ -153,6 +155,7 @@ export enum QUEST_TYPES {
   URSA_ROLL_LIQUIDITY_ADDED = "URSA_ROLL_LIQUIDITY_ADDED",
   GOVERNOR_PROPOSE = "GOVERNOR_PROPOSE",
   GOLDILOCKS_STAKE = "GOLDILOCKS_STAKE",
+  GOLDILOCKS_BUY = "GOLDILOCKS_BUY",
   AQUABERA_DEPOSIT = "AQUABERA_DEPOSIT",
 }
 
@@ -264,7 +267,11 @@ export const QUEST_TYPE_INFO: Record<
   },
   [QUEST_TYPES.GOLDILOCKS_STAKE]: {
     eventName: "Stake",
-    abi: goldilocksAbi as AbiWithEvents,
+    abi: goldilockedAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.GOLDILOCKS_BUY]: {
+    eventName: "Buy",
+    abi: goldiswapAbi as AbiWithEvents,
   },
   [QUEST_TYPES.AQUABERA_DEPOSIT]: {
     eventName: "DepositForwarded",
