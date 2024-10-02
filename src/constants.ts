@@ -1,5 +1,6 @@
 import { AbiEvent } from "@subsquid/evm-abi";
 import { parseEther, zeroAddress } from "viem";
+import * as aquaberaAbi from "./abi/aquabera";
 import * as bgtAbi from "./abi/bgt";
 import * as boogaBearsAbi from "./abi/boogaBears";
 import * as diracVaultAbi from "./abi/diracVault";
@@ -7,6 +8,7 @@ import * as erc1155Abi from "./abi/erc1155";
 import * as erc20Abi from "./abi/erc20";
 import * as erc721Abi from "./abi/erc721";
 import * as ftoPairAbi from "./abi/ftoPair";
+import * as goldilocksAbi from "./abi/goldilocks";
 import * as governorAbi from "./abi/governor";
 import * as hookVaultAbi from "./abi/hookVault";
 import * as lendingPoolAbi from "./abi/lendingPool";
@@ -70,6 +72,10 @@ export const HONEY_JAR_GEN_4_ADDRESS =
 export const FABLE_BERAS_ADDRESS = "0x06D7ce587bD94583070192caBc5AE3FC06D43A90";
 export const JOKERACE_GOVERNOR_ADDRESS =
   "0x855B7839fd915BDC6d589cB2D612EEc7f5B0b7cc";
+export const AQUABERA_ADDRESS = "0x0Dad5a47adbec92E7472F6F34AC066798dEdEE40";
+export const GOLDILOCKS_ADDRESS = "0x7d91Bf5851B3A8bCf8C39A69AF2F0F98A4e2202A";
+export const BOARDING_PASS_ADDRESS =
+  "0x154a563Ab6C037BD0f041ac91600FfA9FE2f5fa0";
 
 export enum CHAINS {
   BASE = "base",
@@ -115,6 +121,9 @@ export enum QUESTS {
   THE_FOURTH_GENERATION = "The Fourth Generation",
   LORE_HARBINGER = "Lore Harbinger",
   MEME_MADNESS = "Meme Madness",
+  HOUSE_IN_DA_WOODS = "House in Da Woods",
+  SOURCE_OF_LIFE = "Source of Life",
+  A_JOURNEY_OVER_THE_HORIZON = "A Journey Over the Horizon",
 }
 
 export enum MISSIONS {
@@ -143,6 +152,8 @@ export enum QUEST_TYPES {
   URSA_ROLL_DEPOSIT = "URSA_ROLL_DEPOSIT",
   URSA_ROLL_LIQUIDITY_ADDED = "URSA_ROLL_LIQUIDITY_ADDED",
   GOVERNOR_PROPOSE = "GOVERNOR_PROPOSE",
+  GOLDILOCKS_STAKE = "GOLDILOCKS_STAKE",
+  AQUABERA_DEPOSIT = "AQUABERA_DEPOSIT",
 }
 
 export enum MISSION_TYPES {
@@ -251,6 +262,14 @@ export const QUEST_TYPE_INFO: Record<
     eventName: "ProposalCreated",
     abi: governorAbi as AbiWithEvents,
   },
+  [QUEST_TYPES.GOLDILOCKS_STAKE]: {
+    eventName: "Stake",
+    abi: goldilocksAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.AQUABERA_DEPOSIT]: {
+    eventName: "DepositForwarded",
+    abi: aquaberaAbi as AbiWithEvents,
+  },
 } as const;
 
 const MISSION_TYPE_INFO: Record<
@@ -300,6 +319,26 @@ type MissionConfig = {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
+    [QUESTS.SOURCE_OF_LIFE]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.AQUABERA_DEPOSIT],
+          addresses: [AQUABERA_ADDRESS],
+        },
+      ],
+      startTime: 1727956800,
+      endTime: 1728216000,
+    },
+    [QUESTS.HOUSE_IN_DA_WOODS]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.GOLDILOCKS_STAKE],
+          addresses: [GOLDILOCKS_ADDRESS],
+        },
+      ],
+      startTime: 1728331200,
+      endTime: 1728590400,
+    },
     [QUESTS.BERAS_BIG_BET]: {
       steps: [
         {
@@ -467,6 +506,21 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.A_JOURNEY_OVER_THE_HORIZON]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [BOARDING_PASS_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: zeroAddress,
+            },
+          },
+        },
+      ],
+      // startTime: 1727899200,
+      endTime: 1728262800,
+    },
     [QUESTS.MEME_MADNESS]: {
       steps: [
         {

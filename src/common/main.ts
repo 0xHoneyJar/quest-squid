@@ -410,6 +410,12 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       case QUEST_TYPES.GOVERNOR_PROPOSE:
         userAddress = decodedLog.proposer.toLowerCase();
         break;
+      case QUEST_TYPES.GOLDILOCKS_STAKE:
+        userAddress = decodedLog.user.toLowerCase();
+        break;
+      case QUEST_TYPES.AQUABERA_DEPOSIT:
+        userAddress = decodedLog.to.toLowerCase();
+        break;
       default:
         return { userAddress: null, amount: 0n };
     }
