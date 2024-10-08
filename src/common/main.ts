@@ -7,7 +7,13 @@ import {
   QUEST_TYPES,
   QUEST_TYPE_INFO,
 } from "../constants";
-import { Quest, QuestStep, StepProgress, UserQuestProgress } from "../model";
+import {
+  Quest,
+  QuestStep,
+  RevshareEvent,
+  StepProgress,
+  UserQuestProgress,
+} from "../model";
 import { TaskQueue } from "../utils/queue";
 import { Context, ProcessorContext } from "./processorFactory";
 
@@ -70,6 +76,7 @@ function scheduleInit(
       questStep.includeTransaction = stepConfig.includeTransaction || false;
       questStep.path = stepConfig.path;
       questStep.startBlock = stepConfig.startBlock; // Add this line
+      questStep.revshareTracking = stepConfig.revshareTracking || false; // Add this line
       quest.steps.push(questStep);
       questSteps.set(stepId, questStep);
     });
@@ -133,7 +140,11 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
                   decodedLog,
                   sender,
                   eventName,
-                  questType as QUEST_TYPES
+                  questType as QUEST_TYPES,
+                  matchingStep.revshareTracking
+                    ? log.transaction?.hash
+                    : undefined,
+                  log.logIndex
                 );
                 break; // Exit the loop if we've found a matching event
               }
@@ -210,7 +221,9 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
     decodedLog: any,
     sender?: string,
     eventName?: string,
-    questType?: QUEST_TYPES
+    questType?: QUEST_TYPES,
+    transactionHash?: string,
+    logIndex?: number
   ): Promise<void> {
     console.log(
       `Handling event for quest: ${quest.name}, step: ${step.stepNumber}, event: ${eventName}`
@@ -271,11 +284,18 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
     const userQuestProgressId = `${userAddress}-${quest.id}`;
     const stepProgressId = `${userQuestProgressId}-step-${step.stepNumber}`;
 
+    // Simplify the RevshareEvent ID
+    const revshareEventId = `${userAddress}-${transactionHash}-${logIndex}`;
+
     const userQuestProgressDeferred = ctx.store.defer(
       UserQuestProgress,
       userQuestProgressId
     );
     const stepProgressDeferred = ctx.store.defer(StepProgress, stepProgressId);
+    const revshareEventDeferred = ctx.store.defer(
+      RevshareEvent,
+      revshareEventId
+    );
 
     ctx.queue.add(async () => {
       const userQuestProgress = await userQuestProgressDeferred.getOrInsert(
@@ -298,7 +318,7 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
           stepNumber: step.stepNumber,
           progressAmount: 0n,
           completed: false,
-          startTimestamp: BigInt(Math.floor(Date.now() / 1000)),
+          startTimestamp: BigInt(block.header.timestamp),
           path: step.path,
         });
       });
@@ -316,6 +336,28 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
           userQuestProgress.completed = true;
           quest.totalCompletions += 1;
         }
+      }
+
+      // Handle revshare tracking
+      if (step.revshareTracking) {
+        console.log("Revshare tracking enabled for step:", step.id);
+        const revshareEvent = await revshareEventDeferred.getOrInsert(() => {
+          return new RevshareEvent({
+            id: revshareEventId,
+            quest,
+            step,
+            user: userAddress,
+            amount,
+            timestamp: BigInt(block.header.timestamp),
+            transactionHash,
+          });
+        });
+
+        // Update the revshare event if it already exists
+        revshareEvent.amount = amount;
+        revshareEvent.timestamp = BigInt(block.header.timestamp);
+
+        await ctx.store.upsert(revshareEvent);
       }
 
       await ctx.store.upsert(quest);
@@ -411,6 +453,7 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         userAddress = decodedLog.proposer.toLowerCase();
         break;
       case QUEST_TYPES.GOLDILOCKS_STAKE:
+        console.log("stake", decodedLog);
         userAddress = decodedLog.user.toLowerCase();
         break;
       case QUEST_TYPES.GOLDILOCKS_BUY:
@@ -418,6 +461,10 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         break;
       case QUEST_TYPES.AQUABERA_DEPOSIT:
         userAddress = decodedLog.to.toLowerCase();
+        break;
+      case QUEST_TYPES.SPOOKY_MINTED:
+        userAddress = decodedLog.recipient.toLowerCase();
+        amount = decodedLog.quantity;
         break;
       default:
         return { userAddress: null, amount: 0n };

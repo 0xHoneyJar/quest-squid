@@ -1,8 +1,8 @@
-module.exports = class Data1725420800425 {
-    name = 'Data1725420800425'
+module.exports = class Data1728340286961 {
+    name = 'Data1728340286961'
 
     async up(db) {
-        await db.query(`CREATE TABLE "quest_step" ("id" character varying NOT NULL, "step_number" integer NOT NULL, "types" text array NOT NULL, "addresses" text array NOT NULL, "filter_criteria" jsonb, "required_amount" numeric NOT NULL, "include_transaction" boolean NOT NULL, "start_block" integer, "path" text, "quest_id" character varying, CONSTRAINT "PK_2701eac9024314902255b9efaf7" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "quest_step" ("id" character varying NOT NULL, "step_number" integer NOT NULL, "types" text array NOT NULL, "addresses" text array NOT NULL, "filter_criteria" jsonb, "required_amount" numeric NOT NULL, "include_transaction" boolean NOT NULL, "start_block" integer, "path" text, "revshare_tracking" boolean NOT NULL, "quest_id" character varying, CONSTRAINT "PK_2701eac9024314902255b9efaf7" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_9dc3e0b37118e6c7035a54d9d9" ON "quest_step" ("quest_id") `)
         await db.query(`CREATE TABLE "quest" ("id" character varying NOT NULL, "name" text NOT NULL, "chain" text NOT NULL, "start_time" integer, "end_time" integer, "total_participants" integer NOT NULL, "total_completions" integer NOT NULL, CONSTRAINT "PK_0d6873502a58302d2ae0b82631c" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_27eab628270ea2fa9e514693e4" ON "quest" ("name") `)
@@ -15,9 +15,14 @@ module.exports = class Data1725420800425 {
         await db.query(`CREATE INDEX "IDX_05eab2fd50df506ab9088765b5" ON "user_quest_progress" ("completed") `)
         await db.query(`CREATE INDEX "IDX_fcfe4389dd2ff4ecbdff7cf5de" ON "user_quest_progress" ("id", "completed") `)
         await db.query(`CREATE INDEX "IDX_ad2f24a57265ad902e5b0fc44b" ON "user_quest_progress" ("id", "address") `)
+        await db.query(`CREATE TABLE "revshare_event" ("id" character varying NOT NULL, "user" text NOT NULL, "amount" numeric NOT NULL, "timestamp" numeric NOT NULL, "transaction_hash" text NOT NULL, "quest_id" character varying, "step_id" character varying, CONSTRAINT "PK_62eb187a15d2263a1e3159d04cf" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE INDEX "IDX_8a41931e18f4b39a3fc5939a2e" ON "revshare_event" ("quest_id") `)
+        await db.query(`CREATE INDEX "IDX_3d64e9da5ea8ce90b545ad0404" ON "revshare_event" ("step_id") `)
         await db.query(`ALTER TABLE "quest_step" ADD CONSTRAINT "FK_9dc3e0b37118e6c7035a54d9d90" FOREIGN KEY ("quest_id") REFERENCES "quest"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
         await db.query(`ALTER TABLE "step_progress" ADD CONSTRAINT "FK_e63392ab41383a0cdcf2bde6db5" FOREIGN KEY ("user_quest_progress_id") REFERENCES "user_quest_progress"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
         await db.query(`ALTER TABLE "user_quest_progress" ADD CONSTRAINT "FK_7420506ba802bf996bde06b5c5c" FOREIGN KEY ("quest_id") REFERENCES "quest"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+        await db.query(`ALTER TABLE "revshare_event" ADD CONSTRAINT "FK_8a41931e18f4b39a3fc5939a2ef" FOREIGN KEY ("quest_id") REFERENCES "quest"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+        await db.query(`ALTER TABLE "revshare_event" ADD CONSTRAINT "FK_3d64e9da5ea8ce90b545ad0404e" FOREIGN KEY ("step_id") REFERENCES "quest_step"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
     }
 
     async down(db) {
@@ -34,8 +39,13 @@ module.exports = class Data1725420800425 {
         await db.query(`DROP INDEX "public"."IDX_05eab2fd50df506ab9088765b5"`)
         await db.query(`DROP INDEX "public"."IDX_fcfe4389dd2ff4ecbdff7cf5de"`)
         await db.query(`DROP INDEX "public"."IDX_ad2f24a57265ad902e5b0fc44b"`)
+        await db.query(`DROP TABLE "revshare_event"`)
+        await db.query(`DROP INDEX "public"."IDX_8a41931e18f4b39a3fc5939a2e"`)
+        await db.query(`DROP INDEX "public"."IDX_3d64e9da5ea8ce90b545ad0404"`)
         await db.query(`ALTER TABLE "quest_step" DROP CONSTRAINT "FK_9dc3e0b37118e6c7035a54d9d90"`)
         await db.query(`ALTER TABLE "step_progress" DROP CONSTRAINT "FK_e63392ab41383a0cdcf2bde6db5"`)
         await db.query(`ALTER TABLE "user_quest_progress" DROP CONSTRAINT "FK_7420506ba802bf996bde06b5c5c"`)
+        await db.query(`ALTER TABLE "revshare_event" DROP CONSTRAINT "FK_8a41931e18f4b39a3fc5939a2ef"`)
+        await db.query(`ALTER TABLE "revshare_event" DROP CONSTRAINT "FK_3d64e9da5ea8ce90b545ad0404e"`)
     }
 }

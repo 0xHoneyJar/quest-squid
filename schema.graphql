@@ -20,6 +20,7 @@ type QuestStep @entity {
   includeTransaction: Boolean!
   startBlock: Int
   path: String
+  revshareTracking: Boolean! # New field
 }
 
 type UserQuestProgress
@@ -41,5 +42,15 @@ type StepProgress @entity {
   progressAmount: BigInt!
   completed: Boolean! @index
   startTimestamp: BigInt!
-  path: String # Add this line
+  path: String
+}
+
+type RevshareEvent @entity {
+  id: ID!
+  quest: Quest!
+  step: QuestStep!
+  user: String!
+  amount: BigInt!
+  timestamp: BigInt!
+  transactionHash: String! # Add this line
 }

@@ -16,6 +16,7 @@ import * as lendingPoolAbi from "./abi/lendingPool";
 import * as memeswapDeployerAbi from "./abi/memeswapDeployer";
 import * as rewardsVaultAbi from "./abi/rewardsVault";
 import * as simplifiedUniswapAbi from "./abi/simplifiedUniswap";
+import * as spookyAbi from "./abi/spooky";
 import * as strategiesControllerAbi from "./abi/strategiesController";
 import * as uniswapAbi from "./abi/uniswap";
 import * as ursaRollAbi from "./abi/ursaRoll";
@@ -78,6 +79,7 @@ export const GOLDILOCKS_ADDRESS = "0xe2cA693a47C32bd33949120d31d42b9e5Ef5c7Ef";
 export const GOLDISWAP_ADDRESS = "0xC94ecBfE16E337f6e606dcd86B8A5eaDbAe7A337";
 export const BOARDING_PASS_ADDRESS =
   "0x154a563Ab6C037BD0f041ac91600FfA9FE2f5fa0";
+export const SPOOKY_BOX_ADDRESS = "0xf7988c8d0F6FBd15c192bd7b2c53ACD8F36999e7";
 
 export enum CHAINS {
   BASE = "base",
@@ -126,6 +128,7 @@ export enum QUESTS {
   HOUSE_IN_DA_WOODS = "House in Da Woods",
   SOURCE_OF_LIFE = "Source of Life",
   A_JOURNEY_OVER_THE_HORIZON = "A Journey Over the Horizon",
+  TRICK_OR_TREAT = "Trick or Treat with Spooky.box",
 }
 
 export enum MISSIONS {
@@ -157,6 +160,7 @@ export enum QUEST_TYPES {
   GOLDILOCKS_STAKE = "GOLDILOCKS_STAKE",
   GOLDILOCKS_BUY = "GOLDILOCKS_BUY",
   AQUABERA_DEPOSIT = "AQUABERA_DEPOSIT",
+  SPOOKY_MINTED = "SPOOKY_MINTED",
 }
 
 export enum MISSION_TYPES {
@@ -266,7 +270,7 @@ export const QUEST_TYPE_INFO: Record<
     abi: governorAbi as AbiWithEvents,
   },
   [QUEST_TYPES.GOLDILOCKS_STAKE]: {
-    eventName: "Stake",
+    eventName: "Staked",
     abi: goldilockedAbi as AbiWithEvents,
   },
   [QUEST_TYPES.GOLDILOCKS_BUY]: {
@@ -276,6 +280,10 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.AQUABERA_DEPOSIT]: {
     eventName: "DepositForwarded",
     abi: aquaberaAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.SPOOKY_MINTED]: {
+    eventName: "SpookySRC_minted",
+    abi: spookyAbi as AbiWithEvents,
   },
 } as const;
 
@@ -293,7 +301,7 @@ const MISSION_TYPE_INFO: Record<
   },
 };
 
-type QuestStepConfig = {
+export type QuestStepConfig = {
   readonly types: QUEST_TYPES[];
   readonly addresses: string[];
   readonly filterCriteria?: {
@@ -303,6 +311,7 @@ type QuestStepConfig = {
   readonly includeTransaction?: boolean;
   readonly path?: string;
   readonly startBlock?: number;
+  readonly revshareTracking?: boolean; // Add this line
 };
 
 type QuestConfig = {
@@ -338,6 +347,10 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
     [QUESTS.HOUSE_IN_DA_WOODS]: {
       steps: [
+        {
+          types: [QUEST_TYPES.GOLDILOCKS_BUY],
+          addresses: [GOLDISWAP_ADDRESS],
+        },
         {
           types: [QUEST_TYPES.GOLDILOCKS_STAKE],
           addresses: [GOLDILOCKS_ADDRESS],
@@ -513,6 +526,17 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.TRICK_OR_TREAT]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.SPOOKY_MINTED],
+          addresses: [SPOOKY_BOX_ADDRESS],
+          startBlock: 20596152,
+        },
+      ],
+      startTime: 1727985600,
+      endTime: 1730145600,
+    },
     [QUESTS.A_JOURNEY_OVER_THE_HORIZON]: {
       steps: [
         {
@@ -737,6 +761,8 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          includeTransaction: true,
+          revshareTracking: true,
         },
       ],
       startTime: 1727460000 - ONE_DAY_IN_SECONDS,

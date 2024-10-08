@@ -37,4 +37,7 @@ export class QuestStep {
 
     @StringColumn_({nullable: true})
     path!: string | undefined | null
+
+    @BooleanColumn_({nullable: false})
+    revshareTracking!: boolean
 }
