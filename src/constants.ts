@@ -85,6 +85,7 @@ export const SPOOKY_BOX_ADDRESS = "0xf7988c8d0F6FBd15c192bd7b2c53ACD8F36999e7";
 export const PRETZEL_BRIDGE_ADDRESS =
   "0xC4555f8Fd652FECC01DbbF9a64bf1819b0a4A695";
 export const STATION_X_ADDRESS = "0x28F06a3415A741367303Db36a6646C354cCE1340";
+export const BROWN_HOLE_ADDRESS = "0x197e75a1951f5b47603787e2d206459b07f6951b";
 
 export enum CHAINS {
   BASE = "base",
@@ -136,6 +137,7 @@ export enum QUESTS {
   TRICK_OR_TREAT = "Trick or Treat with Spooky.box",
   BRIDGE_TO_PRETZEL = "Bridge to Pretzel",
   THE_HONEY_FESTIVAL = "The Honey Festival",
+  QUEST_FOR_THE_BROWN_HOLE = "Quest for the Brown Hole",
 }
 
 export enum MISSIONS {
@@ -793,6 +795,20 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.ARBITRUM]: {
+    [QUESTS.QUEST_FOR_THE_BROWN_HOLE]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [BROWN_HOLE_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: zeroAddress,
+            },
+          },
+        },
+      ],
+      endTime: 1729274400,
+    },
     [QUESTS.LORE_HARBINGER]: {
       steps: [
         {
