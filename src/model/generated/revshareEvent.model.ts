@@ -1,6 +1,5 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, StringColumn as StringColumn_, BigIntColumn as BigIntColumn_} from "@subsquid/typeorm-store"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, StringColumn as StringColumn_, IntColumn as IntColumn_, BigIntColumn as BigIntColumn_} from "@subsquid/typeorm-store"
 import {Quest} from "./quest.model"
-import {QuestStep} from "./questStep.model"
 
 @Entity_()
 export class RevshareEvent {
@@ -15,12 +14,11 @@ export class RevshareEvent {
     @ManyToOne_(() => Quest, {nullable: true})
     quest!: Quest
 
-    @Index_()
-    @ManyToOne_(() => QuestStep, {nullable: true})
-    step!: QuestStep
-
     @StringColumn_({nullable: false})
     user!: string
+
+    @IntColumn_({nullable: false})
+    stepNumber!: number
 
     @BigIntColumn_({nullable: false})
     amount!: bigint

@@ -1,5 +1,6 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, Index as Index_, OneToMany as OneToMany_, IntColumn as IntColumn_} from "@subsquid/typeorm-store"
 import {QuestStep} from "./questStep.model"
+import {RevshareEvent} from "./revshareEvent.model"
 
 @Entity_()
 export class Quest {
@@ -31,4 +32,7 @@ export class Quest {
 
     @IntColumn_({nullable: false})
     totalCompletions!: number
+
+    @OneToMany_(() => RevshareEvent, e => e.quest)
+    revshareEvents!: RevshareEvent[]
 }

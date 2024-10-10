@@ -14,9 +14,11 @@ import * as governorAbi from "./abi/governor";
 import * as hookVaultAbi from "./abi/hookVault";
 import * as lendingPoolAbi from "./abi/lendingPool";
 import * as memeswapDeployerAbi from "./abi/memeswapDeployer";
+import * as pretzelBridgeAbi from "./abi/pretzelBridge";
 import * as rewardsVaultAbi from "./abi/rewardsVault";
 import * as simplifiedUniswapAbi from "./abi/simplifiedUniswap";
 import * as spookyAbi from "./abi/spooky";
+import * as stationXFactoryAbi from "./abi/stationXFactory";
 import * as strategiesControllerAbi from "./abi/strategiesController";
 import * as uniswapAbi from "./abi/uniswap";
 import * as ursaRollAbi from "./abi/ursaRoll";
@@ -80,6 +82,9 @@ export const GOLDISWAP_ADDRESS = "0xC94ecBfE16E337f6e606dcd86B8A5eaDbAe7A337";
 export const BOARDING_PASS_ADDRESS =
   "0x154a563Ab6C037BD0f041ac91600FfA9FE2f5fa0";
 export const SPOOKY_BOX_ADDRESS = "0xf7988c8d0F6FBd15c192bd7b2c53ACD8F36999e7";
+export const PRETZEL_BRIDGE_ADDRESS =
+  "0xC4555f8Fd652FECC01DbbF9a64bf1819b0a4A695";
+export const STATION_X_ADDRESS = "0x28F06a3415A741367303Db36a6646C354cCE1340";
 
 export enum CHAINS {
   BASE = "base",
@@ -129,6 +134,8 @@ export enum QUESTS {
   SOURCE_OF_LIFE = "Source of Life",
   A_JOURNEY_OVER_THE_HORIZON = "A Journey Over the Horizon",
   TRICK_OR_TREAT = "Trick or Treat with Spooky.box",
+  BRIDGE_TO_PRETZEL = "Bridge to Pretzel",
+  THE_HONEY_FESTIVAL = "The Honey Festival",
 }
 
 export enum MISSIONS {
@@ -161,6 +168,8 @@ export enum QUEST_TYPES {
   GOLDILOCKS_BUY = "GOLDILOCKS_BUY",
   AQUABERA_DEPOSIT = "AQUABERA_DEPOSIT",
   SPOOKY_MINTED = "SPOOKY_MINTED",
+  PRETZEL_BRIDGE = "PRETZEL_BRIDGE",
+  STATION_X_NEW_USER = "STATION_X_NEW_USER",
 }
 
 export enum MISSION_TYPES {
@@ -270,7 +279,7 @@ export const QUEST_TYPE_INFO: Record<
     abi: governorAbi as AbiWithEvents,
   },
   [QUEST_TYPES.GOLDILOCKS_STAKE]: {
-    eventName: "Staked",
+    eventName: "Stake",
     abi: goldilockedAbi as AbiWithEvents,
   },
   [QUEST_TYPES.GOLDILOCKS_BUY]: {
@@ -284,6 +293,14 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.SPOOKY_MINTED]: {
     eventName: "SpookySRC_minted",
     abi: spookyAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.PRETZEL_BRIDGE]: {
+    eventName: "MessageDelivered",
+    abi: pretzelBridgeAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.STATION_X_NEW_USER]: {
+    eventName: "NewUser",
+    abi: stationXFactoryAbi as AbiWithEvents,
   },
 } as const;
 
@@ -335,6 +352,26 @@ type MissionConfig = {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
+    [QUESTS.THE_HONEY_FESTIVAL]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.STATION_X_NEW_USER],
+          addresses: [STATION_X_ADDRESS],
+        },
+      ],
+      startTime: 1728561600 - ONE_DAY_IN_SECONDS,
+      endTime: 1729425600,
+    },
+    [QUESTS.BRIDGE_TO_PRETZEL]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.PRETZEL_BRIDGE],
+          addresses: [PRETZEL_BRIDGE_ADDRESS],
+        },
+      ],
+      startTime: 1728669600 - ONE_DAY_IN_SECONDS,
+      endTime: 1728928800,
+    },
     [QUESTS.SOURCE_OF_LIFE]: {
       steps: [
         {
@@ -529,8 +566,13 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.TRICK_OR_TREAT]: {
       steps: [
         {
-          types: [QUEST_TYPES.SPOOKY_MINTED],
+          types: [QUEST_TYPES.ERC721_MINT],
           addresses: [SPOOKY_BOX_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
           startBlock: 20596152,
         },
       ],
@@ -761,6 +803,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 254674088,
           includeTransaction: true,
           revshareTracking: true,
         },

@@ -7,6 +7,7 @@ type Quest @entity {
   endTime: Int
   totalParticipants: Int!
   totalCompletions: Int!
+  revshareEvents: [RevshareEvent!]! @derivedFrom(field: "quest")
 }
 
 type QuestStep @entity {
@@ -48,8 +49,8 @@ type StepProgress @entity {
 type RevshareEvent @entity {
   id: ID!
   quest: Quest!
-  step: QuestStep!
   user: String!
+  stepNumber: Int!
   amount: BigInt!
   timestamp: BigInt!
   transactionHash: String! # Add this line

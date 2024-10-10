@@ -338,31 +338,32 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         }
       }
 
+      await ctx.store.upsert(quest);
+      await ctx.store.upsert(userQuestProgress);
+      await ctx.store.upsert(stepProgress);
+
       // Handle revshare tracking
       if (step.revshareTracking) {
-        console.log("Revshare tracking enabled for step:", step.id);
+        console.log(
+          "Revshare tracking enabled for step:",
+          step.id,
+          quest,
+          step
+        );
         const revshareEvent = await revshareEventDeferred.getOrInsert(() => {
           return new RevshareEvent({
             id: revshareEventId,
             quest,
-            step,
             user: userAddress,
+            stepNumber: step.stepNumber,
             amount,
             timestamp: BigInt(block.header.timestamp),
             transactionHash,
           });
         });
 
-        // Update the revshare event if it already exists
-        revshareEvent.amount = amount;
-        revshareEvent.timestamp = BigInt(block.header.timestamp);
-
         await ctx.store.upsert(revshareEvent);
       }
-
-      await ctx.store.upsert(quest);
-      await ctx.store.upsert(userQuestProgress);
-      await ctx.store.upsert(stepProgress);
     });
   }
 
@@ -453,7 +454,6 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         userAddress = decodedLog.proposer.toLowerCase();
         break;
       case QUEST_TYPES.GOLDILOCKS_STAKE:
-        console.log("stake", decodedLog);
         userAddress = decodedLog.user.toLowerCase();
         break;
       case QUEST_TYPES.GOLDILOCKS_BUY:
@@ -465,6 +465,12 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       case QUEST_TYPES.SPOOKY_MINTED:
         userAddress = decodedLog.recipient.toLowerCase();
         amount = decodedLog.quantity;
+        break;
+      case QUEST_TYPES.PRETZEL_BRIDGE:
+        userAddress = decodedLog.sender.toLowerCase();
+        break;
+      case QUEST_TYPES.STATION_X_NEW_USER:
+        userAddress = decodedLog["_depositor"].toLowerCase();
         break;
       default:
         return { userAddress: null, amount: 0n };
