@@ -1,6 +1,6 @@
 import { Arg, Query, Resolver } from "type-graphql";
 import type { EntityManager } from "typeorm";
-import { UserQuestProgress } from "../model";
+import { UserQuestProgress } from "../../model";
 
 @Resolver()
 export class CountResolver {

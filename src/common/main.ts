@@ -66,7 +66,7 @@ function scheduleInit(
       const stepId = `${questName}-step-${index + 1}`;
       const questStep = new QuestStep({ id: stepId });
       questStep.quest = quest;
-      questStep.stepNumber = index + 1;
+      questStep.stepNumber = stepConfig.stepNumber || index + 1;
       questStep.types = stepConfig.types;
       questStep.addresses = stepConfig.addresses.map((address) =>
         address.toLowerCase()
@@ -471,6 +471,9 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         break;
       case QUEST_TYPES.STATION_X_NEW_USER:
         userAddress = decodedLog["_depositor"].toLowerCase();
+        break;
+      case QUEST_TYPES.WAGMI_BUY:
+        userAddress = decodedLog.buyer.toLowerCase();
         break;
       default:
         return { userAddress: null, amount: 0n };

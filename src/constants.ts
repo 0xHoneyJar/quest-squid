@@ -23,6 +23,7 @@ import * as strategiesControllerAbi from "./abi/strategiesController";
 import * as uniswapAbi from "./abi/uniswap";
 import * as ursaRollAbi from "./abi/ursaRoll";
 import * as ursaVaultAbi from "./abi/ursaVault";
+import * as wagmiAbi from "./abi/wagmibera";
 
 const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
 
@@ -38,7 +39,7 @@ export const STDV4TNT_ADDRESS = "0x355bb949d80331516Fc7F4CF81229021187d67d2";
 export const KODIAK_POOL_ADDRESS = "0xF331ABFfE9cB2b966Ab4C102ee268f4e1ad8e24b";
 export const BGT_ADDRESS = "0xbDa130737BDd9618301681329bF2e46A016ff9Ad";
 // HONEY-WBERA Rewards Vault
-export const REWARDS_VAULT_ADDRESS =
+export const HONEY_WBERA_REWARDS_VAULT_ADDRESS =
   "0xAD57d7d39a487C04a44D3522b910421888Fb9C6d";
 export const THJ_VALIDATOR_ADDRESS =
   "0x40495A781095932e2FC8dccA69F5e358711Fdd41";
@@ -81,11 +82,27 @@ export const GOLDILOCKS_ADDRESS = "0xe2cA693a47C32bd33949120d31d42b9e5Ef5c7Ef";
 export const GOLDISWAP_ADDRESS = "0xC94ecBfE16E337f6e606dcd86B8A5eaDbAe7A337";
 export const BOARDING_PASS_ADDRESS =
   "0x154a563Ab6C037BD0f041ac91600FfA9FE2f5fa0";
-export const SPOOKY_BOX_ADDRESS = "0xf7988c8d0F6FBd15c192bd7b2c53ACD8F36999e7";
+export const SPOOKY_BOX_ADDRESS = "0xBB7B805B257d7C76CA9435B3ffe780355E4C4B17";
 export const PRETZEL_BRIDGE_ADDRESS =
   "0xC4555f8Fd652FECC01DbbF9a64bf1819b0a4A695";
-export const STATION_X_ADDRESS = "0x28F06a3415A741367303Db36a6646C354cCE1340";
+export const STATION_X_ADDRESS = "0x013dB555Bf79c2e4De4b4e106bD7eF3DEe595500";
 export const BROWN_HOLE_ADDRESS = "0x197e75a1951f5b47603787e2d206459b07f6951b";
+export const WAGMI_JAR_ADDRESS = "0x8995D1745AA4439Aeb22A7D7897297D5F53aB27D";
+export const WAGMI_BULLAS_ADDRESS =
+  "0xCAcF16A642993D111852262c9656a77BD04D1864";
+export const WAGMI_FABLE_ADDRESS = "0x0288976B80309EDB5003cB2dAa034A1E54Eb3E41";
+export const WAGMI_BELAND_ADDRESS =
+  "0x2A82164F7217060d53A9e988d2164cAF2aE04DA5";
+export const WAGMI_WAGMI_ADDRESS = "0x157Ab16d344727510E6BC3B294E0824a6a6CAAfD";
+export const INHERITOR_OF_A_DYING_WORLD_ADDRESS =
+  "0x137E1747C2e57630A5a627c5359d4A7C76b0EE80";
+export const HONEY_ZERU_LP_ADDRESS =
+  "0x7a560f7336D75787F5DD12ea7082fa611c3F5dDB";
+export const HONEY_ZERU_REWARDS_VAULT_ADDRESS =
+  "0x016044304A7e7Df23630D4B5796176097C6bd409";
+export const DIRAC_USDC_ADDRESS = "0xB42FA579B971FCa501E320d7531C0d6b0FE95820";
+export const BERACPOL_2_ADDRESS = "0x2A2D56802ECB44EAC0110F76731981131219667c";
+export const SHROOMIEZ_ADDRESS = "0xbCD0294fCC8CD0eFb326ff82b7560f86D2f0F65e";
 
 export enum CHAINS {
   BASE = "base",
@@ -138,6 +155,11 @@ export enum QUESTS {
   BRIDGE_TO_PRETZEL = "Bridge to Pretzel",
   THE_HONEY_FESTIVAL = "The Honey Festival",
   QUEST_FOR_THE_BROWN_HOLE = "Quest for the Brown Hole",
+  WAGMILAND = "Wagmiland",
+  INHERITOR_OF_A_DYING_WORLD = "Inheritor of a Dying World",
+  OCTOBERA_REVOLUTION = "Octobera Revolution",
+  BERAC_ULTIMATE_OG = "Berac Ultimate OG",
+  SHROOMIEZ_SEEK_HONEYCOMB = "Shroomiez seek HoneyComb",
 }
 
 export enum MISSIONS {
@@ -148,6 +170,7 @@ export enum QUEST_TYPES {
   ERC721_MINT = "ERC721_MINT",
   ERC1155_MINT = "ERC1155_MINT",
   ERC20_MINT = "ERC20_MINT",
+  ERC20_TRANSFER = "ERC20_TRANSFER",
   UNISWAP_SWAP = "UNISWAP_SWAP",
   TOKENS_MINTED = "TOKENS_MINTED",
   TOKENS_DEPOSITED = "TOKENS_DEPOSITED",
@@ -172,6 +195,7 @@ export enum QUEST_TYPES {
   SPOOKY_MINTED = "SPOOKY_MINTED",
   PRETZEL_BRIDGE = "PRETZEL_BRIDGE",
   STATION_X_NEW_USER = "STATION_X_NEW_USER",
+  WAGMI_BUY = "WAGMI_BUY",
 }
 
 export enum MISSION_TYPES {
@@ -304,6 +328,14 @@ export const QUEST_TYPE_INFO: Record<
     eventName: "NewUser",
     abi: stationXFactoryAbi as AbiWithEvents,
   },
+  [QUEST_TYPES.WAGMI_BUY]: {
+    eventName: "TokensPurchased",
+    abi: wagmiAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.ERC20_TRANSFER]: {
+    eventName: "Transfer",
+    abi: erc20Abi as AbiWithEvents,
+  },
 } as const;
 
 const MISSION_TYPE_INFO: Record<
@@ -321,16 +353,17 @@ const MISSION_TYPE_INFO: Record<
 };
 
 export type QuestStepConfig = {
-  readonly types: QUEST_TYPES[];
-  readonly addresses: string[];
-  readonly filterCriteria?: {
+  types: QUEST_TYPES[];
+  addresses: string[];
+  filterCriteria?: {
     [K in QUEST_TYPES]?: Record<string, any>;
   };
-  readonly requiredAmount?: bigint;
-  readonly includeTransaction?: boolean;
-  readonly path?: string;
-  readonly startBlock?: number;
-  readonly revshareTracking?: boolean; // Add this line
+  requiredAmount?: bigint;
+  includeTransaction?: boolean;
+  path?: string;
+  startBlock?: number;
+  revshareTracking?: boolean;
+  stepNumber?: number; // Allows for overriding the default step number
 };
 
 type QuestConfig = {
@@ -354,14 +387,87 @@ type MissionConfig = {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
+    [QUESTS.BERAC_ULTIMATE_OG]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC20_MINT],
+          addresses: [DIRAC_USDC_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC20_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 5574627,
+        },
+      ],
+      // startTime: 1729080000 - ONE_DAY_IN_SECONDS,
+      endTime: 1729713600,
+    },
+    [QUESTS.OCTOBERA_REVOLUTION]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC20_MINT],
+          addresses: [HONEY_ZERU_LP_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC20_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 5540465,
+        },
+        {
+          types: [QUEST_TYPES.STAKE],
+          addresses: [HONEY_ZERU_REWARDS_VAULT_ADDRESS],
+          startBlock: 5540465,
+        },
+      ],
+      startTime: 1728928800 - ONE_DAY_IN_SECONDS,
+      endTime: 1729188000,
+    },
+    [QUESTS.WAGMILAND]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC20_MINT],
+          addresses: [WAGMI_WAGMI_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC20_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 5482013,
+        },
+        {
+          types: [
+            QUEST_TYPES.WAGMI_BUY,
+            QUEST_TYPES.WAGMI_BUY,
+            QUEST_TYPES.WAGMI_BUY,
+            QUEST_TYPES.WAGMI_BUY,
+          ],
+          addresses: [
+            WAGMI_JAR_ADDRESS,
+            WAGMI_BULLAS_ADDRESS,
+            WAGMI_FABLE_ADDRESS,
+            WAGMI_BELAND_ADDRESS,
+          ],
+          startBlock: 5482013,
+        },
+      ],
+      startTime: 1728756000 - ONE_DAY_IN_SECONDS,
+      endTime: 1729360800,
+    },
     [QUESTS.THE_HONEY_FESTIVAL]: {
       steps: [
         {
-          types: [QUEST_TYPES.STATION_X_NEW_USER],
+          types: [QUEST_TYPES.ERC721_MINT],
           addresses: [STATION_X_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
         },
       ],
-      startTime: 1728561600 - ONE_DAY_IN_SECONDS,
+      // startTime: 1728561600 - ONE_DAY_IN_SECONDS,
       endTime: 1729425600,
     },
     [QUESTS.BRIDGE_TO_PRETZEL]: {
@@ -396,7 +502,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       startTime: 1728331200,
-      endTime: 1728590400,
+      endTime: 1729360800,
     },
     [QUESTS.BERAS_BIG_BET]: {
       steps: [
@@ -487,7 +593,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
       steps: [
         {
           types: [QUEST_TYPES.STAKE],
-          addresses: [REWARDS_VAULT_ADDRESS],
+          addresses: [HONEY_WBERA_REWARDS_VAULT_ADDRESS],
           startBlock: 3853226,
         },
       ],
@@ -497,7 +603,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
       steps: [
         {
           types: [QUEST_TYPES.CLAIM_BGT_REWARD],
-          addresses: [REWARDS_VAULT_ADDRESS],
+          addresses: [HONEY_WBERA_REWARDS_VAULT_ADDRESS],
           startBlock: 3853226,
         },
         {
@@ -795,6 +901,24 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.ARBITRUM]: {
+    [QUESTS.BERAC_ULTIMATE_OG]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: [BERACPOL_2_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          stepNumber: 2,
+          revshareTracking: true,
+          includeTransaction: true,
+        },
+      ],
+      // startTime: 1729080000 - ONE_DAY_IN_SECONDS,
+      endTime: 1729713600,
+    },
     [QUESTS.QUEST_FOR_THE_BROWN_HOLE]: {
       steps: [
         {
@@ -805,6 +929,8 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          revshareTracking: true,
+          includeTransaction: true,
         },
       ],
       endTime: 1729274400,
@@ -900,6 +1026,35 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.OPTIMISM]: {
+    [QUESTS.SHROOMIEZ_SEEK_HONEYCOMB]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [SHROOMIEZ_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          revshareTracking: true,
+        },
+      ],
+      endTime: 1729792800,
+    },
+    [QUESTS.INHERITOR_OF_A_DYING_WORLD]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: [INHERITOR_OF_A_DYING_WORLD_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+        },
+      ],
+      endTime: 1729771200,
+    },
     [QUESTS.THE_FOURTH_GENERATION]: {
       steps: [
         {
