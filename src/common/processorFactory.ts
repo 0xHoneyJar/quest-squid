@@ -1,22 +1,20 @@
 import { StoreWithCache } from "@belopash/typeorm-store";
 import {
+  Log as _Log,
+  Transaction as _Transaction,
   BlockHeader,
   DataHandlerContext,
   EvmBatchProcessor,
   EvmBatchProcessorFields,
-  Log as _Log,
-  Transaction as _Transaction,
 } from "@subsquid/evm-processor";
 import { assertNotNull } from "@subsquid/util-internal";
 import {
   ARCHIVE_GATEWAYS,
   BLOCK_RANGES,
-  CHAINS,
   QUESTS_CONFIG,
-  QUEST_TYPES,
-  QUEST_TYPE_INFO,
   RPC_ENDPOINTS,
-} from "../constants";
+} from "../constants/quests";
+import { CHAINS, QUEST_TYPE_INFO, QUEST_TYPES } from "../constants/types";
 
 export function createProcessor(chain: CHAINS) {
   const questConfig = QUESTS_CONFIG[chain];

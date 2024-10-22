@@ -1,6 +1,6 @@
 import { TypeormDatabaseWithCache } from "@belopash/typeorm-store";
 import { createMain } from "../common/main";
-import { CHAINS } from "../constants";
+import { CHAINS } from "../constants/types";
 import { processor } from "./processor";
 
 processor.run(

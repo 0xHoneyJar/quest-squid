@@ -1,12 +1,8 @@
 import { StoreWithCache } from "@belopash/typeorm-store";
 import { AbiEvent } from "@subsquid/evm-abi";
 import { BlockData } from "@subsquid/evm-processor";
-import {
-  CHAINS,
-  QUESTS_CONFIG,
-  QUEST_TYPES,
-  QUEST_TYPE_INFO,
-} from "../constants";
+import { QUESTS_CONFIG } from "../constants/quests";
+import { CHAINS, QUEST_TYPE_INFO, QUEST_TYPES } from "../constants/types";
 import {
   Quest,
   QuestStep,
@@ -474,6 +470,27 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         break;
       case QUEST_TYPES.WAGMI_BUY:
         userAddress = decodedLog.buyer.toLowerCase();
+        break;
+      case QUEST_TYPES.BV_DEPOSIT:
+        userAddress = decodedLog.user.toLowerCase();
+        break;
+      case QUEST_TYPES.LV_SWAP:
+        userAddress = decodedLog.user.toLowerCase();
+        break;
+      case QUEST_TYPES.JAM_SETTLEMENT:
+        userAddress = sender?.toLowerCase() || "";
+        break;
+      case QUEST_TYPES.HONEY_VAULT_ACTIVITY:
+        userAddress = decodedLog.caller.toLowerCase();
+        break;
+      case QUEST_TYPES.BERAMONIUM_STAKE:
+        userAddress = decodedLog.owner.toLowerCase();
+        break;
+      case QUEST_TYPES.YEET_STAKE:
+        userAddress = decodedLog.addr.toLowerCase();
+        break;
+      case QUEST_TYPES.YEET_BOND:
+        userAddress = sender?.toLowerCase() || "";
         break;
       default:
         return { userAddress: null, amount: 0n };
