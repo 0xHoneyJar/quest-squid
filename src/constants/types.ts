@@ -303,7 +303,7 @@ export const QUEST_TYPE_INFO: Record<
     abi: beramoniumAbi as AbiWithEvents,
   },
   [QUEST_TYPES.YEET_STAKE]: {
-    eventName: "Staked",
+    eventName: "Stake",
     abi: yeetStakeAbi as AbiWithEvents,
   },
   [QUEST_TYPES.YEET_BOND]: {

@@ -730,7 +730,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       startTime: 1729706400,
-      endTime: 1730311200,
+      endTime: 1730829600,
     },
     [QUESTS.BERAC_ULTIMATE_OG]: {
       steps: [
@@ -860,10 +860,10 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.SHROOMIEZ_SEEK_HONEYCOMB]: {
       steps: [
         {
-          types: [QUEST_TYPES.ERC1155_MINT],
+          types: [QUEST_TYPES.ERC721_MINT],
           addresses: [SHROOMIEZ_ADDRESS],
           filterCriteria: {
-            [QUEST_TYPES.ERC1155_MINT]: {
+            [QUEST_TYPES.ERC721_MINT]: {
               from: zeroAddress,
             },
           },
