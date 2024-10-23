@@ -110,22 +110,22 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         {
           types: [QUEST_TYPES.ERC20_MINT],
           addresses: [MEMESWAP_JANI_ADDRESS],
-          filterCriteria: {
-            [QUEST_TYPES.ERC20_MINT]: {
-              from: zeroAddress,
-            },
-          },
+          // filterCriteria: {
+          //   [QUEST_TYPES.ERC20_MINT]: {
+          //     from: zeroAddress,
+          //   },
+          // },
           startBlock: 5900573,
           path: "Jani",
         },
         {
           types: [QUEST_TYPES.ERC20_MINT],
           addresses: [MEMESWAP_SHMOKEY_ADDRESS],
-          filterCriteria: {
-            [QUEST_TYPES.ERC20_MINT]: {
-              from: zeroAddress,
-            },
-          },
+          // filterCriteria: {
+          //   [QUEST_TYPES.ERC20_MINT]: {
+          //     from: zeroAddress,
+          //   },
+          // },
           startBlock: 5900573,
           path: "Shmokey",
         },
@@ -159,13 +159,13 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.ZOO_ENCHANTED_NIGHT]: {
       steps: [
         {
-          types: [QUEST_TYPES.BV_DEPOSIT],
-          addresses: [BV_ADDRESS],
+          types: [QUEST_TYPES.LV_SWAP],
+          addresses: [LV_ADDRESS],
           startBlock: 5788071,
         },
         {
-          types: [QUEST_TYPES.LV_SWAP],
-          addresses: [LV_ADDRESS],
+          types: [QUEST_TYPES.BV_DEPOSIT],
+          addresses: [BV_ADDRESS],
           startBlock: 5788071,
         },
       ],
@@ -868,6 +868,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
             },
           },
           revshareTracking: true,
+          includeTransaction: true,
         },
       ],
       endTime: 1729792800,
