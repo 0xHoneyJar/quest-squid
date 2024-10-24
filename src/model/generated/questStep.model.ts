@@ -23,6 +23,9 @@ export class QuestStep {
     @StringColumn_({array: true, nullable: false})
     addresses!: (string)[]
 
+    @StringColumn_({array: true, nullable: true})
+    siblingTypes!: (string)[] | undefined | null
+
     @JSONColumn_({nullable: true})
     filterCriteria!: unknown | undefined | null
 
@@ -31,6 +34,9 @@ export class QuestStep {
 
     @BooleanColumn_({nullable: false})
     includeTransaction!: boolean
+
+    @BooleanColumn_({nullable: false})
+    includeTransactionLogs!: boolean
 
     @IntColumn_({nullable: true})
     startBlock!: number | undefined | null

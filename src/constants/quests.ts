@@ -150,7 +150,12 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           types: [QUEST_TYPES.JAM_SETTLEMENT],
           addresses: [BEBOP_ADDRESS],
           startBlock: 5889748,
+          includeTransactionLogs: true,
           includeTransaction: true,
+          siblingTypes: [
+            QUEST_TYPES.JAM_NATIVE_TRANSFER,
+            QUEST_TYPES.ERC20_TRANSFER,
+          ], // Add this line
         },
       ],
       startTime: 1729706400,
@@ -159,13 +164,13 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.ZOO_ENCHANTED_NIGHT]: {
       steps: [
         {
-          types: [QUEST_TYPES.LV_SWAP],
-          addresses: [LV_ADDRESS],
+          types: [QUEST_TYPES.BV_DEPOSIT],
+          addresses: [BV_ADDRESS],
           startBlock: 5788071,
         },
         {
-          types: [QUEST_TYPES.BV_DEPOSIT],
-          addresses: [BV_ADDRESS],
+          types: [QUEST_TYPES.LV_SWAP],
+          addresses: [LV_ADDRESS],
           startBlock: 5788071,
         },
       ],
@@ -883,6 +888,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 126566730,
         },
       ],
       endTime: 1729771200,

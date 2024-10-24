@@ -142,6 +142,7 @@ export enum QUEST_TYPES {
   BERAMONIUM_STAKE = "BERAMONIUM_STAKE",
   YEET_STAKE = "YEET_STAKE",
   YEET_BOND = "YEET_BOND",
+  JAM_NATIVE_TRANSFER = "JAM_NATIVE_TRANSFER",
 }
 
 export enum MISSION_TYPES {
@@ -294,6 +295,10 @@ export const QUEST_TYPE_INFO: Record<
     eventName: "Settlement",
     abi: jamSettlementAbi as AbiWithEvents,
   },
+  [QUEST_TYPES.JAM_NATIVE_TRANSFER]: {
+    eventName: "NativeTransfer",
+    abi: jamSettlementAbi as AbiWithEvents,
+  },
   [QUEST_TYPES.HONEY_VAULT_ACTIVITY]: {
     eventName: "Activity",
     abi: vaultRouterAbi as AbiWithEvents,
@@ -334,10 +339,12 @@ export type QuestStepConfig = {
   };
   requiredAmount?: bigint;
   includeTransaction?: boolean;
+  includeTransactionLogs?: boolean;
+  siblingTypes?: QUEST_TYPES[]; // Add this new field
   path?: string;
   startBlock?: number;
   revshareTracking?: boolean;
-  stepNumber?: number; // Allows for overriding the default step number
+  stepNumber?: number;
 };
 
 export type QuestConfig = {
