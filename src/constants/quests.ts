@@ -136,8 +136,13 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.THE_WEBERA_JUNGLE_PARTY]: {
       steps: [
         {
-          types: [QUEST_TYPES.HONEY_VAULT_ACTIVITY],
+          types: [QUEST_TYPES.ERC20_TRANSFER],
           addresses: [WEBERA_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC20_TRANSFER]: {
+              from: zeroAddress,
+            },
+          },
           startBlock: 5900573,
         },
       ],
@@ -164,13 +169,13 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.ZOO_ENCHANTED_NIGHT]: {
       steps: [
         {
-          types: [QUEST_TYPES.BV_DEPOSIT],
-          addresses: [BV_ADDRESS],
+          types: [QUEST_TYPES.LV_SWAP],
+          addresses: [LV_ADDRESS],
           startBlock: 5788071,
         },
         {
-          types: [QUEST_TYPES.LV_SWAP],
-          addresses: [LV_ADDRESS],
+          types: [QUEST_TYPES.BV_DEPOSIT],
+          addresses: [BV_ADDRESS],
           startBlock: 5788071,
         },
       ],
@@ -219,7 +224,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       // startTime: 1729080000 - EXTENSION_DURATION,
-      endTime: 1729886400,
+      endTime: 1730318400,
     },
     [QUESTS.OCTOBERA_REVOLUTION]: {
       steps: [

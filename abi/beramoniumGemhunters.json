@@ -145,13 +145,13 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "owner",
+        "name": "user",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint16",
-        "name": "tokenId",
+        "name": "mainIndex",
         "type": "uint16"
       }
     ],

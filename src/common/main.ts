@@ -550,7 +550,7 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         userAddress = decodedLog.caller.toLowerCase();
         break;
       case QUEST_TYPES.BERAMONIUM_STAKE:
-        userAddress = decodedLog.owner.toLowerCase();
+        userAddress = decodedLog.user.toLowerCase();
         break;
       case QUEST_TYPES.YEET_STAKE:
         userAddress = decodedLog.addr.toLowerCase();
