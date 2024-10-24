@@ -9,7 +9,7 @@ export const events = {
     RoleAdminChanged: event("0xbd79b86ffe0ab8e8776151514217cd7cacd52c909f66475c3af44e129f0b00ff", "RoleAdminChanged(bytes32,bytes32,bytes32)", {"role": indexed(p.bytes32), "previousAdminRole": indexed(p.bytes32), "newAdminRole": indexed(p.bytes32)}),
     RoleGranted: event("0x2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d", "RoleGranted(bytes32,address,address)", {"role": indexed(p.bytes32), "account": indexed(p.address), "sender": indexed(p.address)}),
     RoleRevoked: event("0xf6391f5c32d9c69d2a47ea670b442974b53935d1edc7fd64eb21e047a839171b", "RoleRevoked(bytes32,address,address)", {"role": indexed(p.bytes32), "account": indexed(p.address), "sender": indexed(p.address)}),
-    Staked: event("0x82cac1f6ac2ff91bb64e19e91079373bb4ad1d2658113ed8d652b29c86932227", "Staked(address,uint16)", {"owner": p.address, "tokenId": p.uint16}),
+    Staked: event("0x82cac1f6ac2ff91bb64e19e91079373bb4ad1d2658113ed8d652b29c86932227", "Staked(address,uint16)", {"user": p.address, "mainIndex": p.uint16}),
     Unstaked: event("0xdf597ef9ebbe3b7c4d132cebcc7d4e2a326c4ec8dfa02330232cd32d96c8439b", "Unstaked(address,uint16)", {"owner": p.address, "tokenId": p.uint16}),
     Upgraded: event("0xbc7cd75a20ee27fd9adebab32041f755214dbc6bffa90cc0225b39da2e5c2d3b", "Upgraded(address)", {"implementation": indexed(p.address)}),
 }

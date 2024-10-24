@@ -136,8 +136,13 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.THE_WEBERA_JUNGLE_PARTY]: {
       steps: [
         {
-          types: [QUEST_TYPES.HONEY_VAULT_ACTIVITY],
+          types: [QUEST_TYPES.ERC20_TRANSFER],
           addresses: [WEBERA_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC20_TRANSFER]: {
+              from: zeroAddress,
+            },
+          },
           startBlock: 5900573,
         },
       ],
@@ -150,7 +155,12 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           types: [QUEST_TYPES.JAM_SETTLEMENT],
           addresses: [BEBOP_ADDRESS],
           startBlock: 5889748,
+          includeTransactionLogs: true,
           includeTransaction: true,
+          siblingTypes: [
+            QUEST_TYPES.JAM_NATIVE_TRANSFER,
+            QUEST_TYPES.ERC20_TRANSFER,
+          ], // Add this line
         },
       ],
       startTime: 1729706400,
@@ -214,7 +224,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       // startTime: 1729080000 - EXTENSION_DURATION,
-      endTime: 1729886400,
+      endTime: 1730318400,
     },
     [QUESTS.OCTOBERA_REVOLUTION]: {
       steps: [
@@ -883,6 +893,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 126566730,
         },
       ],
       endTime: 1729771200,

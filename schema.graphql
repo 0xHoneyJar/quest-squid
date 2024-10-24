@@ -16,9 +16,11 @@ type QuestStep @entity {
   stepNumber: Int!
   types: [String!]!
   addresses: [String!]!
+  siblingTypes: [String!]
   filterCriteria: JSON
   requiredAmount: BigInt!
   includeTransaction: Boolean!
+  includeTransactionLogs: Boolean!
   startBlock: Int
   path: String
   revshareTracking: Boolean! # New field

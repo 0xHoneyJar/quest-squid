@@ -131,6 +131,11 @@
     "open": {
       "description": "Open a local browser window",
       "cmd": ["npx", "--yes", "opener"]
+    },
+    "process": {
+      "description": "Test a specific quest on a specific chain",
+      "deps": ["build", "migration:apply"],
+      "cmd": ["node", "--require=dotenv/config", "lib/processor.js"]
     }
   }
 }

@@ -16,7 +16,7 @@ import {
 } from "../constants/quests";
 import { CHAINS, QUEST_TYPE_INFO, QUEST_TYPES } from "../constants/types";
 
-export function createProcessor(chain: CHAINS) {
+export function createProcessor(chain: CHAINS, quests?: string[]) {
   const questConfig = QUESTS_CONFIG[chain];
   const addressToTopics: Record<
     string,
@@ -26,12 +26,23 @@ export function createProcessor(chain: CHAINS) {
       topic2?: string;
       range?: { from: number; to?: number };
       includeTransaction: boolean;
+      includeTransactionLogs: boolean;
       isEthTransfer: boolean;
     }
   > = {};
 
+  // Filter for the specified quests or use all quests if none specified
+  const filteredQuestConfig = quests
+    ? quests.reduce((acc, questName) => {
+        if (questConfig[questName]) {
+          acc[questName] = questConfig[questName];
+        }
+        return acc;
+      }, {} as typeof questConfig)
+    : questConfig;
+
   // Collect relevant addresses and topics
-  for (const quest of Object.values(questConfig)) {
+  for (const quest of Object.values(filteredQuestConfig)) {
     for (const step of quest.steps) {
       const questTypes = step.types;
       for (const address of step.addresses) {
@@ -40,6 +51,7 @@ export function createProcessor(chain: CHAINS) {
           addressToTopics[lowerCaseAddress] = {
             topic0: [],
             includeTransaction: false,
+            includeTransactionLogs: false,
             isEthTransfer: false,
           };
         }
@@ -50,6 +62,10 @@ export function createProcessor(chain: CHAINS) {
 
         if (step.includeTransaction) {
           addressToTopics[lowerCaseAddress].includeTransaction = true;
+        }
+
+        if (step.includeTransactionLogs) {
+          addressToTopics[lowerCaseAddress].includeTransactionLogs = true;
         }
 
         for (const questType of questTypes) {
@@ -118,6 +134,7 @@ export function createProcessor(chain: CHAINS) {
         topic2: topics.topic2 ? [topics.topic2] : undefined,
         range: topics.range,
         transaction: topics.includeTransaction,
+        transactionLogs: topics.includeTransactionLogs,
       });
     }
   }

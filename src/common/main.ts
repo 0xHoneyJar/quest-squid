@@ -1,6 +1,6 @@
 import { StoreWithCache } from "@belopash/typeorm-store";
 import { AbiEvent } from "@subsquid/evm-abi";
-import { BlockData } from "@subsquid/evm-processor";
+import { BlockData, Log } from "@subsquid/evm-processor";
 import { QUESTS_CONFIG } from "../constants/quests";
 import { CHAINS, QUEST_TYPE_INFO, QUEST_TYPES } from "../constants/types";
 import {
@@ -15,25 +15,26 @@ import { Context, ProcessorContext } from "./processorFactory";
 
 type MappingContext = ProcessorContext<StoreWithCache> & { queue: TaskQueue };
 
-export function createMain(chain: CHAINS) {
+export function createMain(chain: CHAINS, quests?: string[]) {
   return async (ctx: Context) => {
     return await mapBlocks(
       {
         ...ctx,
         queue: new TaskQueue(),
       },
-      chain
+      chain,
+      quests || Object.keys(QUESTS_CONFIG[chain])
     );
   };
 }
 
-async function mapBlocks(ctx: MappingContext, chain: CHAINS) {
-  const quests: Map<string, Quest> = new Map();
+async function mapBlocks(ctx: MappingContext, chain: CHAINS, quests: string[]) {
+  const questsMap: Map<string, Quest> = new Map();
   const questSteps: Map<string, QuestStep> = new Map();
 
-  scheduleInit(chain, quests, questSteps);
+  scheduleInit(chain, questsMap, questSteps, quests);
 
-  const questsArray = Array.from(quests.values());
+  const questsArray = Array.from(questsMap.values());
 
   for (const block of ctx.blocks) {
     mapBlock(ctx, block, questsArray);
@@ -45,9 +46,16 @@ async function mapBlocks(ctx: MappingContext, chain: CHAINS) {
 function scheduleInit(
   chain: CHAINS,
   quests: Map<string, Quest>,
-  questSteps: Map<string, QuestStep>
+  questSteps: Map<string, QuestStep>,
+  questNames: string[]
 ) {
-  for (const [questName, questConfig] of Object.entries(QUESTS_CONFIG[chain])) {
+  for (const questName of questNames) {
+    const questConfig = QUESTS_CONFIG[chain][questName];
+    if (!questConfig) {
+      console.warn(`Quest ${questName} not found for chain ${chain}`);
+      continue;
+    }
+
     const questId = `${chain}-${questName.replace(/\s+/g, "-").toLowerCase()}`;
     const quest = new Quest({ id: questId });
     quest.name = questName;
@@ -64,15 +72,18 @@ function scheduleInit(
       questStep.quest = quest;
       questStep.stepNumber = stepConfig.stepNumber || index + 1;
       questStep.types = stepConfig.types;
+      questStep.siblingTypes = stepConfig.siblingTypes;
       questStep.addresses = stepConfig.addresses.map((address) =>
         address.toLowerCase()
       );
       questStep.filterCriteria = stepConfig.filterCriteria;
       questStep.requiredAmount = stepConfig.requiredAmount || 1n;
       questStep.includeTransaction = stepConfig.includeTransaction || false;
+      questStep.includeTransactionLogs =
+        stepConfig.includeTransactionLogs || false;
       questStep.path = stepConfig.path;
-      questStep.startBlock = stepConfig.startBlock; // Add this line
-      questStep.revshareTracking = stepConfig.revshareTracking || false; // Add this line
+      questStep.startBlock = stepConfig.startBlock;
+      questStep.revshareTracking = stepConfig.revshareTracking || false;
       quest.steps.push(questStep);
       questSteps.set(stepId, questStep);
     });
@@ -140,6 +151,7 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
                   matchingStep.revshareTracking
                     ? log.transaction?.hash
                     : undefined,
+                  log.transaction?.logs,
                   log.logIndex
                 );
                 break; // Exit the loop if we've found a matching event
@@ -219,6 +231,7 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
     eventName?: string,
     questType?: QUEST_TYPES,
     transactionHash?: string,
+    transactionLogs?: Log[],
     logIndex?: number
   ): Promise<void> {
     console.log(
@@ -264,12 +277,61 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       }
     }
 
-    const { userAddress, amount } = getUserAddressAndAmount(
-      questType as QUEST_TYPES,
-      decodedLog,
-      sender,
-      eventName
-    );
+    let userAddress: string | null = null;
+    let amount: bigint = 1n;
+
+    if (step.includeTransactionLogs && step.siblingTypes && transactionLogs) {
+      for (let i = 0; i < transactionLogs.length; i++) {
+        const log = transactionLogs[i];
+
+        const matchingQuestType = step.siblingTypes.find((type) => {
+          const questTypeInfo = QUEST_TYPE_INFO[type as QUEST_TYPES];
+          const eventNames = Array.isArray(questTypeInfo.eventName)
+            ? questTypeInfo.eventName
+            : [questTypeInfo.eventName];
+          return eventNames.some((name) => {
+            const event = questTypeInfo.abi.events[name] as AbiEvent<any>;
+            return event.is(log);
+          });
+        });
+
+        if (matchingQuestType) {
+          const questTypeInfo =
+            QUEST_TYPE_INFO[matchingQuestType as QUEST_TYPES];
+          const eventNames = Array.isArray(questTypeInfo.eventName)
+            ? questTypeInfo.eventName
+            : [questTypeInfo.eventName];
+          const matchingEventName = eventNames.find((name) => {
+            const event = questTypeInfo.abi.events[name] as AbiEvent<any>;
+            return event.is(log);
+          });
+
+          if (matchingEventName) {
+            const event = questTypeInfo.abi.events[
+              matchingEventName
+            ] as AbiEvent<any>;
+            const decodedTransactionLog = event.decode(log);
+            const result = getUserAddressAndAmount(
+              matchingQuestType as QUEST_TYPES,
+              decodedTransactionLog,
+              sender,
+              matchingEventName
+            );
+            userAddress = result.userAddress;
+            amount = result.amount;
+          }
+        }
+      }
+    } else {
+      const result = getUserAddressAndAmount(
+        questType as QUEST_TYPES,
+        decodedLog,
+        sender,
+        eventName
+      );
+      userAddress = result.userAddress;
+      amount = result.amount;
+    }
 
     console.log(`User address: ${userAddress}, amount: ${amount}`);
 
@@ -378,6 +440,10 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         userAddress = decodedLog.to.toLowerCase();
         if (questType === QUEST_TYPES.ERC20_MINT) amount = decodedLog.value;
         break;
+      case QUEST_TYPES.ERC20_TRANSFER:
+        userAddress = decodedLog.to.toLowerCase();
+        amount = decodedLog.value;
+        break;
       case QUEST_TYPES.UNISWAP_MINT:
         userAddress = sender?.toLowerCase() || "";
         break;
@@ -477,14 +543,14 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       case QUEST_TYPES.LV_SWAP:
         userAddress = decodedLog.user.toLowerCase();
         break;
-      case QUEST_TYPES.JAM_SETTLEMENT:
-        userAddress = sender?.toLowerCase() || "";
+      case QUEST_TYPES.JAM_NATIVE_TRANSFER:
+        userAddress = decodedLog.receiver.toLowerCase();
         break;
       case QUEST_TYPES.HONEY_VAULT_ACTIVITY:
         userAddress = decodedLog.caller.toLowerCase();
         break;
       case QUEST_TYPES.BERAMONIUM_STAKE:
-        userAddress = decodedLog.owner.toLowerCase();
+        userAddress = decodedLog.user.toLowerCase();
         break;
       case QUEST_TYPES.YEET_STAKE:
         userAddress = decodedLog.addr.toLowerCase();
