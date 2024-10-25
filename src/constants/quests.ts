@@ -14,6 +14,7 @@ import {
   BV_ADDRESS,
   DIRAC_USDC_ADDRESS,
   EGGS_ADDRESS,
+  ELEMENTAL_JANI_ADDRESS,
   FABLE_BERAS_ADDRESS,
   GOLDILOCKS_ADDRESS,
   GOLDISWAP_ADDRESS,
@@ -495,6 +496,22 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.THE_HONEY_ELEMENT]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [ELEMENTAL_JANI_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 21540663,
+        },
+      ],
+      // startTime: 1735156800 - EXTENSION_DURATION,
+      endTime: 1730232000,
+    },
     [QUESTS.TRICK_OR_TREAT]: {
       steps: [
         {

@@ -99,6 +99,7 @@ export enum QUESTS {
   THREE_IS_BETTER_THAN_ONE = "3 is better than 1",
   YEET = "{YEET}",
   BERAMONIUM = "{Beramonium}",
+  THE_HONEY_ELEMENT = "The Honey Element",
 }
 
 export enum MISSIONS {
