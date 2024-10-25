@@ -100,6 +100,7 @@ export enum QUESTS {
   YEET = "{YEET}",
   BERAMONIUM = "{Beramonium}",
   THE_HONEY_ELEMENT = "The Honey Element",
+  BOOGA_BERAS = "{Booga_Beras}",
 }
 
 export enum MISSIONS {
