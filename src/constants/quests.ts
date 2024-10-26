@@ -510,7 +510,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           startBlock: 21540663,
         },
       ],
-      // startTime: 1735156800 - EXTENSION_DURATION,
+      // startTime: 1729897200 - EXTENSION_DURATION,
       endTime: 1730232000,
     },
     [QUESTS.TRICK_OR_TREAT]: {
