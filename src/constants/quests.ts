@@ -84,15 +84,15 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         {
           types: [QUEST_TYPES.ERC721_MINT],
           addresses: [BOOGA_BEARS_TESTNET_ADDRESS],
-          filterCriteria: {
-            [QUEST_TYPES.ERC721_MINT]: {
-              from: zeroAddress,
-            },
-          },
+          // filterCriteria: {
+          //   [QUEST_TYPES.ERC721_MINT]: {
+          //     from: zeroAddress,
+          //   },
+          // },
           startBlock: 6013825,
         },
       ],
-      startTime: 1729706400 - EXTENSION_DURATION,
+      // startTime: 1729706400 - EXTENSION_DURATION,
       endTime: 1730829600,
     },
     [QUESTS.YEET]: {
