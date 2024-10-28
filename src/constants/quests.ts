@@ -47,6 +47,8 @@ import {
   POT_ADDRESS,
   PRETZEL_BRIDGE_ADDRESS,
   SHROOMIEZ_ADDRESS,
+  SMILEE_FINANCE_FAUCET_ADDRESS,
+  SMILEE_FINANCE_POSITION_MANAGER_ADDRESS,
   SPOOKY_BOX_ADDRESS,
   STATION_X_ADDRESS,
   STDV4TNT_ADDRESS,
@@ -79,6 +81,30 @@ import {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
+    [QUESTS.SMILEE_FINANCE]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.SMILEE_TOKEN_EMISSION],
+          addresses: [SMILEE_FINANCE_FAUCET_ADDRESS],
+          startBlock: 6129017,
+        },
+        {
+          types: [QUEST_TYPES.SMILEE_BUY_DVP],
+          addresses: [SMILEE_FINANCE_POSITION_MANAGER_ADDRESS],
+          startBlock: 6129017,
+          includeTransaction: true,
+        },
+        {
+          types: [QUEST_TYPES.SMILEE_SELL_DVP],
+          addresses: [SMILEE_FINANCE_POSITION_MANAGER_ADDRESS],
+          startBlock: 6129017,
+          includeTransaction: true,
+        },
+      ],
+      startTime: 1730232000 - EXTENSION_DURATION,
+      endTime: 1731096000,
+    },
+
     [QUESTS.BOOGA_BERAS]: {
       steps: [
         {

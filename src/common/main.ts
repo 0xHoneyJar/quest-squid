@@ -558,6 +558,15 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       case QUEST_TYPES.YEET_BOND:
         userAddress = sender?.toLowerCase() || "";
         break;
+      case QUEST_TYPES.SMILEE_TOKEN_EMISSION:
+        userAddress = decodedLog.user.toLowerCase();
+        break;
+      case QUEST_TYPES.SMILEE_BUY_DVP:
+        userAddress = sender?.toLowerCase() || "";
+        break;
+      case QUEST_TYPES.SMILEE_SELL_DVP:
+        userAddress = sender?.toLowerCase() || "";
+        break;
       default:
         return { userAddress: null, amount: 0n };
     }

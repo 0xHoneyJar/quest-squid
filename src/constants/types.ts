@@ -30,6 +30,8 @@ import * as vaultRouterAbi from "../abi/vaultRouter";
 import * as wagmiAbi from "../abi/wagmibera";
 import * as yeetBondAbi from "../abi/yeetBond";
 import * as yeetStakeAbi from "../abi/yeetStake";
+import * as smileeFinanceFaucetAbi from "../abi/smileeFinanceFaucetAbi";
+import * as smileeFinancePositionManagerAbi from "../abi/smileeFinanceAbiPositionManager";
 
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 
@@ -101,6 +103,7 @@ export enum QUESTS {
   BERAMONIUM = "{Beramonium}",
   THE_HONEY_ELEMENT = "The Honey Element",
   BOOGA_BERAS = "{Booga_Beras}",
+  SMILEE_FINANCE = "{Smilee_Finance}",
 }
 
 export enum MISSIONS {
@@ -145,6 +148,9 @@ export enum QUEST_TYPES {
   YEET_STAKE = "YEET_STAKE",
   YEET_BOND = "YEET_BOND",
   JAM_NATIVE_TRANSFER = "JAM_NATIVE_TRANSFER",
+  SMILEE_TOKEN_EMISSION = "SMILEE_TOKEN_EMISSION",
+  SMILEE_BUY_DVP = "SMILEE_BUY_DVP",
+  SMILEE_SELL_DVP = "SMILEE_SELL_DVP",
 }
 
 export enum MISSION_TYPES {
@@ -316,6 +322,18 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.YEET_BOND]: {
     eventName: "Bonded",
     abi: yeetBondAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.SMILEE_TOKEN_EMISSION]: {
+    eventName: "TokenEmission",
+    abi: smileeFinanceFaucetAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.SMILEE_BUY_DVP]: {
+    eventName: "BuyDVP",
+    abi: smileeFinancePositionManagerAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.SMILEE_SELL_DVP]: {
+    eventName: "SellDVP",
+    abi: smileeFinancePositionManagerAbi as AbiWithEvents,
   },
 } as const;
 
