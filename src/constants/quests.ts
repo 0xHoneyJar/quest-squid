@@ -79,13 +79,29 @@ import {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
-    [QUESTS.YEET]: {
+    [QUESTS.BOOGA_BERAS]: {
       steps: [
         {
-          types: [QUEST_TYPES.YEET_STAKE],
-          addresses: [YEET_STAKE_ADDRESS],
-          startBlock: 5900573,
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: [BOOGA_BEARS_TESTNET_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 6013825,
         },
+      ],
+      startTime: 1729706400 - EXTENSION_DURATION,
+      endTime: 1730829600,
+    },
+    [QUESTS.YEET]: {
+      steps: [
+        // {
+        //   types: [QUEST_TYPES.YEET_STAKE],
+        //   addresses: [YEET_STAKE_ADDRESS],
+        //   startBlock: 5900573,
+        // },
         {
           types: [QUEST_TYPES.YEET_BOND],
           addresses: [YEET_BOND_ADDRESS],
@@ -516,10 +532,10 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.TRICK_OR_TREAT]: {
       steps: [
         {
-          types: [QUEST_TYPES.ERC721_MINT],
+          types: [QUEST_TYPES.ERC1155_MINT],
           addresses: [SPOOKY_BOX_ADDRESS],
           filterCriteria: {
-            [QUEST_TYPES.ERC721_MINT]: {
+            [QUEST_TYPES.ERC1155_MINT]: {
               from: zeroAddress,
             },
           },
@@ -743,22 +759,22 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.ARBITRUM]: {
-    [QUESTS.BOOGA_BERAS]: {
-      steps: [
-        {
-          types: [QUEST_TYPES.ERC721_MINT],
-          addresses: [BOOGA_BEARS_TESTNET_ADDRESS],
-          // filterCriteria: {
-          //   [QUEST_TYPES.ERC721_MINT]: {
-          //     from: zeroAddress,
-          //   },
-          // },
-          startBlock: 6013825,
-        },
-      ],
-      startTime: 1729706400 - EXTENSION_DURATION,
-      endTime: 1730829600,
-    },
+    // [QUESTS.BOOGA_BERAS]: {
+    //   steps: [
+    //     {
+    //       types: [QUEST_TYPES.ERC721_MINT],
+    //       addresses: [BOOGA_BEARS_TESTNET_ADDRESS],
+    //       filterCriteria: {
+    //         [QUEST_TYPES.ERC721_MINT]: {
+    //           from: zeroAddress,
+    //         },
+    //       },
+    //       startBlock: 6013825,
+    //     },
+    //   ],
+    //   startTime: 1729706400 - EXTENSION_DURATION,
+    //   endTime: 1730829600,
+    // },
     [QUESTS.THREE_IS_BETTER_THAN_ONE]: {
       steps: [
         {
