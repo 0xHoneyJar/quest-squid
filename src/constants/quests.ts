@@ -565,6 +565,8 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          revshareTracking: true,
+          includeTransaction: true,
           startBlock: 20596152,
         },
       ],
