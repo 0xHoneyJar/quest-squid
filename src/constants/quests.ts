@@ -3,6 +3,8 @@ import {
   APICULTURE_ADDRESS,
   AQUABERA_ADDRESS,
   BEBOP_ADDRESS,
+  BERABORROW_BORROWER_OPERATIONS_ADDRESS,
+  BERABORROW_LIQUID_STABILITY_POOL_ADDRESS,
   BERACPOL_2_ADDRESS,
   BERAMONIUM_ADDRESS,
   BGT_ADDRESS,
@@ -81,6 +83,42 @@ import {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
+    [QUESTS.BERABORROW]: {
+      steps: [
+        {
+          types: [
+            QUEST_TYPES.BERABORROW_DEN_CREATED,
+            QUEST_TYPES.BERABORROW_DEN_UPDATED,
+          ],
+          addresses: [BERABORROW_BORROWER_OPERATIONS_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.BERABORROW_DEPOSIT],
+          addresses: [BERABORROW_LIQUID_STABILITY_POOL_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.UNISWAP_SWAP],
+          addresses: ["0x496e305C03909ae382974cAcA4c580E1BF32afBE"], // from my transaction, need to confirm.
+        },
+        {
+          types: [QUEST_TYPES.UNISWAP_MINT],
+          addresses: ["0x63b0edc427664d4330f72eec890a86b3f98ce225"], // from my transaction, need to confirm.
+        },
+        {
+          types: [QUEST_TYPES.STAKE],
+          addresses: ["0x584082c8141e8b4fa22a9f9e76d4d6dc3f3b20c"], // from my transaction, need to confirm.
+        },
+        {
+          types: [
+            QUEST_TYPES.BERABORROW_DEN_CREATED,
+            QUEST_TYPES.BERABORROW_DEN_UPDATED,
+          ],
+          addresses: [BERABORROW_BORROWER_OPERATIONS_ADDRESS],
+        },
+      ],
+      startTime: 1730491200,
+      endTime: 1731355200,
+    },
     [QUESTS.SMILEE_FINANCE]: {
       steps: [
         {
@@ -813,6 +851,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 265950877,
           revshareTracking: true,
           includeTransaction: true,
         },
