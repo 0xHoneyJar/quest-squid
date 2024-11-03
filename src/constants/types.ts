@@ -32,8 +32,8 @@ import * as yeetBondAbi from "../abi/yeetBond";
 import * as yeetStakeAbi from "../abi/yeetStake";
 import * as smileeFinanceFaucetAbi from "../abi/smileeFinanceFaucetAbi";
 import * as smileeFinancePositionManagerAbi from "../abi/smileeFinanceAbiPositionManager";
-// import * as berraborrowBorrowerOperationsAbi from "../abi/berraborrowBorrowerOperationsAbi";
-// import * as berraborrowLiquidStabilityPoolAbi from "../abi/berraborrowLiquidStabilityPoolAbi";
+import * as berraborrowBorrowerOperationsAbi from "../abi/berraborrowBorrowerOperationsAbi";
+import * as berraborrowLiquidStabilityPoolAbi from "../abi/berraborrowLiquidStabilityPoolAbi";
 
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 
@@ -106,7 +106,7 @@ export enum QUESTS {
   THE_HONEY_ELEMENT = "The Honey Element",
   BOOGA_BERAS = "{Booga_Beras}",
   SMILEE_FINANCE = "{Smilee_Finance}",
-  // BERABORROW = "{Beraborrow}",
+  BERABORROW = "{Beraborrow}",
 }
 
 export enum MISSIONS {
@@ -154,9 +154,9 @@ export enum QUEST_TYPES {
   SMILEE_TOKEN_EMISSION = "SMILEE_TOKEN_EMISSION",
   SMILEE_BUY_DVP = "SMILEE_BUY_DVP",
   SMILEE_SELL_DVP = "SMILEE_SELL_DVP",
-  // BERABORROW_DEN_CREATED = "BERABORROW_DEN_CREATED",
-  // BERABORROW_DEN_UPDATED = "BERABORROW_DEN_UPDATED",
-  // BERABORROW_DEPOSIT = "BERABORROW_DEPOSIT",
+  BERABORROW_DEN_CREATED = "BERABORROW_DEN_CREATED",
+  BERABORROW_DEN_UPDATED = "BERABORROW_DEN_UPDATED",
+  BERABORROW_DEPOSIT = "BERABORROW_DEPOSIT",
 }
 
 export enum MISSION_TYPES {
@@ -341,18 +341,18 @@ export const QUEST_TYPE_INFO: Record<
     eventName: "SellDVP",
     abi: smileeFinancePositionManagerAbi as AbiWithEvents,
   },
-  // [QUEST_TYPES.BERABORROW_DEN_CREATED]: {
-  //   eventName: "DenCreated",
-  //   abi: berraborrowBorrowerOperationsAbi as AbiWithEvents,
-  // },
-  // [QUEST_TYPES.BERABORROW_DEN_UPDATED]: {
-  //   eventName: "DenUpdated",
-  //   abi: berraborrowBorrowerOperationsAbi as AbiWithEvents,
-  // },
-  // [QUEST_TYPES.BERABORROW_DEPOSIT]: {
-  //   eventName: "Deposit",
-  //   abi: berraborrowLiquidStabilityPoolAbi as AbiWithEvents,
-  // },
+  [QUEST_TYPES.BERABORROW_DEN_CREATED]: {
+    eventName: "DenCreated",
+    abi: berraborrowBorrowerOperationsAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.BERABORROW_DEN_UPDATED]: {
+    eventName: "DenUpdated",
+    abi: berraborrowBorrowerOperationsAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.BERABORROW_DEPOSIT]: {
+    eventName: "Deposit",
+    abi: berraborrowLiquidStabilityPoolAbi as AbiWithEvents,
+  },
 } as const;
 
 const MISSION_TYPE_INFO: Record<

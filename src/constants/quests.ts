@@ -3,8 +3,8 @@ import {
   APICULTURE_ADDRESS,
   AQUABERA_ADDRESS,
   BEBOP_ADDRESS,
-  // BERABORROW_BORROWER_OPERATIONS_ADDRESS,
-  // BERABORROW_LIQUID_STABILITY_POOL_ADDRESS,
+  BERABORROW_BORROWER_OPERATIONS_ADDRESS,
+  BERABORROW_LIQUID_STABILITY_POOL_ADDRESS,
   BERACPOL_2_ADDRESS,
   BERAMONIUM_ADDRESS,
   BGT_ADDRESS,
@@ -83,48 +83,46 @@ import {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
-    // [QUESTS.BERABORROW]: {
-    //   steps: [
-    //     {
-    //       types: [
-    //         QUEST_TYPES.BERABORROW_DEN_CREATED,
-    //         QUEST_TYPES.BERABORROW_DEN_UPDATED,
-    //       ],
-    //       addresses: [BERABORROW_BORROWER_OPERATIONS_ADDRESS],
-    //       includeTransaction: true,
-    //     },
-    //     {
-    //       types: [QUEST_TYPES.BERABORROW_DEPOSIT],
-    //       addresses: [BERABORROW_LIQUID_STABILITY_POOL_ADDRESS],
-    //       includeTransaction: true,
-    //     },
-    //     {
-    //       types: [QUEST_TYPES.UNISWAP_SWAP],
-    //       addresses: ["0x496e305C03909ae382974cAcA4c580E1BF32afBE"], // from my transaction, need to confirm.
-    //     },
-    //     {
-    //       types: [QUEST_TYPES.UNISWAP_MINT],
-    //       addresses: ["0x63b0edc427664d4330f72eec890a86b3f98ce225"], // from my transaction, need to confirm.
-    //     },
-    //     {
-    //       types: [QUEST_TYPES.STAKE],
-    //       addresses: ["0x63b0EdC427664D4330F72eEc890A86b3F98ce225"], // from my transaction, need to confirm.
-    //     },
-    //     {
-    //       types: [QUEST_TYPES.STAKE],
-    //       addresses: ["0x3a7f6f2F27f7794a7820a32313F4a68e36580864"],
-    //     },
-    //     {
-    //       types: [
-    //         QUEST_TYPES.BERABORROW_DEN_CREATED,
-    //         QUEST_TYPES.BERABORROW_DEN_UPDATED,
-    //       ],
-    //       addresses: [BERABORROW_BORROWER_OPERATIONS_ADDRESS],
-    //     },
-    //   ],
-    //   startTime: 1730491200,
-    //   endTime: 1731355200,
-    // },
+    [QUESTS.BERABORROW]: {
+      steps: [
+        {
+          types: [
+            QUEST_TYPES.BERABORROW_DEN_CREATED,
+            QUEST_TYPES.BERABORROW_DEN_UPDATED,
+          ],
+          addresses: [BERABORROW_BORROWER_OPERATIONS_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.BERABORROW_DEPOSIT],
+          addresses: [BERABORROW_LIQUID_STABILITY_POOL_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.UNISWAP_SWAP],
+          addresses: ["0x496e305C03909ae382974cAcA4c580E1BF32afBE"], // from my transaction, need to confirm.
+        },
+        {
+          types: [QUEST_TYPES.UNISWAP_MINT],
+          addresses: ["0x4d41822c1804ffF5c038E4905cfd1044121e0E85"], // from my transaction, need to confirm.
+        },
+        {
+          types: [QUEST_TYPES.STAKE],
+          addresses: ["0x584084216b8D0193EB26f6e28466535f29f3B20c"], // infrared option
+        },
+        {
+          types: [QUEST_TYPES.STAKE],
+          addresses: ["0x72e222116fC6063f4eE5cA90A6C59916AAD8352a"], // bartio option
+        },
+        {
+          types: [
+            QUEST_TYPES.BERABORROW_DEN_CREATED,
+            QUEST_TYPES.BERABORROW_DEN_UPDATED,
+          ],
+          addresses: [BERABORROW_BORROWER_OPERATIONS_ADDRESS],
+        },
+      ],
+      startTime: 1730491200,
+      endTime: 1731355200,
+    },
     [QUESTS.SMILEE_FINANCE]: {
       steps: [
         {
