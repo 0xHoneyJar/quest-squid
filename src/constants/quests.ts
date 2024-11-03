@@ -3,8 +3,8 @@ import {
   APICULTURE_ADDRESS,
   AQUABERA_ADDRESS,
   BEBOP_ADDRESS,
-  BERABORROW_BORROWER_OPERATIONS_ADDRESS,
-  BERABORROW_LIQUID_STABILITY_POOL_ADDRESS,
+  // BERABORROW_BORROWER_OPERATIONS_ADDRESS,
+  // BERABORROW_LIQUID_STABILITY_POOL_ADDRESS,
   BERACPOL_2_ADDRESS,
   BERAMONIUM_ADDRESS,
   BGT_ADDRESS,
@@ -91,10 +91,12 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     //         QUEST_TYPES.BERABORROW_DEN_UPDATED,
     //       ],
     //       addresses: [BERABORROW_BORROWER_OPERATIONS_ADDRESS],
+    //       includeTransaction: true,
     //     },
     //     {
     //       types: [QUEST_TYPES.BERABORROW_DEPOSIT],
     //       addresses: [BERABORROW_LIQUID_STABILITY_POOL_ADDRESS],
+    //       includeTransaction: true,
     //     },
     //     {
     //       types: [QUEST_TYPES.UNISWAP_SWAP],
@@ -106,7 +108,11 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     //     },
     //     {
     //       types: [QUEST_TYPES.STAKE],
-    //       addresses: ["0x584082c8141e8b4fa22a9f9e76d4d6dc3f3b20c"], // from my transaction, need to confirm.
+    //       addresses: ["0x63b0EdC427664D4330F72eEc890A86b3F98ce225"], // from my transaction, need to confirm.
+    //     },
+    //     {
+    //       types: [QUEST_TYPES.STAKE],
+    //       addresses: ["0x3a7f6f2F27f7794a7820a32313F4a68e36580864"],
     //     },
     //     {
     //       types: [
@@ -140,7 +146,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       startTime: 1730232000 - EXTENSION_DURATION,
-      endTime: 1731096000,
+      endTime: 1731355200,
     },
 
     [QUESTS.BOOGA_BERAS]: {
@@ -157,7 +163,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       // startTime: 1729706400 - EXTENSION_DURATION,
-      endTime: 1730829600,
+      endTime: 1731009600,
     },
     [QUESTS.YEET]: {
       steps: [
@@ -174,7 +180,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       startTime: 1729540800 - EXTENSION_DURATION,
-      endTime: 1730404800,
+      endTime: 1730664000,
     },
     [QUESTS.BERAMONIUM]: {
       steps: [
@@ -185,7 +191,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       startTime: 1729713600 - EXTENSION_DURATION,
-      endTime: 1730577600,
+      endTime: 1730836800,
     },
     [QUESTS.IQ_CURVE]: {
       steps: [
@@ -859,7 +865,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       startTime: 1729706400,
-      endTime: 1730829600,
+      endTime: 1731002400,
     },
     [QUESTS.BERAC_ULTIMATE_OG]: {
       steps: [

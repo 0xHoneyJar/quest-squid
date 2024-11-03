@@ -567,6 +567,15 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       case QUEST_TYPES.SMILEE_SELL_DVP:
         userAddress = sender?.toLowerCase() || "";
         break;
+      // case QUEST_TYPES.BERABORROW_DEN_CREATED:
+      //   userAddress = decodedLog._borrower.toLowerCase();
+      //   break;
+      // case QUEST_TYPES.BERABORROW_DEN_UPDATED:
+      //   userAddress = decodedLog._borrower.toLowerCase();
+      //   break;
+      // case QUEST_TYPES.BERABORROW_DEPOSIT:
+      //   userAddress = decodedLog.user.toLowerCase();
+      //   break;
       default:
         return { userAddress: null, amount: 0n };
     }

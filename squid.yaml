@@ -12,7 +12,6 @@ deploy:
     postgres:
     rpc:
       - arbitrum-one.http
-      # - berachain.http
       - optimism.http
       - base.http
       - eth.http
