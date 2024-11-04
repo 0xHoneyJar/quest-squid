@@ -576,6 +576,10 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       case QUEST_TYPES.BERABORROW_DEPOSIT:
         userAddress = decodedLog.sender.toLowerCase();
         break;
+      case QUEST_TYPES.BERABORROW_BORROWING_FEE_PAID:
+        userAddress = decodedLog.borrower.toLowerCase();
+        amount = decodedLog.amount;
+        break;
       default:
         return { userAddress: null, amount: 0n };
     }

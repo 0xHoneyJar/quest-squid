@@ -83,47 +83,65 @@ import {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
+    [QUESTS.JUNKY_URSAS]: {
+      steps: [
+        // mint $JNKY tokens
+        {
+          types: [QUEST_TYPES.ERC20_MINT],
+          addresses: ["0xa0525273423537BC76825B4389F3bAeC1968f83F"],
+          filterCriteria: {
+            [QUEST_TYPES.ERC20_MINT]: {
+              from: zeroAddress,
+            },
+          },
+        },
+        {
+          types: [QUEST_TYPES.ERC20_MINT],
+          addresses: ["0x0000000000000000000000000000000000000000"],
+        },
+      ],
+    },
     [QUESTS.HONEYPOT_FINANCE]: {
       steps: [
         {
           types: [QUEST_TYPES.UNISWAP_SWAP],
-          addresses: ["0x8e372a22f272C6B15d07a3D25ccB9b6a3201d8bA"], // Bera Neiro
+          addresses: ["0x8e372a22f272C6B15d07a3D25ccB9b6a3201d8bA"], // Beiro
         },
         {
           types: [QUEST_TYPES.UNISWAP_SWAP],
-          addresses: ["0xdf5484AF1d8b17B147DE2584fC4EA44ba9Beb714"], // Bera Pepe
+          addresses: ["0xdf5484AF1d8b17B147DE2584fC4EA44ba9Beb714"], // Bepe
         },
         {
           types: [QUEST_TYPES.UNISWAP_SWAP],
-          addresses: ["0xC7d90C2DC76fA3A7FA24867AD38440cFd69ee7De"], // Bera Mog
+          addresses: ["0xC7d90C2DC76fA3A7FA24867AD38440cFd69ee7De"], // Bog
         },
         {
           types: [QUEST_TYPES.UNISWAP_SWAP],
-          addresses: ["0x678Aec5982B2d1a06FEd529949Dd7eA5bAdAD616"], // Bera Dog Wif Hat
+          addresses: ["0x678Aec5982B2d1a06FEd529949Dd7eA5bAdAD616"], // Bif
         },
         {
           types: [QUEST_TYPES.UNISWAP_SWAP],
-          addresses: ["0x504A6d538e21a0A1dDa34C1D3075d6cBAe1733D7"], // Bera Popcat
+          addresses: ["0x504A6d538e21a0A1dDa34C1D3075d6cBAe1733D7"], // Bopcat
         },
         {
           types: [QUEST_TYPES.UNISWAP_SWAP],
-          addresses: ["0x1033F3586556Ee464e9367908045DB5d7DA49a4f"], // Bera Giga Chad
+          addresses: ["0x1033F3586556Ee464e9367908045DB5d7DA49a4f"], // Biga
         },
         {
           types: [QUEST_TYPES.UNISWAP_SWAP],
-          addresses: ["0x3755a042b02Bf75d7C60b2c1E8BD37D0402ECe07"], // Bera Goat
+          addresses: ["0x3755a042b02Bf75d7C60b2c1E8BD37D0402ECe07"], // Boat
         },
         {
           types: [QUEST_TYPES.UNISWAP_SWAP],
-          addresses: ["0xb4248d756eb4BD52D8000B9A13fE8EAB1AC1E081"], // Bera Moo Deng
+          addresses: ["0xb4248d756eb4BD52D8000B9A13fE8EAB1AC1E081"], // BooDeng
         },
         {
           types: [QUEST_TYPES.UNISWAP_SWAP],
-          addresses: ["0x1614a03A8D10802d633D26A096695746F2f225E5"], // Bera Retadrio
+          addresses: ["0x1614a03A8D10802d633D26A096695746F2f225E5"], // Betardio
         },
         {
           types: [QUEST_TYPES.UNISWAP_SWAP],
-          addresses: ["0x0a14B021B337074cCBE3Ba124Fe901809f851Dc8"], // Bera Apu
+          addresses: ["0x0a14B021B337074cCBE3Ba124Fe901809f851Dc8"], // Bapu
         },
       ],
       startTime: 1730664000,
@@ -133,10 +151,11 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
       steps: [
         {
           types: [
-            QUEST_TYPES.BERABORROW_DEN_CREATED,
-            QUEST_TYPES.BERABORROW_DEN_UPDATED,
+            // QUEST_TYPES.BERABORROW_DEN_CREATED,
+            // QUEST_TYPES.BERABORROW_DEN_UPDATED,
+            QUEST_TYPES.BERABORROW_BORROWING_FEE_PAID,
           ],
-          addresses: ["BERABORROW_BORROWER_OPERATIONS_ADDRESS"],
+          addresses: [BERABORROW_BORROWER_OPERATIONS_ADDRESS],
         },
         {
           types: [QUEST_TYPES.BERABORROW_DEPOSIT],

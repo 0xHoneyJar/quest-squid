@@ -108,6 +108,7 @@ export enum QUESTS {
   SMILEE_FINANCE = "{Smilee_Finance}",
   BERABORROW = "{Beraborrow}",
   HONEYPOT_FINANCE = "{HONEYPOT_FINANCE}",
+  JUNKY_URSAS = "{Junky_Ursas}",
 }
 
 export enum MISSIONS {
@@ -158,6 +159,7 @@ export enum QUEST_TYPES {
   BERABORROW_DEN_CREATED = "BERABORROW_DEN_CREATED",
   BERABORROW_DEN_UPDATED = "BERABORROW_DEN_UPDATED",
   BERABORROW_DEPOSIT = "BERABORROW_DEPOSIT",
+  BERABORROW_BORROWING_FEE_PAID = "BERABORROW_BORROWING_FEE_PAID",
 }
 
 export enum MISSION_TYPES {
@@ -353,6 +355,10 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.BERABORROW_DEPOSIT]: {
     eventName: "Deposit",
     abi: berraborrowLiquidStabilityPoolAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.BERABORROW_BORROWING_FEE_PAID]: {
+    eventName: "BorrowingFeePaid",
+    abi: berraborrowBorrowerOperationsAbi as AbiWithEvents,
   },
 } as const;
 
