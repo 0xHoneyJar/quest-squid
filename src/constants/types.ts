@@ -107,6 +107,7 @@ export enum QUESTS {
   BOOGA_BERAS = "{Booga_Beras}",
   SMILEE_FINANCE = "{Smilee_Finance}",
   BERABORROW = "{Beraborrow}",
+  HONEYPOT_FINANCE = "{HONEYPOT_FINANCE}",
 }
 
 export enum MISSIONS {

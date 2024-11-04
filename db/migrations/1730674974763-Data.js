@@ -1,8 +1,8 @@
-module.exports = class Data1729727355111 {
-    name = 'Data1729727355111'
+module.exports = class Data1730674974763 {
+    name = 'Data1730674974763'
 
     async up(db) {
-        await db.query(`CREATE TABLE "quest_step" ("id" character varying NOT NULL, "step_number" integer NOT NULL, "types" text array NOT NULL, "addresses" text array NOT NULL, "filter_criteria" jsonb, "required_amount" numeric NOT NULL, "include_transaction" boolean NOT NULL, "include_transaction_logs" boolean NOT NULL, "start_block" integer, "path" text, "revshare_tracking" boolean NOT NULL, "quest_id" character varying, CONSTRAINT "PK_2701eac9024314902255b9efaf7" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "quest_step" ("id" character varying NOT NULL, "step_number" integer NOT NULL, "types" text array NOT NULL, "addresses" text array NOT NULL, "sibling_types" text array, "filter_criteria" jsonb, "required_amount" numeric NOT NULL, "include_transaction" boolean NOT NULL, "include_transaction_logs" boolean NOT NULL, "start_block" integer, "path" text, "revshare_tracking" boolean NOT NULL, "quest_id" character varying, CONSTRAINT "PK_2701eac9024314902255b9efaf7" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_9dc3e0b37118e6c7035a54d9d9" ON "quest_step" ("quest_id") `)
         await db.query(`CREATE TABLE "revshare_event" ("id" character varying NOT NULL, "user" text NOT NULL, "step_number" integer NOT NULL, "amount" numeric NOT NULL, "timestamp" numeric NOT NULL, "transaction_hash" text NOT NULL, "quest_id" character varying, CONSTRAINT "PK_62eb187a15d2263a1e3159d04cf" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_8a41931e18f4b39a3fc5939a2e" ON "revshare_event" ("quest_id") `)
