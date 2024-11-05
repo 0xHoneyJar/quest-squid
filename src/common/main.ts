@@ -578,7 +578,7 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         break;
       case QUEST_TYPES.BERABORROW_BORROWING_FEE_PAID:
         userAddress = decodedLog.borrower.toLowerCase();
-        amount = decodedLog.amount;
+        // amount = decodedLog.amount;
         break;
       case QUEST_TYPES.JUNKY_DEPOSIT:
         userAddress = decodedLog.player.toLowerCase();

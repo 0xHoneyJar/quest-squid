@@ -150,11 +150,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.BERABORROW]: {
       steps: [
         {
-          types: [
-            // QUEST_TYPES.BERABORROW_DEN_CREATED,
-            // QUEST_TYPES.BERABORROW_DEN_UPDATED,
-            QUEST_TYPES.BERABORROW_BORROWING_FEE_PAID,
-          ],
+          types: [QUEST_TYPES.BERABORROW_BORROWING_FEE_PAID],
           addresses: [BERABORROW_BORROWER_OPERATIONS_ADDRESS],
         },
         {
@@ -182,7 +178,10 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
             QUEST_TYPES.BERABORROW_DEN_CREATED,
             QUEST_TYPES.BERABORROW_DEN_UPDATED,
           ],
-          addresses: [BERABORROW_BORROWER_OPERATIONS_ADDRESS],
+          addresses: [
+            BERABORROW_BORROWER_OPERATIONS_ADDRESS,
+            BERABORROW_BORROWER_OPERATIONS_ADDRESS,
+          ],
         },
       ],
       startTime: 1730491200 - EXTENSION_DURATION,
