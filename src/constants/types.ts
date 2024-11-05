@@ -32,8 +32,8 @@ import * as yeetBondAbi from "../abi/yeetBond";
 import * as yeetStakeAbi from "../abi/yeetStake";
 import * as smileeFinanceFaucetAbi from "../abi/smileeFinanceFaucetAbi";
 import * as smileeFinancePositionManagerAbi from "../abi/smileeFinanceAbiPositionManager";
-import * as berraborrowBorrowerOperationsAbi from "../abi/berraborrowBorrowerOperationsAbi";
-import * as berraborrowLiquidStabilityPoolAbi from "../abi/berraborrowLiquidStabilityPoolAbi";
+import * as beraborrowBorrowerOperationsAbi from "../abi/beraborrowBorrowerOperations";
+import * as beraborrowLiquidStabilityPoolAbi from "../abi/berraborrowLiquidStabilityPoolAbi";
 
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 
@@ -107,7 +107,7 @@ export enum QUESTS {
   BOOGA_BERAS = "{Booga_Beras}",
   SMILEE_FINANCE = "{Smilee_Finance}",
   BERABORROW = "{Beraborrow}",
-  HONEYPOT_FINANCE = "{HONEYPOT_FINANCE}",
+  HONEYPOT_FINANCE = "{Honeypot_Finance}",
   JUNKY_URSAS = "{Junky_Ursas}",
 }
 
@@ -346,19 +346,19 @@ export const QUEST_TYPE_INFO: Record<
   },
   [QUEST_TYPES.BERABORROW_DEN_CREATED]: {
     eventName: "DenCreated",
-    abi: berraborrowBorrowerOperationsAbi as AbiWithEvents,
+    abi: beraborrowBorrowerOperationsAbi as AbiWithEvents,
   },
   [QUEST_TYPES.BERABORROW_DEN_UPDATED]: {
     eventName: "DenUpdated",
-    abi: berraborrowBorrowerOperationsAbi as AbiWithEvents,
+    abi: beraborrowBorrowerOperationsAbi as AbiWithEvents,
   },
   [QUEST_TYPES.BERABORROW_DEPOSIT]: {
     eventName: "Deposit",
-    abi: berraborrowLiquidStabilityPoolAbi as AbiWithEvents,
+    abi: beraborrowLiquidStabilityPoolAbi as AbiWithEvents,
   },
   [QUEST_TYPES.BERABORROW_BORROWING_FEE_PAID]: {
     eventName: "BorrowingFeePaid",
-    abi: berraborrowBorrowerOperationsAbi as AbiWithEvents,
+    abi: beraborrowBorrowerOperationsAbi as AbiWithEvents,
   },
 } as const;
 
