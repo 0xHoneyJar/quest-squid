@@ -24,12 +24,12 @@ import {
   HENLO_CULT_ADDRESS,
   HENLO_CULT_DASHBOARD_ADDRESS,
   HONEY_ADDRESS,
+  HONEY_FLIP_ADDRESS,
   HONEY_JAR_GEN_4_ADDRESS,
   HONEY_SITE_ADDRESS,
   HONEY_WBERA_REWARDS_VAULT_ADDRESS,
   HONEY_ZERU_LP_ADDRESS,
   HONEY_ZERU_REWARDS_VAULT_ADDRESS,
-  HONEYFLIP_ADDRESS,
   HONEYPOT_JANI_ADDRESS,
   HONEYPOT_POT_ADDRESS,
   HOOK_VAULT_ADDRESS,
@@ -38,8 +38,9 @@ import {
   IBGT_DIRAC_VAULT_ADDRESS,
   INHERITOR_OF_A_DYING_WORLD_ADDRESS,
   JANI_ADDRESS,
-  JNKY_ADDRESS,
   JOKERACE_GOVERNOR_ADDRESS,
+  JUNKY_SLOTS_ADDRESS,
+  JUNKY_URSAS_TOKEN_ADDRESS,
   KODIAK_POOL_ADDRESS,
   LEFT_CURVE_ADDRESS,
   LV_ADDRESS,
@@ -57,9 +58,9 @@ import {
   STATION_X_ADDRESS,
   STDV4TNT_ADDRESS,
   THJ_VALIDATOR_ADDRESS,
-  URSA_PLAY_ADDRESS,
   URSA_ROLL_ADDRESS,
   URSA_VAULT_ADDRESS,
+  VAULT_MANAGER_ADDRESS,
   WAGMI_BELAND_ADDRESS,
   WAGMI_BULLAS_ADDRESS,
   WAGMI_BVOL_ADDRESS,
@@ -70,7 +71,6 @@ import {
   WBERA_ADDRESS,
   WEBERA_ADDRESS,
   YEET_BOND_ADDRESS,
-  YEET_STAKE_ADDRESS,
   ZERU_LENDING_POOL,
   ZERU_STRATEGIES_CONTROLLER,
   ZORB_ADDRESS,
@@ -86,25 +86,35 @@ import {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
-    // [QUESTS.JUNKY_URSAS]: {
-    //   steps: [
-    //     {
-    //       types: [QUEST_TYPES.ERC20_MINT],
-    //       addresses: [JNKY_ADDRESS],
-    //       filterCriteria: {
-    //         [QUEST_TYPES.ERC20_MINT]: {
-    //           from: zeroAddress,
-    //         },
-    //       },
-    //     },
-    //     {
-    //       types: [QUEST_TYPES.URSA_ROLL_DEPOSIT],
-    //       addresses: [URSA_PLAY_ADDRESS],
-    //     },
-    //   ],
-    //   startTime: 1730836800 - EXTENSION_DURATION,
-    //   endTime: 1731700800,
-    // },
+    [QUESTS.JUNKY_URSAS]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC20_MINT],
+          addresses: [JUNKY_URSAS_TOKEN_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC20_MINT]: {
+              from: zeroAddress,
+            },
+          },
+        },
+        {
+          types: [QUEST_TYPES.JUNKY_DEPOSIT],
+          addresses: [URSA_ROLL_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.HONEY_FLIP],
+          addresses: [HONEY_FLIP_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.JUNKY_SLOTS],
+          addresses: [JUNKY_SLOTS_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.VAULT_MANAGER_DEPOSIT],
+          addresses: [VAULT_MANAGER_ADDRESS],
+        },
+      ],
+    },
     [QUESTS.HONEYPOT_FINANCE]: {
       steps: [
         {

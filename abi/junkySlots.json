@@ -1,0 +1,15 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "uint64", "name": "sequenceNumber", "type": "uint64" },
+      { "indexed": true, "internalType": "address", "name": "player", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "wager", "type": "uint256" },
+      { "indexed": false, "internalType": "uint8", "name": "count", "type": "uint8" },
+      { "indexed": true, "internalType": "address", "name": "token", "type": "address" },
+      { "indexed": true, "internalType": "bytes32", "name": "userRandomNumber", "type": "bytes32" }
+    ],
+    "name": "GameStarted",
+    "type": "event"
+  }
+] 

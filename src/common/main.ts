@@ -580,6 +580,18 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         userAddress = decodedLog.borrower.toLowerCase();
         amount = decodedLog.amount;
         break;
+      case QUEST_TYPES.JUNKY_DEPOSIT:
+        userAddress = decodedLog.player.toLowerCase();
+        break;
+      case QUEST_TYPES.JUNKY_SLOTS:
+        userAddress = decodedLog.player.toLowerCase();
+        break;
+      case QUEST_TYPES.VAULT_MANAGER_DEPOSIT:
+        userAddress = decodedLog.user.toLowerCase();
+        break;
+      case QUEST_TYPES.HONEY_FLIP:
+        userAddress = decodedLog.player.toLowerCase();
+        break;
       default:
         return { userAddress: null, amount: 0n };
     }
