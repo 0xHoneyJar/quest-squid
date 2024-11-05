@@ -3,6 +3,8 @@ import {
   APICULTURE_ADDRESS,
   AQUABERA_ADDRESS,
   BEBOP_ADDRESS,
+  BERABORROW_BORROWER_OPERATIONS_ADDRESS,
+  BERABORROW_LIQUID_STABILITY_POOL_ADDRESS,
   BERACPOL_2_ADDRESS,
   BERAMONIUM_ADDRESS,
   BGT_ADDRESS,
@@ -22,6 +24,7 @@ import {
   HENLO_CULT_ADDRESS,
   HENLO_CULT_DASHBOARD_ADDRESS,
   HONEY_ADDRESS,
+  HONEY_FLIP_ADDRESS,
   HONEY_JAR_GEN_4_ADDRESS,
   HONEY_SITE_ADDRESS,
   HONEY_WBERA_REWARDS_VAULT_ADDRESS,
@@ -36,6 +39,8 @@ import {
   INHERITOR_OF_A_DYING_WORLD_ADDRESS,
   JANI_ADDRESS,
   JOKERACE_GOVERNOR_ADDRESS,
+  JUNKY_SLOTS_ADDRESS,
+  JUNKY_URSAS_TOKEN_ADDRESS,
   KODIAK_POOL_ADDRESS,
   LEFT_CURVE_ADDRESS,
   LV_ADDRESS,
@@ -47,12 +52,15 @@ import {
   POT_ADDRESS,
   PRETZEL_BRIDGE_ADDRESS,
   SHROOMIEZ_ADDRESS,
+  SMILEE_FINANCE_FAUCET_ADDRESS,
+  SMILEE_FINANCE_POSITION_MANAGER_ADDRESS,
   SPOOKY_BOX_ADDRESS,
   STATION_X_ADDRESS,
   STDV4TNT_ADDRESS,
   THJ_VALIDATOR_ADDRESS,
   URSA_ROLL_ADDRESS,
   URSA_VAULT_ADDRESS,
+  VAULT_MANAGER_ADDRESS,
   WAGMI_BELAND_ADDRESS,
   WAGMI_BULLAS_ADDRESS,
   WAGMI_BVOL_ADDRESS,
@@ -63,7 +71,6 @@ import {
   WBERA_ADDRESS,
   WEBERA_ADDRESS,
   YEET_BOND_ADDRESS,
-  YEET_STAKE_ADDRESS,
   ZERU_LENDING_POOL,
   ZERU_STRATEGIES_CONTROLLER,
   ZORB_ADDRESS,
@@ -79,13 +86,154 @@ import {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
-    [QUESTS.YEET]: {
+    [QUESTS.JUNKY_URSAS]: {
       steps: [
         {
-          types: [QUEST_TYPES.YEET_STAKE],
-          addresses: [YEET_STAKE_ADDRESS],
-          startBlock: 5900573,
+          types: [QUEST_TYPES.ERC20_MINT],
+          addresses: [JUNKY_URSAS_TOKEN_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC20_MINT]: {
+              from: zeroAddress,
+            },
+          },
         },
+        {
+          types: [QUEST_TYPES.JUNKY_DEPOSIT],
+          addresses: [URSA_ROLL_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.HONEY_FLIP],
+          addresses: [HONEY_FLIP_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.JUNKY_SLOTS],
+          addresses: [JUNKY_SLOTS_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.VAULT_MANAGER_DEPOSIT],
+          addresses: [VAULT_MANAGER_ADDRESS],
+        },
+      ],
+    },
+    [QUESTS.HONEYPOT_FINANCE]: {
+      steps: [
+        {
+          types: [
+            QUEST_TYPES.UNISWAP_SWAP,
+            QUEST_TYPES.UNISWAP_SWAP,
+            QUEST_TYPES.UNISWAP_SWAP,
+            QUEST_TYPES.UNISWAP_SWAP,
+            QUEST_TYPES.UNISWAP_SWAP,
+            QUEST_TYPES.UNISWAP_SWAP,
+            QUEST_TYPES.UNISWAP_SWAP,
+            QUEST_TYPES.UNISWAP_SWAP,
+            QUEST_TYPES.UNISWAP_SWAP,
+            QUEST_TYPES.UNISWAP_SWAP,
+          ],
+          addresses: [
+            "0x8aBc3a7bAC442Ae449B07fd0C2152364C230DA9A", // Beiro contract
+            "0xdf5484AF1d8b17B147DE2584fC4EA44ba9Beb714", // Bepe dexPair
+            "0xC7d90C2DC76fA3A7FA24867AD38440cFd69ee7De", // Bog dexPair
+            "0x678Aec5982B2d1a06FEd529949Dd7eA5bAdAD616", // Bif dexPair
+            "0x504A6d538e21a0A1dDa34C1D3075d6cBAe1733D7", // Bopcat dexPair
+            "0x1033F3586556Ee464e9367908045DB5d7DA49a4f", // Biga Chad dexPair
+            "0x3755a042b02Bf75d7C60b2c1E8BD37D0402ECe07", // Boat dexPair
+            "0xb4248d756eb4BD52D8000B9A13fE8EAB1AC1E081", // BooDeng dexPair
+            "0x1614a03A8D10802d633D26A096695746F2f225E5", // Betardio dexPair
+            "0x0a14B021B337074cCBE3Ba124Fe901809f851Dc8", // Bapu dexPair
+          ],
+        },
+      ],
+      startTime: 1730664000 - EXTENSION_DURATION,
+      endTime: 1731528000,
+    },
+    [QUESTS.BERABORROW]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.BERABORROW_BORROWING_FEE_PAID],
+          addresses: [BERABORROW_BORROWER_OPERATIONS_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.BERABORROW_DEPOSIT],
+          addresses: [BERABORROW_LIQUID_STABILITY_POOL_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.UNISWAP_SWAP],
+          addresses: ["0x496e305C03909ae382974cAcA4c580E1BF32afBE"], // from my transaction, need to confirm.
+        },
+        {
+          types: [QUEST_TYPES.UNISWAP_MINT],
+          addresses: ["0x4d41822c1804ffF5c038E4905cfd1044121e0E85"], // from my transaction, need to confirm.
+        },
+        {
+          types: [QUEST_TYPES.STAKE],
+          addresses: ["0x584084216b8D0193EB26f6e28466535f29f3B20c"], // infrared option
+        },
+        {
+          types: [QUEST_TYPES.STAKE],
+          addresses: ["0x72e222116fC6063f4eE5cA90A6C59916AAD8352a"], // bartio option
+        },
+        {
+          types: [
+            QUEST_TYPES.BERABORROW_DEN_CREATED,
+            QUEST_TYPES.BERABORROW_DEN_UPDATED,
+          ],
+          addresses: [
+            BERABORROW_BORROWER_OPERATIONS_ADDRESS,
+            BERABORROW_BORROWER_OPERATIONS_ADDRESS,
+          ],
+        },
+      ],
+      startTime: 1730491200 - EXTENSION_DURATION,
+      endTime: 1731528000,
+    },
+    [QUESTS.SMILEE_FINANCE]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.SMILEE_TOKEN_EMISSION],
+          addresses: [SMILEE_FINANCE_FAUCET_ADDRESS],
+          startBlock: 6129017,
+        },
+        {
+          types: [QUEST_TYPES.SMILEE_BUY_DVP],
+          addresses: [SMILEE_FINANCE_POSITION_MANAGER_ADDRESS],
+          startBlock: 6129017,
+          includeTransaction: true,
+        },
+        {
+          types: [QUEST_TYPES.SMILEE_SELL_DVP],
+          addresses: [SMILEE_FINANCE_POSITION_MANAGER_ADDRESS],
+          startBlock: 6129017,
+          includeTransaction: true,
+        },
+      ],
+      startTime: 1730232000 - EXTENSION_DURATION,
+      endTime: 1731355200,
+    },
+
+    [QUESTS.BOOGA_BERAS]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: [BOOGA_BEARS_TESTNET_ADDRESS],
+          // filterCriteria: {
+          //   [QUEST_TYPES.ERC721_MINT]: {
+          //     from: zeroAddress,
+          //   },
+          // },
+          startBlock: 6013825,
+        },
+      ],
+      // startTime: 1729706400 - EXTENSION_DURATION,
+      endTime: 1731009600,
+    },
+    [QUESTS.YEET]: {
+      steps: [
+        // {
+        //   types: [QUEST_TYPES.YEET_STAKE],
+        //   addresses: [YEET_STAKE_ADDRESS],
+        //   startBlock: 5900573,
+        // },
         {
           types: [QUEST_TYPES.YEET_BOND],
           addresses: [YEET_BOND_ADDRESS],
@@ -94,7 +242,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       startTime: 1729540800 - EXTENSION_DURATION,
-      endTime: 1730404800,
+      endTime: 1730664000,
     },
     [QUESTS.BERAMONIUM]: {
       steps: [
@@ -105,7 +253,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       startTime: 1729713600 - EXTENSION_DURATION,
-      endTime: 1730577600,
+      endTime: 1730836800,
     },
     [QUESTS.IQ_CURVE]: {
       steps: [
@@ -117,6 +265,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           //     from: zeroAddress,
           //   },
           // },
+          stepNumber: 1,
           startBlock: 5900573,
           path: "Jani",
         },
@@ -128,6 +277,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           //     from: zeroAddress,
           //   },
           // },
+          stepNumber: 1,
           startBlock: 5900573,
           path: "Shmokey",
         },
@@ -516,13 +666,15 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.TRICK_OR_TREAT]: {
       steps: [
         {
-          types: [QUEST_TYPES.ERC721_MINT],
+          types: [QUEST_TYPES.ERC1155_MINT],
           addresses: [SPOOKY_BOX_ADDRESS],
           filterCriteria: {
-            [QUEST_TYPES.ERC721_MINT]: {
+            [QUEST_TYPES.ERC1155_MINT]: {
               from: zeroAddress,
             },
           },
+          revshareTracking: true,
+          includeTransaction: true,
           startBlock: 20596152,
         },
       ],
@@ -743,22 +895,22 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.ARBITRUM]: {
-    [QUESTS.BOOGA_BERAS]: {
-      steps: [
-        {
-          types: [QUEST_TYPES.ERC721_MINT],
-          addresses: [BOOGA_BEARS_TESTNET_ADDRESS],
-          // filterCriteria: {
-          //   [QUEST_TYPES.ERC721_MINT]: {
-          //     from: zeroAddress,
-          //   },
-          // },
-          startBlock: 6013825,
-        },
-      ],
-      startTime: 1729706400 - EXTENSION_DURATION,
-      endTime: 1730829600,
-    },
+    // [QUESTS.BOOGA_BERAS]: {
+    //   steps: [
+    //     {
+    //       types: [QUEST_TYPES.ERC721_MINT],
+    //       addresses: [BOOGA_BEARS_TESTNET_ADDRESS],
+    //       filterCriteria: {
+    //         [QUEST_TYPES.ERC721_MINT]: {
+    //           from: zeroAddress,
+    //         },
+    //       },
+    //       startBlock: 6013825,
+    //     },
+    //   ],
+    //   startTime: 1729706400 - EXTENSION_DURATION,
+    //   endTime: 1730829600,
+    // },
     [QUESTS.THREE_IS_BETTER_THAN_ONE]: {
       steps: [
         {
@@ -769,12 +921,13 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 265950877,
           revshareTracking: true,
           includeTransaction: true,
         },
       ],
       startTime: 1729706400,
-      endTime: 1730829600,
+      endTime: 1731002400,
     },
     [QUESTS.BERAC_ULTIMATE_OG]: {
       steps: [
@@ -792,7 +945,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       // startTime: 1729080000 - EXTENSION_DURATION,
-      endTime: 1729713600,
+      endTime: 1730318400,
     },
     [QUESTS.QUEST_FOR_THE_BROWN_HOLE]: {
       steps: [

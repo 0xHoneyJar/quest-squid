@@ -558,6 +558,40 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       case QUEST_TYPES.YEET_BOND:
         userAddress = sender?.toLowerCase() || "";
         break;
+      case QUEST_TYPES.SMILEE_TOKEN_EMISSION:
+        userAddress = decodedLog.user.toLowerCase();
+        break;
+      case QUEST_TYPES.SMILEE_BUY_DVP:
+        userAddress = sender?.toLowerCase() || "";
+        break;
+      case QUEST_TYPES.SMILEE_SELL_DVP:
+        userAddress = sender?.toLowerCase() || "";
+        break;
+      case QUEST_TYPES.BERABORROW_DEN_CREATED:
+        userAddress = decodedLog._borrower.toLowerCase();
+        break;
+      case QUEST_TYPES.BERABORROW_DEN_UPDATED:
+        userAddress = decodedLog._borrower.toLowerCase();
+        break;
+      case QUEST_TYPES.BERABORROW_DEPOSIT:
+        userAddress = decodedLog.sender.toLowerCase();
+        break;
+      case QUEST_TYPES.BERABORROW_BORROWING_FEE_PAID:
+        userAddress = decodedLog.borrower.toLowerCase();
+        // amount = decodedLog.amount;
+        break;
+      case QUEST_TYPES.JUNKY_DEPOSIT:
+        userAddress = decodedLog.player.toLowerCase();
+        break;
+      case QUEST_TYPES.JUNKY_SLOTS:
+        userAddress = decodedLog.player.toLowerCase();
+        break;
+      case QUEST_TYPES.VAULT_MANAGER_DEPOSIT:
+        userAddress = decodedLog.user.toLowerCase();
+        break;
+      case QUEST_TYPES.HONEY_FLIP:
+        userAddress = decodedLog.player.toLowerCase();
+        break;
       default:
         return { userAddress: null, amount: 0n };
     }

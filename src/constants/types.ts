@@ -1,6 +1,8 @@
 import { AbiEvent } from "@subsquid/evm-abi";
 import * as aquaberaAbi from "../abi/aquabera";
+import * as beraborrowBorrowerOperationsAbi from "../abi/beraborrowBorrowerOperations";
 import * as beramoniumAbi from "../abi/beramoniumGemhunters";
+import * as beraborrowLiquidStabilityPoolAbi from "../abi/berraborrowLiquidStabilityPoolAbi";
 import * as bgtAbi from "../abi/bgt";
 import * as boogaBearsAbi from "../abi/boogaBears";
 import * as bvaultAbi from "../abi/bvault";
@@ -12,20 +14,26 @@ import * as ftoPairAbi from "../abi/ftoPair";
 import * as goldilockedAbi from "../abi/goldilocked";
 import * as goldiswapAbi from "../abi/goldiswap";
 import * as governorAbi from "../abi/governor";
+import * as honeyFlipAbi from "../abi/honeyFlip";
 import * as hookVaultAbi from "../abi/hookVault";
 import * as jamSettlementAbi from "../abi/jamSettlement";
+import * as junkySlotsAbi from "../abi/junkySlots";
 import * as lendingPoolAbi from "../abi/lendingPool";
 import * as lvaultAbi from "../abi/lvault";
 import * as memeswapDeployerAbi from "../abi/memeswapDeployer";
 import * as pretzelBridgeAbi from "../abi/pretzelBridge";
 import * as rewardsVaultAbi from "../abi/rewardsVault";
-import * as simplifiedUniswapAbi from "../abi/simplifiedUniswap";
+import * as smileeFinancePositionManagerAbi from "../abi/smileeFinanceAbiPositionManager";
+import * as smileeFinanceFaucetAbi from "../abi/smileeFinanceFaucetAbi";
 import * as spookyAbi from "../abi/spooky";
 import * as stationXFactoryAbi from "../abi/stationXFactory";
 import * as strategiesControllerAbi from "../abi/strategiesController";
+import * as simplifiedUniswapAbi from "../abi/uniswap";
 import * as uniswapAbi from "../abi/uniswap";
 import * as ursaRollAbi from "../abi/ursaRoll";
+import * as ursaRoll2Abi from "../abi/ursaroll2";
 import * as ursaVaultAbi from "../abi/ursaVault";
+import * as vaultManagerAbi from "../abi/vaultManager";
 import * as vaultRouterAbi from "../abi/vaultRouter";
 import * as wagmiAbi from "../abi/wagmibera";
 import * as yeetBondAbi from "../abi/yeetBond";
@@ -101,6 +109,10 @@ export enum QUESTS {
   BERAMONIUM = "{Beramonium}",
   THE_HONEY_ELEMENT = "The Honey Element",
   BOOGA_BERAS = "{Booga_Beras}",
+  SMILEE_FINANCE = "{Smilee_Finance}",
+  BERABORROW = "{Beraborrow}",
+  HONEYPOT_FINANCE = "{Honeypot_Finance}",
+  JUNKY_URSAS = "{Junky_Ursas}",
 }
 
 export enum MISSIONS {
@@ -145,6 +157,17 @@ export enum QUEST_TYPES {
   YEET_STAKE = "YEET_STAKE",
   YEET_BOND = "YEET_BOND",
   JAM_NATIVE_TRANSFER = "JAM_NATIVE_TRANSFER",
+  SMILEE_TOKEN_EMISSION = "SMILEE_TOKEN_EMISSION",
+  SMILEE_BUY_DVP = "SMILEE_BUY_DVP",
+  SMILEE_SELL_DVP = "SMILEE_SELL_DVP",
+  BERABORROW_DEN_CREATED = "BERABORROW_DEN_CREATED",
+  BERABORROW_DEN_UPDATED = "BERABORROW_DEN_UPDATED",
+  BERABORROW_DEPOSIT = "BERABORROW_DEPOSIT",
+  BERABORROW_BORROWING_FEE_PAID = "BERABORROW_BORROWING_FEE_PAID",
+  JUNKY_DEPOSIT = "JUNKY_DEPOSIT",
+  HONEY_FLIP = "HONEY_FLIP",
+  JUNKY_SLOTS = "JUNKY_SLOTS",
+  VAULT_MANAGER_DEPOSIT = "VAULT_MANAGER_DEPOSIT",
 }
 
 export enum MISSION_TYPES {
@@ -316,6 +339,50 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.YEET_BOND]: {
     eventName: "Bonded",
     abi: yeetBondAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.SMILEE_TOKEN_EMISSION]: {
+    eventName: "TokenEmission",
+    abi: smileeFinanceFaucetAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.SMILEE_BUY_DVP]: {
+    eventName: "BuyDVP",
+    abi: smileeFinancePositionManagerAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.SMILEE_SELL_DVP]: {
+    eventName: "SellDVP",
+    abi: smileeFinancePositionManagerAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.BERABORROW_DEN_CREATED]: {
+    eventName: "DenCreated",
+    abi: beraborrowBorrowerOperationsAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.BERABORROW_DEN_UPDATED]: {
+    eventName: "DenUpdated",
+    abi: beraborrowBorrowerOperationsAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.BERABORROW_DEPOSIT]: {
+    eventName: "Deposit",
+    abi: beraborrowLiquidStabilityPoolAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.BERABORROW_BORROWING_FEE_PAID]: {
+    eventName: "BorrowingFeePaid",
+    abi: beraborrowBorrowerOperationsAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.JUNKY_DEPOSIT]: {
+    eventName: "DepositETH",
+    abi: ursaRoll2Abi as AbiWithEvents,
+  },
+  [QUEST_TYPES.HONEY_FLIP]: {
+    eventName: "GameStarted",
+    abi: honeyFlipAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.JUNKY_SLOTS]: {
+    eventName: "GameStarted",
+    abi: junkySlotsAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.VAULT_MANAGER_DEPOSIT]: {
+    eventName: "LiquidityAdded",
+    abi: vaultManagerAbi as AbiWithEvents,
   },
 } as const;
 

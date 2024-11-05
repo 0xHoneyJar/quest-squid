@@ -1,6 +1,6 @@
 manifestVersion: subsquid.io/v0.1
 name: quest-squid
-version: 86
+version: 100
 description: A squid that indexes quest events for Cub Scouts
 build:
 deploy:
@@ -12,7 +12,6 @@ deploy:
     postgres:
     rpc:
       - arbitrum-one.http
-      # - berachain.http
       - optimism.http
       - base.http
       - eth.http
