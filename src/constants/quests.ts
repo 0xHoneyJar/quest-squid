@@ -114,6 +114,8 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: [VAULT_MANAGER_ADDRESS],
         },
       ],
+      startTime: 1731182400 - EXTENSION_DURATION,
+      endTime: 1732046400,
     },
     [QUESTS.HONEYPOT_FINANCE]: {
       steps: [
@@ -144,8 +146,8 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           ],
         },
       ],
-      startTime: 1730664000 - EXTENSION_DURATION,
-      endTime: 1731528000,
+      startTime: 1731009600 - EXTENSION_DURATION,
+      endTime: 1731873600,
     },
     [QUESTS.BERABORROW]: {
       steps: [
@@ -185,7 +187,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       startTime: 1730491200 - EXTENSION_DURATION,
-      endTime: 1731528000,
+      endTime: 1731700800,
     },
     [QUESTS.SMILEE_FINANCE]: {
       steps: [
