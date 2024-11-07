@@ -27,6 +27,12 @@ export class StepProgress {
     @BigIntColumn_({nullable: false})
     startTimestamp!: bigint
 
+    @BigIntColumn_({nullable: false})
+    lastUpdateTimestamp!: bigint
+
+    @StringColumn_({nullable: true})
+    lastTransactionHash!: string | undefined | null
+
     @StringColumn_({nullable: true})
     path!: string | undefined | null
 }

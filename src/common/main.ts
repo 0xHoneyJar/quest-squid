@@ -377,11 +377,18 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
           progressAmount: 0n,
           completed: false,
           startTimestamp: BigInt(block.header.timestamp),
+          lastUpdateTimestamp: BigInt(block.header.timestamp),
+          lastTransactionHash: transactionHash ? transactionHash : null,
           path: step.path,
         });
       });
 
       stepProgress.progressAmount += amount;
+      stepProgress.lastUpdateTimestamp = BigInt(block.header.timestamp);
+
+      if (transactionHash) {
+        stepProgress.lastTransactionHash = transactionHash;
+      }
 
       if (
         stepProgress.progressAmount >= step.requiredAmount &&

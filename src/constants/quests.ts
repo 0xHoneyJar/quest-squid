@@ -86,6 +86,15 @@ import {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
+    [QUESTS.BITGET]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: ["0x5d746f8387bd6c192f9b8a8dccbd9a4d7f7d54c1"],
+          includeTransaction: true,
+        },
+      ],
+    },
     [QUESTS.JUNKY_URSAS]: {
       steps: [
         {

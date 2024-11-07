@@ -45,6 +45,8 @@ type StepProgress @entity {
   progressAmount: BigInt!
   completed: Boolean! @index
   startTimestamp: BigInt!
+  lastUpdateTimestamp: BigInt!
+  lastTransactionHash: String
   path: String
 }
 

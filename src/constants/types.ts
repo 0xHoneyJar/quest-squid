@@ -113,6 +113,7 @@ export enum QUESTS {
   BERABORROW = "{Beraborrow}",
   HONEYPOT_FINANCE = "{Honeypot_Finance}",
   JUNKY_URSAS = "{Junky_Ursas}",
+  BITGET = "Bitget",
 }
 
 export enum MISSIONS {
