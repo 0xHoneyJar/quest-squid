@@ -133,30 +133,36 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.HONEYPOT_FINANCE]: {
       steps: [
         {
-          types: [
-            QUEST_TYPES.UNISWAP_SWAP,
-            QUEST_TYPES.UNISWAP_SWAP,
-            QUEST_TYPES.UNISWAP_SWAP,
-            QUEST_TYPES.UNISWAP_SWAP,
-            QUEST_TYPES.UNISWAP_SWAP,
-            QUEST_TYPES.UNISWAP_SWAP,
-            QUEST_TYPES.UNISWAP_SWAP,
-            QUEST_TYPES.UNISWAP_SWAP,
-            QUEST_TYPES.UNISWAP_SWAP,
-            QUEST_TYPES.UNISWAP_SWAP,
-          ],
+          types: [QUEST_TYPES.ERC20_TRANSFER],
           addresses: [
-            "0x8aBc3a7bAC442Ae449B07fd0C2152364C230DA9A", // Beiro contract
-            "0xdf5484AF1d8b17B147DE2584fC4EA44ba9Beb714", // Bepe dexPair
-            "0xC7d90C2DC76fA3A7FA24867AD38440cFd69ee7De", // Bog dexPair
-            "0x678Aec5982B2d1a06FEd529949Dd7eA5bAdAD616", // Bif dexPair
-            "0x504A6d538e21a0A1dDa34C1D3075d6cBAe1733D7", // Bopcat dexPair
-            "0x1033F3586556Ee464e9367908045DB5d7DA49a4f", // Biga Chad dexPair
-            "0x3755a042b02Bf75d7C60b2c1E8BD37D0402ECe07", // Boat dexPair
-            "0xb4248d756eb4BD52D8000B9A13fE8EAB1AC1E081", // BooDeng dexPair
-            "0x1614a03A8D10802d633D26A096695746F2f225E5", // Betardio dexPair
-            "0x0a14B021B337074cCBE3Ba124Fe901809f851Dc8", // Bapu dexPair
+            "0x8B045d02c581284295Be33D4f261F8E1e6F78F18", // Bera Neiro
+            "0xff4abcd6d4cea557e4267bc81f1d2064615cb49e", // Bera Pepe
+            "0x3F7AAE503000A08A8d4A9AFefa738b565f3A6CD6", // Bera Mog
+            "0xEF348b9FD378c91b00874d611b22062d7ee60284", // Bera Dog Wif Hat
+            "0x51A42ceAFDA32F68390840A187b65a99584332df", // Bera Popcat
+            "0x96dc300D5406E42051575B8b49d3057F1Ef678FC", // Bera Giga Chad
+            "0x0874955158639A594fd65641E16C7de91F3dF465", // Bera Goat
+            "0x5c648D0Fd479cAFB9638eB94dB50aAA4d6A58c33", // Bera Moo Deng
+            "0xFa9FB9d84525e4fE6c7DEaE137e3f1C81F86FdF8", // Bera Retadrio
+            "0x96d62fbd15608ef087219f20986735a1d65a22a4", // Bera Apu
           ],
+          filterCriteria: {
+            [QUEST_TYPES.ERC20_TRANSFER]: {
+              from: [
+                "0x8e372a22f272C6B15d07a3D25ccB9b6a3201d8bA", // Beiro dexPair
+                "0xdf5484AF1d8b17B147DE2584fC4EA44ba9Beb714", // Bepe dexPair
+                "0xC7d90C2DC76fA3A7FA24867AD38440cFd69ee7De", // Bog dexPair
+                "0x678Aec5982B2d1a06FEd529949Dd7eA5bAdAD616", // Bif dexPair
+                "0x504A6d538e21a0A1dDa34C1D3075d6cBAe1733D7", // Bopcat dexPair
+                "0x1033F3586556Ee464e9367908045DB5d7DA49a4f", // Biga Chad dexPair
+                "0x3755a042b02Bf75d7C60b2c1E8BD37D0402ECe07", // Boat dexPair
+                "0xb4248d756eb4BD52D8000B9A13fE8EAB1AC1E081", // BooDeng dexPair
+                "0x1614a03A8D10802d633D26A096695746F2f225E5", // Betardio dexPair
+                "0x0a14B021B337074cCBE3Ba124Fe901809f851Dc8", // Bapu dexPair
+              ]
+            }
+          },
+          startBlock: 6574608,
         },
       ],
       startTime: 1731182400 - EXTENSION_DURATION,
