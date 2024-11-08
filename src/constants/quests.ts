@@ -26,6 +26,7 @@ import {
   HONEY_ADDRESS,
   HONEY_FLIP_ADDRESS,
   HONEY_JAR_GEN_4_ADDRESS,
+  HONEY_NECT_KODIAK_LP_ADDRESS,
   HONEY_SITE_ADDRESS,
   HONEY_WBERA_REWARDS_VAULT_ADDRESS,
   HONEY_ZERU_LP_ADDRESS,
@@ -36,12 +37,14 @@ import {
   HOOKED_ADDRESS,
   HORSES_ADDRESS,
   IBGT_DIRAC_VAULT_ADDRESS,
+  IBGT_ADDRESS,
   INHERITOR_OF_A_DYING_WORLD_ADDRESS,
   JANI_ADDRESS,
   JOKERACE_GOVERNOR_ADDRESS,
   JUNKY_SLOTS_ADDRESS,
   JUNKY_URSAS_TOKEN_ADDRESS,
   KODIAK_POOL_ADDRESS,
+  KODIAK_NECT_HONEY_POOL,
   LEFT_CURVE_ADDRESS,
   LV_ADDRESS,
   MEMESWAP_JANI_ADDRESS,
@@ -49,6 +52,7 @@ import {
   MIBERA_README_ADDRESS,
   MYSTERY_BOX_ADDRESS,
   NECT_DIRAC_VAULT_ADDRESS,
+  NECT_ADDRESS,
   POT_ADDRESS,
   PRETZEL_BRIDGE_ADDRESS,
   SHROOMIEZ_ADDRESS,
@@ -123,8 +127,8 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: [VAULT_MANAGER_ADDRESS],
         },
       ],
-      startTime: 1731182400 - EXTENSION_DURATION,
-      endTime: 1732046400,
+      startTime: 1731355200 - EXTENSION_DURATION,
+      endTime: 1732219200,
     },
     [QUESTS.HONEYPOT_FINANCE]: {
       steps: [
@@ -155,34 +159,52 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           ],
         },
       ],
-      startTime: 1731009600 - EXTENSION_DURATION,
-      endTime: 1731873600,
+      startTime: 1731182400 - EXTENSION_DURATION,
+      endTime: 1732046400,
     },
     [QUESTS.BERABORROW]: {
       steps: [
         {
-          types: [QUEST_TYPES.BERABORROW_BORROWING_FEE_PAID],
-          addresses: [BERABORROW_BORROWER_OPERATIONS_ADDRESS],
+          types: [
+            QUEST_TYPES.BERABORROW_DEN_CREATED,
+            QUEST_TYPES.BERABORROW_DEN_UPDATED,
+          ],
+          addresses: [
+            BERABORROW_BORROWER_OPERATIONS_ADDRESS,
+            BERABORROW_BORROWER_OPERATIONS_ADDRESS,
+          ],
+          startBlock: 6248115,
         },
         {
           types: [QUEST_TYPES.BERABORROW_DEPOSIT],
           addresses: [BERABORROW_LIQUID_STABILITY_POOL_ADDRESS],
+          startBlock: 6248115,
         },
         {
           types: [QUEST_TYPES.UNISWAP_SWAP],
-          addresses: ["0x496e305C03909ae382974cAcA4c580E1BF32afBE"], // from my transaction, need to confirm.
+          addresses: [KODIAK_NECT_HONEY_POOL],
+          filterCriteria: {
+            [QUEST_TYPES.UNISWAP_SWAP]: {
+              tokenIn: NECT_ADDRESS,
+              tokenOut: HONEY_ADDRESS,
+            },
+          },
+          startBlock: 6248115,
         },
         {
           types: [QUEST_TYPES.UNISWAP_MINT],
-          addresses: ["0x4d41822c1804ffF5c038E4905cfd1044121e0E85"], // from my transaction, need to confirm.
+          addresses: [KODIAK_NECT_HONEY_POOL],
+          startBlock: 6248115,
         },
         {
           types: [QUEST_TYPES.STAKE],
           addresses: ["0x584084216b8D0193EB26f6e28466535f29f3B20c"], // infrared option
+          startBlock: 6248115,
         },
         {
           types: [QUEST_TYPES.STAKE],
           addresses: ["0x72e222116fC6063f4eE5cA90A6C59916AAD8352a"], // bartio option
+          startBlock: 6248115,
         },
         {
           types: [
@@ -193,10 +215,11 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
             BERABORROW_BORROWER_OPERATIONS_ADDRESS,
             BERABORROW_BORROWER_OPERATIONS_ADDRESS,
           ],
+          startBlock: 6248115,
         },
       ],
       startTime: 1730491200 - EXTENSION_DURATION,
-      endTime: 1731700800,
+      endTime: 1731873600,
     },
     [QUESTS.SMILEE_FINANCE]: {
       steps: [

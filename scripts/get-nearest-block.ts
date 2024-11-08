@@ -2,7 +2,7 @@ import prompts from "prompts";
 import { EXTENSION_DURATION } from "../src/constants/types";
 
 const INTERNAL_GRAPHQL_ENDPOINT =
-  "https://the-honey-jar.squids.live/internal-squid@v4/api/graphql";
+  "https://the-honey-jar.squids.live/internal-squid@v5/api/graphql";
 
 async function getNearestBlockToTimestamp(timestamp: number): Promise<number> {
   const query = `
@@ -28,6 +28,22 @@ async function getNearestBlockToTimestamp(timestamp: number): Promise<number> {
       }),
     });
 
+    if (!response.ok) {
+      const text = await response.text();
+      console.error('Server response:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: text.substring(0, 200) + '...' // Log first 200 chars of response
+      });
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const contentType = response.headers.get('content-type');
+    if (!contentType?.includes('application/json')) {
+      console.error('Unexpected content type:', contentType);
+      throw new Error('Expected JSON response but got ' + contentType);
+    }
+
     const responseData = await response.json();
 
     if (responseData.errors) {
@@ -42,7 +58,11 @@ async function getNearestBlockToTimestamp(timestamp: number): Promise<number> {
 
     return Number(responseData.data.blocks[0].number);
   } catch (error) {
-    console.error("Error fetching nearest block:", error);
+    console.error("Error fetching nearest block:", {
+      endpoint: INTERNAL_GRAPHQL_ENDPOINT,
+      timestamp,
+      error: error instanceof Error ? error.message : String(error)
+    });
     throw error;
   }
 }
