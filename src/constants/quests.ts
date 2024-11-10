@@ -127,8 +127,8 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: [VAULT_MANAGER_ADDRESS],
         },
       ],
-      startTime: 1731355200 - EXTENSION_DURATION,
-      endTime: 1732219200,
+      startTime: 1731528000 - EXTENSION_DURATION,
+      endTime: 1732392000,
     },
     [QUESTS.HONEYPOT_FINANCE]: {
       steps: [
@@ -165,8 +165,8 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           startBlock: 6574608,
         },
       ],
-      startTime: 1731182400 - EXTENSION_DURATION,
-      endTime: 1732046400,
+      startTime: 1731355200 - EXTENSION_DURATION,
+      endTime: 1732219200,
     },
     [QUESTS.BERABORROW]: {
       steps: [
@@ -189,17 +189,16 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         {
           types: [QUEST_TYPES.UNISWAP_SWAP],
           addresses: [KODIAK_NECT_HONEY_POOL],
-          filterCriteria: {
-            [QUEST_TYPES.UNISWAP_SWAP]: {
-              tokenIn: NECT_ADDRESS,
-              tokenOut: HONEY_ADDRESS,
-            },
-          },
           startBlock: 6248115,
         },
         {
-          types: [QUEST_TYPES.UNISWAP_MINT],
-          addresses: [KODIAK_NECT_HONEY_POOL],
+          types: [QUEST_TYPES.ERC20_TRANSFER],
+          addresses: ["0x63b0EdC427664D4330F72eEc890A86b3F98ce225"], // LP token address
+          filterCriteria: {
+            [QUEST_TYPES.ERC20_TRANSFER]: {
+              from: zeroAddress,
+            },
+          },
           startBlock: 6248115,
         },
         {
@@ -208,24 +207,19 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           startBlock: 6248115,
         },
         {
-          types: [QUEST_TYPES.STAKE],
-          addresses: ["0x72e222116fC6063f4eE5cA90A6C59916AAD8352a"], // bartio option
+          types: [QUEST_TYPES.BERABORROW_DEN_UPDATED],
+          addresses: [BERABORROW_BORROWER_OPERATIONS_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.BERABORROW_DEN_UPDATED]: {
+              _denManager: "0xCc2F6e3F342ed202D098302012a15cE6aD8eB511",
+            },
+          },
           startBlock: 6248115,
-        },
-        {
-          types: [
-            QUEST_TYPES.BERABORROW_DEN_CREATED,
-            QUEST_TYPES.BERABORROW_DEN_UPDATED,
-          ],
-          addresses: [
-            BERABORROW_BORROWER_OPERATIONS_ADDRESS,
-            BERABORROW_BORROWER_OPERATIONS_ADDRESS,
-          ],
-          startBlock: 6248115,
+          includeTransaction: true,
         },
       ],
       startTime: 1730491200 - EXTENSION_DURATION,
-      endTime: 1731873600,
+      endTime: 1732046400,
     },
     [QUESTS.SMILEE_FINANCE]: {
       steps: [
@@ -1168,6 +1162,22 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.ZORA]: {
+    [QUESTS.OOGA_AWAKENING]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [APICULTURE_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC1155_MINT]: {
+              id: 6n,
+            },
+          },
+          revshareTracking: false,
+        },
+      ],
+      startTime: 1731342000,
+      endTime: 1731946800,
+    },
     [QUESTS.ZORB_MANIA]: {
       steps: [
         {

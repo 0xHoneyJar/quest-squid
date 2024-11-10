@@ -38,6 +38,7 @@ import * as vaultRouterAbi from "../abi/vaultRouter";
 import * as wagmiAbi from "../abi/wagmibera";
 import * as yeetBondAbi from "../abi/yeetBond";
 import * as yeetStakeAbi from "../abi/yeetStake";
+import * as uniswapV3PoolAbi from "../abi/uniswapV3pool";
 
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 
@@ -114,6 +115,7 @@ export enum QUESTS {
   HONEYPOT_FINANCE = "{Honeypot_Finance}",
   JUNKY_URSAS = "{Junky_Ursas}",
   BITGET = "Bitget",
+  OOGA_AWAKENING = "Ooga Awakening",
 }
 
 export enum MISSIONS {
@@ -169,6 +171,7 @@ export enum QUEST_TYPES {
   HONEY_FLIP = "HONEY_FLIP",
   JUNKY_SLOTS = "JUNKY_SLOTS",
   VAULT_MANAGER_DEPOSIT = "VAULT_MANAGER_DEPOSIT",
+  UNISWAP_V3_MINT = "UNISWAP_V3_MINT",
 }
 
 export enum MISSION_TYPES {
@@ -384,6 +387,10 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.VAULT_MANAGER_DEPOSIT]: {
     eventName: "LiquidityAdded",
     abi: vaultManagerAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.UNISWAP_V3_MINT]: {
+    eventName: "Mint",
+    abi: uniswapV3PoolAbi as AbiWithEvents,
   },
 } as const;
 
