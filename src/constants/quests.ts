@@ -26,7 +26,6 @@ import {
   HONEY_ADDRESS,
   HONEY_FLIP_ADDRESS,
   HONEY_JAR_GEN_4_ADDRESS,
-  HONEY_NECT_KODIAK_LP_ADDRESS,
   HONEY_SITE_ADDRESS,
   HONEY_WBERA_REWARDS_VAULT_ADDRESS,
   HONEY_ZERU_LP_ADDRESS,
@@ -37,14 +36,13 @@ import {
   HOOKED_ADDRESS,
   HORSES_ADDRESS,
   IBGT_DIRAC_VAULT_ADDRESS,
-  IBGT_ADDRESS,
   INHERITOR_OF_A_DYING_WORLD_ADDRESS,
   JANI_ADDRESS,
   JOKERACE_GOVERNOR_ADDRESS,
   JUNKY_SLOTS_ADDRESS,
   JUNKY_URSAS_TOKEN_ADDRESS,
-  KODIAK_POOL_ADDRESS,
   KODIAK_NECT_HONEY_POOL,
+  KODIAK_POOL_ADDRESS,
   LEFT_CURVE_ADDRESS,
   LV_ADDRESS,
   MEMESWAP_JANI_ADDRESS,
@@ -52,7 +50,6 @@ import {
   MIBERA_README_ADDRESS,
   MYSTERY_BOX_ADDRESS,
   NECT_DIRAC_VAULT_ADDRESS,
-  NECT_ADDRESS,
   POT_ADDRESS,
   PRETZEL_BRIDGE_ADDRESS,
   SHROOMIEZ_ADDRESS,
@@ -159,8 +156,8 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
                 "0xb4248d756eb4BD52D8000B9A13fE8EAB1AC1E081", // BooDeng dexPair
                 "0x1614a03A8D10802d633D26A096695746F2f225E5", // Betardio dexPair
                 "0x0a14B021B337074cCBE3Ba124Fe901809f851Dc8", // Bapu dexPair
-              ]
-            }
+              ],
+            },
           },
           startBlock: 6574608,
         },
@@ -1175,7 +1172,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           revshareTracking: false,
         },
       ],
-      startTime: 1731342000,
+      // startTime: 1731342000,
       endTime: 1731946800,
     },
     [QUESTS.ZORB_MANIA]: {
