@@ -678,6 +678,22 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.OOGA_AWAKENING]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [APICULTURE_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC1155_MINT]: {
+              id: 6n,
+            },
+          },
+          revshareTracking: false,
+        },
+      ],
+      // startTime: 1731342000,
+      endTime: 1731946800,
+    },
     [QUESTS.THE_HONEY_ELEMENT]: {
       steps: [
         {
@@ -1159,22 +1175,6 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.ZORA]: {
-    [QUESTS.OOGA_AWAKENING]: {
-      steps: [
-        {
-          types: [QUEST_TYPES.ERC1155_MINT],
-          addresses: [APICULTURE_ADDRESS],
-          filterCriteria: {
-            [QUEST_TYPES.ERC1155_MINT]: {
-              id: 6n,
-            },
-          },
-          revshareTracking: false,
-        },
-      ],
-      // startTime: 1731342000,
-      endTime: 1731946800,
-    },
     [QUESTS.ZORB_MANIA]: {
       steps: [
         {
