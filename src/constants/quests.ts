@@ -81,6 +81,7 @@ import {
   HONEY_USDC_LP_ADDRESS,
   HONEY_WBERA_LP_ADDRESS,
   BHONEY_ADDRESS,
+  URSAROLL2_ADDRESS,
 } from "./address";
 import {
   CHAINS,
@@ -137,25 +138,30 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 6822216,
         },
         {
           types: [QUEST_TYPES.JUNKY_DEPOSIT],
-          addresses: [URSA_ROLL_ADDRESS],
+          addresses: [URSAROLL2_ADDRESS],
+          startBlock: 6822216,
         },
         {
           types: [QUEST_TYPES.HONEY_FLIP],
           addresses: [HONEY_FLIP_ADDRESS],
+          startBlock: 6822216,
         },
         {
           types: [QUEST_TYPES.JUNKY_SLOTS],
           addresses: [JUNKY_SLOTS_ADDRESS],
+          startBlock: 6822216,
         },
         {
           types: [QUEST_TYPES.VAULT_MANAGER_DEPOSIT],
           addresses: [VAULT_MANAGER_ADDRESS],
+          startBlock: 6822216,
         },
       ],
-      startTime: 1731528000 - EXTENSION_DURATION,
+      startTime: 1731700800 - EXTENSION_DURATION,
       endTime: 1732392000,
     },
     [QUESTS.HONEYPOT_FINANCE]: {
