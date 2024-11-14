@@ -75,6 +75,12 @@ import {
   ZERU_LENDING_POOL,
   ZERU_STRATEGIES_CONTROLLER,
   ZORB_ADDRESS,
+  MEAD_TOKEN_ADDRESS,
+  BORROWER_OPERATIONS_ADDRESS,
+  BGT_STAKING_ADDRESS,
+  HONEY_USDC_LP_ADDRESS,
+  HONEY_WBERA_LP_ADDRESS,
+  BHONEY_ADDRESS,
 } from "./address";
 import {
   CHAINS,
@@ -87,6 +93,31 @@ import {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
+    [QUESTS.THE_ROOT_OF_ALL_DEFI]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.TROVE_UPDATED],
+          addresses: [BORROWER_OPERATIONS_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.TROVE_UPDATED]: {
+              _asset: [
+                HONEY_USDC_LP_ADDRESS,
+                HONEY_WBERA_LP_ADDRESS,
+                BHONEY_ADDRESS
+              ]
+            },
+          },
+          startBlock: 6574608,
+        },
+        {
+          types: [QUEST_TYPES.BGT_REWARD_PAID],
+          addresses: [BGT_STAKING_ADDRESS],
+          startBlock: 6574608,
+        }
+      ],
+      startTime: 1731182400 - EXTENSION_DURATION,
+      endTime: 1731787200,
+    },
     [QUESTS.BITGET]: {
       steps: [
         {
@@ -208,7 +239,10 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: [BERABORROW_BORROWER_OPERATIONS_ADDRESS],
           filterCriteria: {
             [QUEST_TYPES.BERABORROW_DEN_UPDATED]: {
-              _denManager: "0xCc2F6e3F342ed202D098302012a15cE6aD8eB511",
+              _denManager: [
+                "0xCc2F6e3F342ed202D098302012a15cE6aD8eB511",
+                "0xa57f2370Cde4Efa3e9859668CA072f7672DF2eeB",
+              ],
             },
           },
           startBlock: 6248115,

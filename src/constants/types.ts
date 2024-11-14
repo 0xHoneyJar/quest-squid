@@ -39,6 +39,8 @@ import * as wagmiAbi from "../abi/wagmibera";
 import * as yeetBondAbi from "../abi/yeetBond";
 import * as yeetStakeAbi from "../abi/yeetStake";
 import * as uniswapV3PoolAbi from "../abi/uniswapV3pool";
+import * as borrowerOperationsAbi from "../abi/BorrowerOperations";
+import * as bgtStakingAbi from "../abi/BGTStaking";
 
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 
@@ -116,6 +118,7 @@ export enum QUESTS {
   JUNKY_URSAS = "{Junky_Ursas}",
   BITGET = "Bitget",
   OOGA_AWAKENING = "Ooga Awakening",
+  THE_ROOT_OF_ALL_DEFI = "The Root of all DeFi",
 }
 
 export enum MISSIONS {
@@ -172,6 +175,8 @@ export enum QUEST_TYPES {
   JUNKY_SLOTS = "JUNKY_SLOTS",
   VAULT_MANAGER_DEPOSIT = "VAULT_MANAGER_DEPOSIT",
   UNISWAP_V3_MINT = "UNISWAP_V3_MINT",
+  TROVE_UPDATED = "TROVE_UPDATED",
+  BGT_REWARD_PAID = "BGT_REWARD_PAID",
 }
 
 export enum MISSION_TYPES {
@@ -391,6 +396,14 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.UNISWAP_V3_MINT]: {
     eventName: "Mint",
     abi: uniswapV3PoolAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.TROVE_UPDATED]: {
+    eventName: "TroveUpdated",
+    abi: borrowerOperationsAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.BGT_REWARD_PAID]: {
+    eventName: "RewardPaid",
+    abi: bgtStakingAbi as AbiWithEvents,
   },
 } as const;
 

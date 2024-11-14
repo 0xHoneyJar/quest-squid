@@ -599,6 +599,20 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       case QUEST_TYPES.HONEY_FLIP:
         userAddress = decodedLog.player.toLowerCase();
         break;
+      case QUEST_TYPES.TROVE_UPDATED:
+        userAddress = decodedLog._borrower.toLowerCase();
+        amount = decodedLog._coll; // Using collateral amount
+        break;
+      case QUEST_TYPES.BGT_REWARD_PAID:
+        userAddress = decodedLog.user.toLowerCase();
+        amount = decodedLog.amount;
+        break;
+      case QUEST_TYPES.BERABORROW_DEN_CREATED:
+        userAddress = decodedLog._borrower.toLowerCase();
+        break;
+      case QUEST_TYPES.BERABORROW_DEN_UPDATED:
+        userAddress = decodedLog._borrower.toLowerCase();
+        break;
       default:
         return { userAddress: null, amount: 0n };
     }
