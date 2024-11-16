@@ -119,6 +119,7 @@ export enum QUESTS {
   BITGET = "Bitget",
   OOGA_AWAKENING = "Ooga Awakening",
   THE_ROOT_OF_ALL_DEFI = "The Root of all DeFi",
+  BULLA_BULLSHIT = "Bulla Bullshit",
 }
 
 export enum MISSIONS {

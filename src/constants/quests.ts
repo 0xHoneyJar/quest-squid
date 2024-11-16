@@ -82,6 +82,7 @@ import {
   HONEY_WBERA_LP_ADDRESS,
   BHONEY_ADDRESS,
   URSAROLL2_ADDRESS,
+  BULLA_BULLSHIT_ADDRESS,
 } from "./address";
 import {
   CHAINS,
@@ -116,16 +117,17 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           startBlock: 6574608,
         }
       ],
-      startTime: 1731182400 - EXTENSION_DURATION,
-      endTime: 1731787200,
+      startTime: 1731873600 - EXTENSION_DURATION,
+      endTime: 1732478400,
     },
     [QUESTS.BITGET]: {
       steps: [
         {
           types: [QUEST_TYPES.ERC721_MINT],
           addresses: ["0x5d746f8387bd6c192f9b8a8dccbd9a4d7f7d54c1"],
+          revshareTracking: true,
           includeTransaction: true,
-        },
+        }
       ],
     },
     [QUESTS.JUNKY_URSAS]: {
@@ -718,6 +720,24 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.BULLA_BULLSHIT]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [BULLA_BULLSHIT_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC1155_MINT]: {
+              id: 1n,
+              from: zeroAddress,
+            },
+          },
+          revshareTracking: true,
+          includeTransaction: true,
+        },
+      ],
+      startTime: 1731873600,
+      endTime: 1732737600,
+    },
     [QUESTS.OOGA_AWAKENING]: {
       steps: [
         {
@@ -728,7 +748,8 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               id: 6n,
             },
           },
-          revshareTracking: false,
+          revshareTracking: true,
+          includeTransaction: true,
         },
       ],
       // startTime: 1731342000,
