@@ -1003,22 +1003,22 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.ARBITRUM]: {
-    // [QUESTS.BOOGA_BERAS]: {
-    //   steps: [
-    //     {
-    //       types: [QUEST_TYPES.ERC721_MINT],
-    //       addresses: [BOOGA_BEARS_TESTNET_ADDRESS],
-    //       filterCriteria: {
-    //         [QUEST_TYPES.ERC721_MINT]: {
-    //           from: zeroAddress,
-    //         },
-    //       },
-    //       startBlock: 6013825,
-    //     },
-    //   ],
-    //   startTime: 1729706400 - EXTENSION_DURATION,
-    //   endTime: 1730829600,
-    // },
+    [QUESTS.ITS_RAINING_MONEYCOMB]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [HONEY_SITE_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC1155_MINT]: {
+              id: 3n,
+              from: zeroAddress,
+            },
+          },
+        },
+      ],
+      startTime: 1731990000,
+      endTime: 1732594800,
+    },
     [QUESTS.THREE_IS_BETTER_THAN_ONE]: {
       steps: [
         {
