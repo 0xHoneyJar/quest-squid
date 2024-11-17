@@ -105,8 +105,8 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               _asset: [
                 HONEY_USDC_LP_ADDRESS,
                 HONEY_WBERA_LP_ADDRESS,
-                BHONEY_ADDRESS
-              ]
+                BHONEY_ADDRESS,
+              ],
             },
           },
           startBlock: 6574608,
@@ -115,7 +115,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           types: [QUEST_TYPES.BGT_REWARD_PAID],
           addresses: [BGT_STAKING_ADDRESS],
           startBlock: 6574608,
-        }
+        },
       ],
       startTime: 1731873600 - EXTENSION_DURATION,
       endTime: 1732478400,
@@ -127,7 +127,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: ["0x5d746f8387bd6c192f9b8a8dccbd9a4d7f7d54c1"],
           revshareTracking: true,
           includeTransaction: true,
-        }
+        },
       ],
     },
     [QUESTS.JUNKY_URSAS]: {
@@ -736,7 +736,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       startTime: 1731873600,
-      endTime: 1732737600,
+      endTime: 1732479600,
     },
     [QUESTS.OOGA_AWAKENING]: {
       steps: [
