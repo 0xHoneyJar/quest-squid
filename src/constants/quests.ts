@@ -117,8 +117,8 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           startBlock: 6574608,
         },
       ],
-      startTime: 1731873600 - EXTENSION_DURATION,
-      endTime: 1732478400,
+      startTime: 1732046400,
+      endTime: 1732651200,
     },
     [QUESTS.BITGET]: {
       steps: [
