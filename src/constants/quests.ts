@@ -727,7 +727,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: [BULLA_BULLSHIT_ADDRESS],
           filterCriteria: {
             [QUEST_TYPES.ERC1155_MINT]: {
-              id: 1n,
+              id: 2n,
               from: zeroAddress,
             },
           },
