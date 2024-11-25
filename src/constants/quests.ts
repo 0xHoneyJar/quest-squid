@@ -127,8 +127,11 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: ["0x5d746f8387bd6c192f9b8a8dccbd9a4d7f7d54c1"],
           revshareTracking: true,
           includeTransaction: true,
+          startBlock: 6542321,
         },
       ],
+      startTime: 1731661200,
+      endTime: 1733043600,
     },
     [QUESTS.JUNKY_URSAS]: {
       steps: [
