@@ -457,3 +457,7 @@ export type MissionConfig = {
     filterCriteria: Record<string, any>;
   };
 };
+
+export const HIGH_PROCESSING_QUESTS = [
+  QUESTS.JUNKY_URSAS,
+];

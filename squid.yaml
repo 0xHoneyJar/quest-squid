@@ -1,13 +1,12 @@
 manifestVersion: subsquid.io/v0.1
 name: quest-squid
-version: 120
+version: 121
 description: A squid that indexes quest events for Cub Scouts
 build:
 deploy:
   env:
     RPC_ZORA_HTTP: ${{ secrets.RPC_ZORA_HTTP }}
     RPC_BERA_HTTP: ${{ secrets.RPC_BERA_HTTP }}
-    # SQD_DEBUG: ${{ secrets.SQD_DEBUG }}
   addons:
     postgres:
     rpc:
@@ -16,10 +15,14 @@ deploy:
       - base.http
       - eth.http
   processor:
-    - name: berachain-processor
+    - name: berachain-processor-1
       cmd:
         - sqd
-        - process:prod:bera
+        - process:prod:bera1
+    - name: berachain-processor-2
+      cmd:
+        - sqd
+        - process:prod:bera2
     - name: arb-processor
       cmd:
         - sqd
@@ -46,8 +49,8 @@ deploy:
       - serve:prod
 scale:
   dedicated: true
-  # api:
-  #   profile: medium
+  processor:
+    profile: medium
   addons:
     postgres:
       profile: medium

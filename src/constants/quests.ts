@@ -517,6 +517,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 5059504,
         },
       ],
       // startTime: 1728561600 - EXTENSION_DURATION,
@@ -527,6 +528,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         {
           types: [QUEST_TYPES.PRETZEL_BRIDGE],
           addresses: [PRETZEL_BRIDGE_ADDRESS],
+          startBlock: 4446345,
         },
       ],
       startTime: 1728669600 - EXTENSION_DURATION,
@@ -537,6 +539,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         {
           types: [QUEST_TYPES.AQUABERA_DEPOSIT],
           addresses: [AQUABERA_ADDRESS],
+          startBlock: 4808937,
         },
       ],
       startTime: 1727956800,
@@ -547,10 +550,12 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         {
           types: [QUEST_TYPES.GOLDILOCKS_BUY],
           addresses: [GOLDISWAP_ADDRESS],
+          startBlock: 1893825,
         },
         {
           types: [QUEST_TYPES.GOLDILOCKS_STAKE],
           addresses: [GOLDILOCKS_ADDRESS],
+          startBlock: 1893825,
         },
       ],
       startTime: 1728331200,
@@ -561,10 +566,12 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         {
           types: [QUEST_TYPES.URSA_ROLL_DEPOSIT],
           addresses: [URSA_ROLL_ADDRESS],
+          startBlock: 2148411,
         },
         {
           types: [QUEST_TYPES.URSA_ROLL_LIQUIDITY_ADDED],
           addresses: [URSA_VAULT_ADDRESS],
+          startBlock: 2148404,
         },
       ],
       startTime: 1726164000 - EXTENSION_DURATION,
@@ -575,6 +582,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         {
           types: [QUEST_TYPES.MEMESWAP_DEPLOY],
           addresses: [BRUUVVPRINT_ADDRESS],
+          startBlock: 1960598,
         },
       ],
     },
@@ -604,6 +612,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               reserve: HONEY_ADDRESS,
             },
           },
+          startBlock: 3277686,
         },
         {
           types: [QUEST_TYPES.ZERU_BORROW],
@@ -613,6 +622,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               reserve: WBERA_ADDRESS,
             },
           },
+          startBlock: 3277686,
         },
         {
           types: [QUEST_TYPES.ZERU_OPEN_POSITION],
@@ -622,6 +632,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               strategyId: "1",
             },
           },
+          startBlock: 3278029,
         },
       ],
       startTime: 1724673600 - EXTENSION_DURATION,
@@ -688,6 +699,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         {
           types: [QUEST_TYPES.UNISWAP_SWAP],
           addresses: ["0x8a960A6e5f224D0a88BaD10463bDAD161b68C144"],
+          startBlock: 104065,
         },
         {
           types: [QUEST_TYPES.ERC721_MINT],
@@ -697,6 +709,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 607983,
         },
       ],
       endTime: 1720461600,
@@ -711,12 +724,14 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 1928273,
           requiredAmount: 1n,
         },
         {
           types: [QUEST_TYPES.UNISWAP_MINT],
           addresses: [KODIAK_POOL_ADDRESS],
           includeTransaction: true,
+          startBlock: 1934488,
         },
       ],
       endTime: 1723233600,

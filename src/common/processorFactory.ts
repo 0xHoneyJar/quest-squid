@@ -16,7 +16,7 @@ import {
 } from "../constants/quests";
 import { CHAINS, QUEST_TYPE_INFO, QUEST_TYPES } from "../constants/types";
 
-export function createProcessor(chain: CHAINS, quests?: string[]) {
+export function createProcessor(chain: CHAINS, quests?: string[], isHighProcessing: boolean = true) {
   const questConfig = QUESTS_CONFIG[chain];
   const addressToTopics: Record<
     string,
@@ -31,15 +31,28 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
     }
   > = {};
 
-  // Filter for the specified quests or use all quests if none specified
-  const filteredQuestConfig = quests
-    ? quests.reduce((acc, questName) => {
-        if (questConfig[questName]) {
-          acc[questName] = questConfig[questName];
-        }
-        return acc;
-      }, {} as typeof questConfig)
-    : questConfig;
+  let filteredQuestConfig: typeof questConfig;
+
+  if (!quests || quests.length === 0) {
+    // If no quests specified, process all quests for the chain
+    filteredQuestConfig = questConfig;
+  } else if (isHighProcessing) {
+    // If high processing, only process specified quests
+    filteredQuestConfig = quests.reduce((acc, questName) => {
+      if (questConfig[questName]) {
+        acc[questName] = questConfig[questName];
+      }
+      return acc;
+    }, {} as typeof questConfig);
+  } else {
+    // If not high processing, process all quests except the specified ones
+    filteredQuestConfig = Object.keys(questConfig).reduce((acc, questName) => {
+      if (!quests.includes(questName) && questConfig[questName]) {
+        acc[questName] = questConfig[questName];
+      }
+      return acc;
+    }, {} as typeof questConfig);
+  }
 
   // Collect relevant addresses and topics
   for (const quest of Object.values(filteredQuestConfig)) {
