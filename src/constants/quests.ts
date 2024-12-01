@@ -1021,6 +1021,22 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.ARBITRUM]: {
+    [QUESTS.INTERPOL_AGENT_ACADEMY]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [HONEY_SITE_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC1155_MINT]: {
+              id: 4n,
+              from: zeroAddress,
+            },
+          },
+        },
+      ],
+      startTime: 1733156400,
+      endTime: 1734366000,
+    },
     [QUESTS.ITS_RAINING_MONEYCOMB]: {
       steps: [
         {
