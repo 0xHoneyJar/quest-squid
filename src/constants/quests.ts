@@ -135,16 +135,16 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
     [QUESTS.JUNKY_URSAS]: {
       steps: [
-        {
-          types: [QUEST_TYPES.ERC20_MINT],
-          addresses: [JUNKY_URSAS_TOKEN_ADDRESS],
-          filterCriteria: {
-            [QUEST_TYPES.ERC20_MINT]: {
-              from: zeroAddress,
-            },
-          },
-          startBlock: 6822216,
-        },
+        // {
+        //   types: [QUEST_TYPES.ERC20_MINT],
+        //   addresses: [JUNKY_URSAS_TOKEN_ADDRESS],
+        //   filterCriteria: {
+        //     [QUEST_TYPES.ERC20_MINT]: {
+        //       from: zeroAddress,
+        //     },
+        //   },
+        //   startBlock: 6822216,
+        // },
         {
           types: [QUEST_TYPES.JUNKY_DEPOSIT],
           addresses: [URSAROLL2_ADDRESS],
@@ -1032,6 +1032,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 279786190,
         },
       ],
       startTime: 1733156400,

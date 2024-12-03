@@ -5,7 +5,7 @@ import { processor } from "./processor";
 
 processor.run(
   new TypeormDatabaseWithCache({
-    stateSchema: "bera2_processor",
+    stateSchema: CHAINS.BERACHAIN,
     isolationLevel: "READ COMMITTED",
   }),
   createMain(CHAINS.BERACHAIN)

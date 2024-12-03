@@ -80,14 +80,9 @@
       "cmd": ["node", "lib/arb/main.js"],
       "hidden": true
     },
-    "process:prod:bera1": {
-      "description": "Start the first Berachain squid processor",
-      "cmd": ["node", "lib/bera1/main.js"],
-      "hidden": true
-    },
-    "process:prod:bera2": {
-      "description": "Start the second Berachain squid processor",
-      "cmd": ["node", "lib/bera2/main.js"],
+    "process:prod:bera": {
+      "description": "Start the squid processor",
+      "cmd": ["node", "lib/bera/main.js"],
       "hidden": true
     },
     "process:prod:op": {
@@ -141,24 +136,6 @@
       "description": "Test a specific quest on a specific chain",
       "deps": ["build", "migration:apply"],
       "cmd": ["node", "--require=dotenv/config", "lib/processor.js"]
-    },
-    "process:bera1": {
-      "description": "Load .env and start the first Berachain squid processor",
-      "deps": ["build", "migration:apply"],
-      "cmd": ["node", "--require=dotenv/config", "lib/bera1/main.js"]
-    },
-    "process:bera2": {
-      "description": "Load .env and start the second Berachain squid processor",
-      "deps": ["build", "migration:apply"],
-      "cmd": ["node", "--require=dotenv/config", "lib/bera2/main.js"]
-    },
-    "process:bera": {
-      "description": "Run both Berachain processors",
-      "deps": ["build", "migration:apply"],
-      "cmd": [
-        "node", "-e",
-        "require('child_process').spawn('node', ['--require=dotenv/config', 'lib/bera1/main.js'], {stdio: 'inherit'}); require('child_process').spawn('node', ['--require=dotenv/config', 'lib/bera2/main.js'], {stdio: 'inherit'});"
-      ]
     }
   }
 }

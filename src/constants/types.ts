@@ -121,7 +121,7 @@ export enum QUESTS {
   THE_ROOT_OF_ALL_DEFI = "The Root of all DeFi",
   BULLA_BULLSHIT = "Bulla Bullshit",
   ITS_RAINING_MONEYCOMB = "It's Raining Moneycomb!",
-  INTERPOL_AGENT_ACADEMY = "InterPol Agent Academy",
+  INTERPOL_AGENT_ACADEMY = "InterPoL Agent Academy",
 }
 
 export enum MISSIONS {
@@ -458,7 +458,3 @@ export type MissionConfig = {
     filterCriteria: Record<string, any>;
   };
 };
-
-export const HIGH_PROCESSING_QUESTS = [
-  QUESTS.JUNKY_URSAS,
-];
