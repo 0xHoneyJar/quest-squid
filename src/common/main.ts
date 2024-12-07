@@ -603,9 +603,17 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         userAddress = decodedLog._borrower.toLowerCase();
         amount = decodedLog._coll; // Using collateral amount
         break;
+      case QUEST_TYPES.TROVE_UPDATED_V2:
+        userAddress = decodedLog._borrower.toLowerCase();
+        amount = decodedLog._coll; // Using collateral amount
+        break;
       case QUEST_TYPES.BGT_REWARD_PAID:
         userAddress = decodedLog.user.toLowerCase();
         amount = decodedLog.amount;
+        break;
+      case QUEST_TYPES.BGT_REWARD_CLAIMED:
+        userAddress = decodedLog.account.toLowerCase();
+        amount = decodedLog.claimed;
         break;
       case QUEST_TYPES.BERABORROW_DEN_CREATED:
         userAddress = decodedLog._borrower.toLowerCase();

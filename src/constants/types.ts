@@ -41,7 +41,7 @@ import * as yeetStakeAbi from "../abi/yeetStake";
 import * as uniswapV3PoolAbi from "../abi/uniswapV3pool";
 import * as borrowerOperationsAbi from "../abi/BorrowerOperations";
 import * as bgtStakingAbi from "../abi/BGTStaking";
-
+import * as rootsV2Abi from "../abi/rootsV2";
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 
 export const EXTENSION_DURATION = 60 * 60 * 24 * 2;
@@ -180,6 +180,8 @@ export enum QUEST_TYPES {
   UNISWAP_V3_MINT = "UNISWAP_V3_MINT",
   TROVE_UPDATED = "TROVE_UPDATED",
   BGT_REWARD_PAID = "BGT_REWARD_PAID",
+  BGT_REWARD_CLAIMED = "BGT_REWARD_CLAIMED",
+  TROVE_UPDATED_V2 = "TROVE_UPDATED_V2",
 }
 
 export enum MISSION_TYPES {
@@ -404,8 +406,16 @@ export const QUEST_TYPE_INFO: Record<
     eventName: "TroveUpdated",
     abi: borrowerOperationsAbi as AbiWithEvents,
   },
+  [QUEST_TYPES.TROVE_UPDATED_V2]: {
+    eventName: "TroveUpdated",
+    abi: rootsV2Abi as AbiWithEvents,
+  },
   [QUEST_TYPES.BGT_REWARD_PAID]: {
     eventName: "RewardPaid",
+    abi: bgtStakingAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.BGT_REWARD_CLAIMED]: {
+    eventName: "RewardClaimed",
     abi: bgtStakingAbi as AbiWithEvents,
   },
 } as const;

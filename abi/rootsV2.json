@@ -1,0 +1,39 @@
+[
+    {
+        "type": "event",
+        "name": "TroveUpdated",
+        "inputs": [
+          {
+            "name": "_borrower",
+            "type": "address",
+            "indexed": true,
+            "internalType": "address"
+          },
+          {
+            "name": "_debt",
+            "type": "uint256",
+            "indexed": false,
+            "internalType": "uint256"
+          },
+          {
+            "name": "_coll",
+            "type": "uint256",
+            "indexed": false,
+            "internalType": "uint256"
+          },
+          {
+            "name": "_stake",
+            "type": "uint256",
+            "indexed": false,
+            "internalType": "uint256"
+          },
+          {
+            "name": "_operation",
+            "type": "uint8",
+            "indexed": false,
+            "internalType": "enum ITroveManager.TroveManagerOperation"
+          }
+        ],
+        "anonymous": false
+    }
+]

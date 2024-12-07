@@ -4,6 +4,7 @@ import type { EventParams as EParams, FunctionArguments, FunctionReturn } from '
 
 export const events = {
     RewardPaid: event("0x540798df468d7b23d11f156fdb954cb19ad414d150722a7b6d55ba369dea792e", "RewardPaid(address,address,uint256)", {"user": indexed(p.address), "asset": indexed(p.address), "amount": p.uint256}),
+    RewardClaimed: event("0x0aa4d283470c904c551d18bb894d37e17674920f3261a7f854be501e25f421b7", "RewardClaimed(address,address,uint256)", {"account": indexed(p.address), "recipient": indexed(p.address), "claimed": p.uint256}),
 }
 
 export const functions = {
@@ -149,6 +150,7 @@ export class Contract extends ContractBase {
 
 /// Event types
 export type RewardPaidEventArgs = EParams<typeof events.RewardPaid>
+export type RewardClaimedEventArgs = EParams<typeof events.RewardClaimed>
 
 /// Function types
 export type ActivateBoostBGTParams = FunctionArguments<typeof functions.activateBoostBGT>

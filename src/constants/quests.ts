@@ -98,8 +98,13 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.THE_ROOT_OF_ALL_DEFI]: {
       steps: [
         {
-          types: [QUEST_TYPES.TROVE_UPDATED],
-          addresses: [BORROWER_OPERATIONS_ADDRESS],
+          types: [QUEST_TYPES.TROVE_UPDATED, QUEST_TYPES.TROVE_UPDATED_V2],
+          addresses: [
+            BORROWER_OPERATIONS_ADDRESS,
+            "0xf3DdE8270ec68FAe0CaA8800b538593Ef7592361",
+            "0xE5693b05Da07f36E5c7780cd62C8eb4ad415ddcC",
+            "0x4C875E5f7fFC4EA31496d2d19B5beB8fE486d0B1",
+          ],
           filterCriteria: {
             [QUEST_TYPES.TROVE_UPDATED]: {
               _asset: [
@@ -112,13 +117,19 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           startBlock: 6574608,
         },
         {
-          types: [QUEST_TYPES.BGT_REWARD_PAID],
-          addresses: [BGT_STAKING_ADDRESS],
+          types: [QUEST_TYPES.BGT_REWARD_CLAIMED, QUEST_TYPES.BGT_REWARD_PAID],
+          addresses: [
+            "0xf3DdE8270ec68FAe0CaA8800b538593Ef7592361",
+            "0xE5693b05Da07f36E5c7780cd62C8eb4ad415ddcC",
+            "0x4C875E5f7fFC4EA31496d2d19B5beB8fE486d0B1",
+            BGT_STAKING_ADDRESS,
+          ],
+          requiredAmount: parseEther("1"),
           startBlock: 6574608,
         },
       ],
-      startTime: 1732046400,
-      endTime: 1732651200,
+      startTime: 1733688000,
+      endTime: 1734292800,
     },
     [QUESTS.BITGET]: {
       steps: [
@@ -135,16 +146,6 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
     [QUESTS.JUNKY_URSAS]: {
       steps: [
-        // {
-        //   types: [QUEST_TYPES.ERC20_MINT],
-        //   addresses: [JUNKY_URSAS_TOKEN_ADDRESS],
-        //   filterCriteria: {
-        //     [QUEST_TYPES.ERC20_MINT]: {
-        //       from: zeroAddress,
-        //     },
-        //   },
-        //   startBlock: 6822216,
-        // },
         {
           types: [QUEST_TYPES.JUNKY_DEPOSIT],
           addresses: [URSAROLL2_ADDRESS],
