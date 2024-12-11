@@ -122,6 +122,7 @@ export enum QUESTS {
   BULLA_BULLSHIT = "Bulla Bullshit",
   ITS_RAINING_MONEYCOMB = "It's Raining Moneycomb!",
   INTERPOL_AGENT_ACADEMY = "InterPoL Agent Academy",
+  LIQUID_PLUG = "Liquid Plug",
 }
 
 export enum MISSIONS {

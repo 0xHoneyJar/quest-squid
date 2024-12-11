@@ -13,6 +13,7 @@ import {
   BLOCK_RANGES,
   QUESTS_CONFIG,
   RPC_ENDPOINTS,
+  PORTAL_URLS,
 } from "../constants/quests";
 import { CHAINS, QUEST_TYPE_INFO, QUEST_TYPES } from "../constants/types";
 
@@ -107,7 +108,10 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
   }
 
   const processor = new EvmBatchProcessor()
-    .setGateway(ARCHIVE_GATEWAYS[chain])
+    .setPortal(assertNotNull(
+      PORTAL_URLS[chain],
+      `Required env variable ${PORTAL_URLS[chain]} is missing`
+    ))
     .setRpcEndpoint({
       url: assertNotNull(RPC_ENDPOINTS[chain], "No RPC endpoint supplied"),
     })

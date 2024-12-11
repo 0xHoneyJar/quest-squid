@@ -124,7 +124,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
             "0x4C875E5f7fFC4EA31496d2d19B5beB8fE486d0B1",
             BGT_STAKING_ADDRESS,
           ],
-          requiredAmount: parseEther("1"),
+          requiredAmount: parseEther("0.01"),
           startBlock: 6574608,
         },
       ],
@@ -739,6 +739,20 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.LIQUID_PLUG]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ETH_TRANSFER],
+          addresses: ["0x95A4fa3E03760f984BF058ba11e8e19f3537D9C9"],
+          requiredAmount: parseEther("0.006"),
+          startBlock: 23054079,
+          revshareTracking: true,
+          includeTransaction: true,
+        },
+      ],
+      startTime: 1734026400,
+      endTime: 1734631200,
+    },
     [QUESTS.BULLA_BULLSHIT]: {
       steps: [
         {
@@ -1371,4 +1385,13 @@ export const ARCHIVE_GATEWAYS = {
   [CHAINS.ZORA]: "https://v2.archive.subsquid.io/network/zora-mainnet",
   [CHAINS.BERACHAIN]: "https://v2.archive.subsquid.io/network/berachain-bartio",
   [CHAINS.ETHEREUM]: "https://v2.archive.subsquid.io/network/ethereum-mainnet",
+} as const;
+
+export const PORTAL_URLS = {
+  [CHAINS.BASE]: process.env.BASE_PORTAL_URL,
+  [CHAINS.ARBITRUM]: process.env.ARB_PORTAL_URL,
+  [CHAINS.BERACHAIN]: process.env.BERA_PORTAL_URL,
+  [CHAINS.OPTIMISM]: process.env.OP_PORTAL_URL,
+  [CHAINS.ZORA]: process.env.ZORA_PORTAL_URL,
+  [CHAINS.ETHEREUM]: process.env.ETH_PORTAL_URL,
 } as const;
