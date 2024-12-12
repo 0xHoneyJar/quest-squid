@@ -108,10 +108,13 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
   }
 
   const processor = new EvmBatchProcessor()
-    .setPortal(assertNotNull(
-      PORTAL_URLS[chain],
-      `Required env variable ${PORTAL_URLS[chain]} is missing`
-    ))
+    // TODO: Uncomment this and remove setGateway to switch to portals
+    // .setPortal(assertNotNull(
+    //   PORTAL_URLS[chain],
+    //   `Required env variable ${PORTAL_URLS[chain]} is missing`
+    // ))
+    .setGateway(ARCHIVE_GATEWAYS[chain])
+
     .setRpcEndpoint({
       url: assertNotNull(RPC_ENDPOINTS[chain], "No RPC endpoint supplied"),
     })

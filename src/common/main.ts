@@ -621,6 +621,10 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       case QUEST_TYPES.BERABORROW_DEN_UPDATED:
         userAddress = decodedLog._borrower.toLowerCase();
         break;
+      case QUEST_TYPES.XMAS_SRC_MINTED:
+        userAddress = decodedLog.recipient.toLowerCase();
+        amount = decodedLog.quantity;
+        break;
       default:
         return { userAddress: null, amount: 0n };
     }

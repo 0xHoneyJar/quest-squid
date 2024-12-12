@@ -83,6 +83,7 @@ import {
   BHONEY_ADDRESS,
   URSAROLL2_ADDRESS,
   BULLA_BULLSHIT_ADDRESS,
+  XMAS_BOX_ADDRESS,
 } from "./address";
 import {
   CHAINS,
@@ -739,6 +740,19 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.XMAS_BOX]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.XMAS_SRC_MINTED],
+          addresses: [XMAS_BOX_ADDRESS],
+          startBlock: 23321156,
+          revshareTracking: true,
+          includeTransaction: true,
+        },
+      ],
+      startTime: 1734120000,
+      endTime: 1735675200,
+    },
     [QUESTS.LIQUID_PLUG]: {
       steps: [
         {

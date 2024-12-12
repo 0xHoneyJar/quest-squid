@@ -1,0 +1,1290 @@
+[
+    {
+        "type": "constructor",
+        "inputs": [
+            {
+                "name": "threeDnsRegControl_",
+                "type": "address",
+                "internalType": "contract IThreeDNSRegControl"
+            },
+            {
+                "name": "node_",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            }
+        ],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "receive",
+        "stateMutability": "payable"
+    },
+    {
+        "type": "function",
+        "name": "BASE_REGISTRATION_DURATION",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint64",
+                "internalType": "uint64"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "CHAIN_ID",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint64",
+                "internalType": "uint64"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "DOMAIN_NAME",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "string",
+                "internalType": "string"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "DOMAIN_SEPARATOR",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "DOMAIN_VERSION",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "string",
+                "internalType": "string"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "ETH_ADDRESS",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "MINT_SELECTOR",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bytes4",
+                "internalType": "bytes4"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "MULTICALL_SELECTOR",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bytes4",
+                "internalType": "bytes4"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "NODE",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "Permit2Approval",
+        "inputs": [
+            {
+                "name": "token_",
+                "type": "address",
+                "internalType": "contract IERC20Upgradeable"
+            },
+            {
+                "name": "from_",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "amount_",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "deadline_",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "permitSig_",
+                "type": "bytes",
+                "internalType": "bytes"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "Permit2Approval",
+        "inputs": [
+            {
+                "name": "paymentType_",
+                "type": "uint8",
+                "internalType": "enum Datastructures.PaymentType"
+            },
+            {
+                "name": "from_",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "amount_",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "deadline_",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "permitSig_",
+                "type": "bytes",
+                "internalType": "bytes"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "SP2A_SELECTOR",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bytes4",
+                "internalType": "bytes4"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "SponsorPermit2Approval",
+        "inputs": [
+            {
+                "name": "token_",
+                "type": "address",
+                "internalType": "contract IERC20Upgradeable"
+            },
+            {
+                "name": "from_",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "sponsor_",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "permitAmount_",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "permitFee_",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "deadline_",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "permitSig_",
+                "type": "bytes",
+                "internalType": "bytes"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "SponsorPermit2Approval",
+        "inputs": [
+            {
+                "name": "paymentType_",
+                "type": "uint8",
+                "internalType": "enum Datastructures.PaymentType"
+            },
+            {
+                "name": "from_",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "sponsor_",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "permitAmount_",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "permitFee_",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "deadline_",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "permitSig_",
+                "type": "bytes",
+                "internalType": "bytes"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "THREE_DNS_REGCONTROL",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "contract IThreeDNSRegControl"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "TYPED_DATA_SIGNATURE_TYPEHASH",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "addSet",
+        "inputs": [
+            {
+                "name": "names_",
+                "type": "string[]",
+                "internalType": "string[]"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "getActionPremium",
+        "inputs": [
+            {
+                "name": "node_",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            },
+            {
+                "name": "label_",
+                "type": "string",
+                "internalType": "string"
+            },
+            {
+                "name": "action_",
+                "type": "uint8",
+                "internalType": "enum Datastructures.Action"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "quote",
+                "type": "tuple",
+                "internalType": "struct Datastructures.OrderPayment",
+                "components": [
+                    {
+                        "name": "paymentType",
+                        "type": "uint8",
+                        "internalType": "enum Datastructures.PaymentType"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "uint248",
+                        "internalType": "uint248"
+                    }
+                ]
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getDomainSeparator",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getLabelCount",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getPayoutAddress",
+        "inputs": [
+            {
+                "name": "node_",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "payoutAddress_",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getQuote",
+        "inputs": [
+            {
+                "name": "quantity",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "paymentType_",
+                "type": "uint8",
+                "internalType": "enum Datastructures.PaymentType"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "quote_",
+                "type": "tuple",
+                "internalType": "struct Datastructures.OrderPayment",
+                "components": [
+                    {
+                        "name": "paymentType",
+                        "type": "uint8",
+                        "internalType": "enum Datastructures.PaymentType"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "uint248",
+                        "internalType": "uint248"
+                    }
+                ]
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getRegistrationQuote",
+        "inputs": [
+            {
+                "name": "node_",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            },
+            {
+                "name": "desiredDuration_",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "paymentType_",
+                "type": "uint8",
+                "internalType": "enum Datastructures.PaymentType"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "quoteDuration",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "quote",
+                "type": "tuple",
+                "internalType": "struct Datastructures.OrderPayment",
+                "components": [
+                    {
+                        "name": "paymentType",
+                        "type": "uint8",
+                        "internalType": "enum Datastructures.PaymentType"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "uint248",
+                        "internalType": "uint248"
+                    }
+                ]
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getSubdomainQuote",
+        "inputs": [
+            {
+                "name": "node_",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            },
+            {
+                "name": "label_",
+                "type": "string",
+                "internalType": "string"
+            },
+            {
+                "name": "desiredDuration_",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "paymentType_",
+                "type": "uint8",
+                "internalType": "enum Datastructures.PaymentType"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "currentStatus_",
+                "type": "uint8",
+                "internalType": "enum Datastructures.Status"
+            },
+            {
+                "name": "nextAction_",
+                "type": "uint8",
+                "internalType": "enum Datastructures.Action"
+            },
+            {
+                "name": "quoteDuration_",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "quote_",
+                "type": "tuple",
+                "internalType": "struct Datastructures.OrderPayment",
+                "components": [
+                    {
+                        "name": "paymentType",
+                        "type": "uint8",
+                        "internalType": "enum Datastructures.PaymentType"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "uint248",
+                        "internalType": "uint248"
+                    }
+                ]
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getSubscriptionConfig",
+        "inputs": [
+            {
+                "name": "node_",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "config_",
+                "type": "tuple",
+                "internalType": "struct Datastructures.SubscriptionConfig",
+                "components": [
+                    {
+                        "name": "paymentType",
+                        "type": "uint8",
+                        "internalType": "enum Datastructures.PaymentType"
+                    },
+                    {
+                        "name": "decayRate",
+                        "type": "uint32",
+                        "internalType": "uint32"
+                    },
+                    {
+                        "name": "decayAmount",
+                        "type": "uint32",
+                        "internalType": "uint32"
+                    },
+                    {
+                        "name": "allowPartialPeriod",
+                        "type": "bool",
+                        "internalType": "bool"
+                    },
+                    {
+                        "name": "minimumPeriod",
+                        "type": "uint64",
+                        "internalType": "uint64"
+                    },
+                    {
+                        "name": "maximumPeriod",
+                        "type": "uint64",
+                        "internalType": "uint64"
+                    },
+                    {
+                        "name": "idlePeriodAllowance",
+                        "type": "uint32",
+                        "internalType": "uint32"
+                    }
+                ]
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "hasClaimedVoucher",
+        "inputs": [
+            {
+                "name": "recipient_",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool",
+                "internalType": "bool"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "initialize",
+        "inputs": [
+            {
+                "name": "domainName_",
+                "type": "string",
+                "internalType": "string"
+            },
+            {
+                "name": "domainVersion_",
+                "type": "string",
+                "internalType": "string"
+            },
+            {
+                "name": "payments_",
+                "type": "tuple",
+                "internalType": "struct Datastructures.Payments",
+                "components": [
+                    {
+                        "name": "methods",
+                        "type": "tuple[]",
+                        "internalType": "struct Datastructures.PaymentMethod[]",
+                        "components": [
+                            {
+                                "name": "paymentType",
+                                "type": "uint8",
+                                "internalType": "enum Datastructures.PaymentType"
+                            },
+                            {
+                                "name": "tokenAddress",
+                                "type": "address",
+                                "internalType": "contract IERC20Upgradeable"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "feeds",
+                        "type": "tuple[]",
+                        "internalType": "struct Datastructures.PaymentFeed[]",
+                        "components": [
+                            {
+                                "name": "feedType",
+                                "type": "uint8",
+                                "internalType": "enum Datastructures.PaymentFeedType"
+                            },
+                            {
+                                "name": "feedAddress",
+                                "type": "address",
+                                "internalType": "address"
+                            },
+                            {
+                                "name": "paymentType",
+                                "type": "uint8",
+                                "internalType": "enum Datastructures.PaymentType"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "chainLinkL2SequencerUptimeFeed",
+                        "type": "address",
+                        "internalType": "contract AggregatorV3Interface"
+                    }
+                ]
+            },
+            {
+                "name": "config_",
+                "type": "tuple",
+                "internalType": "struct Datastructures.SubscriptionConfig",
+                "components": [
+                    {
+                        "name": "paymentType",
+                        "type": "uint8",
+                        "internalType": "enum Datastructures.PaymentType"
+                    },
+                    {
+                        "name": "decayRate",
+                        "type": "uint32",
+                        "internalType": "uint32"
+                    },
+                    {
+                        "name": "decayAmount",
+                        "type": "uint32",
+                        "internalType": "uint32"
+                    },
+                    {
+                        "name": "allowPartialPeriod",
+                        "type": "bool",
+                        "internalType": "bool"
+                    },
+                    {
+                        "name": "minimumPeriod",
+                        "type": "uint64",
+                        "internalType": "uint64"
+                    },
+                    {
+                        "name": "maximumPeriod",
+                        "type": "uint64",
+                        "internalType": "uint64"
+                    },
+                    {
+                        "name": "idlePeriodAllowance",
+                        "type": "uint32",
+                        "internalType": "uint32"
+                    }
+                ]
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "isRestrictedLabel",
+        "inputs": [
+            {
+                "name": "node_",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            },
+            {
+                "name": "labelHash_",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool",
+                "internalType": "bool"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "isValidDuration",
+        "inputs": [
+            {
+                "name": "node_",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            },
+            {
+                "name": "duration_",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool",
+                "internalType": "bool"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "isValidLabel",
+        "inputs": [
+            {
+                "name": "node_",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            },
+            {
+                "name": "label_",
+                "type": "string",
+                "internalType": "string"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool",
+                "internalType": "bool"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "isValidMinter",
+        "inputs": [
+            {
+                "name": "node_",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            },
+            {
+                "name": "minter_",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool",
+                "internalType": "bool"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "mint",
+        "inputs": [
+            {
+                "name": "quantity_",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "recipient_",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "permit_",
+                "type": "bytes",
+                "internalType": "bytes"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "payable"
+    },
+    {
+        "type": "function",
+        "name": "mint",
+        "inputs": [
+            {
+                "name": "quantity_",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "recipient_",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "payable"
+    },
+    {
+        "type": "function",
+        "name": "mint",
+        "inputs": [
+            {
+                "name": "quantity_",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "payable"
+    },
+    {
+        "type": "function",
+        "name": "mintPromotional",
+        "inputs": [
+            {
+                "name": "recipient_",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "discount_",
+                "type": "tuple",
+                "internalType": "struct Datastructures.OrderPayment",
+                "components": [
+                    {
+                        "name": "paymentType",
+                        "type": "uint8",
+                        "internalType": "enum Datastructures.PaymentType"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "uint248",
+                        "internalType": "uint248"
+                    }
+                ]
+            },
+            {
+                "name": "auth_",
+                "type": "tuple",
+                "internalType": "struct Datastructures.AuthorizationSignature",
+                "components": [
+                    {
+                        "name": "signature",
+                        "type": "tuple",
+                        "internalType": "struct Datastructures.Signature",
+                        "components": [
+                            {
+                                "name": "v",
+                                "type": "uint8",
+                                "internalType": "uint8"
+                            },
+                            {
+                                "name": "r",
+                                "type": "bytes32",
+                                "internalType": "bytes32"
+                            },
+                            {
+                                "name": "s",
+                                "type": "bytes32",
+                                "internalType": "bytes32"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "issuedAt",
+                        "type": "uint64",
+                        "internalType": "uint64"
+                    },
+                    {
+                        "name": "expiresAt",
+                        "type": "uint64",
+                        "internalType": "uint64"
+                    }
+                ]
+            },
+            {
+                "name": "permit_",
+                "type": "bytes",
+                "internalType": "bytes"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "payable"
+    },
+    {
+        "type": "function",
+        "name": "multicall",
+        "inputs": [
+            {
+                "name": "data",
+                "type": "bytes[]",
+                "internalType": "bytes[]"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "results",
+                "type": "bytes[]",
+                "internalType": "bytes[]"
+            }
+        ],
+        "stateMutability": "payable"
+    },
+    {
+        "type": "function",
+        "name": "readPriceFromFeed",
+        "inputs": [
+            {
+                "name": "dataFeed_",
+                "type": "address",
+                "internalType": "contract AggregatorV3Interface"
+            },
+            {
+                "name": "sequencerUptimeFeed_",
+                "type": "address",
+                "internalType": "contract AggregatorV3Interface"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "int256",
+                "internalType": "int256"
+            },
+            {
+                "name": "",
+                "type": "uint8",
+                "internalType": "uint8"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "setPayoutAddress",
+        "inputs": [
+            {
+                "name": "node_",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            },
+            {
+                "name": "payoutAddress_",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "setSubscriptionConfig",
+        "inputs": [
+            {
+                "name": "node_",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            },
+            {
+                "name": "config_",
+                "type": "tuple",
+                "internalType": "struct Datastructures.SubscriptionConfig",
+                "components": [
+                    {
+                        "name": "paymentType",
+                        "type": "uint8",
+                        "internalType": "enum Datastructures.PaymentType"
+                    },
+                    {
+                        "name": "decayRate",
+                        "type": "uint32",
+                        "internalType": "uint32"
+                    },
+                    {
+                        "name": "decayAmount",
+                        "type": "uint32",
+                        "internalType": "uint32"
+                    },
+                    {
+                        "name": "allowPartialPeriod",
+                        "type": "bool",
+                        "internalType": "bool"
+                    },
+                    {
+                        "name": "minimumPeriod",
+                        "type": "uint64",
+                        "internalType": "uint64"
+                    },
+                    {
+                        "name": "maximumPeriod",
+                        "type": "uint64",
+                        "internalType": "uint64"
+                    },
+                    {
+                        "name": "idlePeriodAllowance",
+                        "type": "uint32",
+                        "internalType": "uint32"
+                    }
+                ]
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "signatureType",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "string",
+                "internalType": "string"
+            }
+        ],
+        "stateMutability": "pure"
+    },
+    {
+        "type": "function",
+        "name": "withdraw",
+        "inputs": [],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "event",
+        "name": "Initialized",
+        "inputs": [
+            {
+                "name": "version",
+                "type": "uint8",
+                "indexed": false,
+                "internalType": "uint8"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "XmasSRC_minted",
+        "inputs": [
+            {
+                "name": "recipient",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "quantity",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "error",
+        "name": "BasePaymentStorage_paymentNotInitialized",
+        "inputs": [
+            {
+                "name": "paymentType_",
+                "type": "uint8",
+                "internalType": "enum Datastructures.PaymentType"
+            }
+        ]
+    },
+    {
+        "type": "error",
+        "name": "BasePayments_insufficientAllowance",
+        "inputs": [
+            {
+                "name": "token",
+                "type": "address",
+                "internalType": "contract IERC20Upgradeable"
+            },
+            {
+                "name": "paymentAmount",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "amount",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ]
+    },
+    {
+        "type": "error",
+        "name": "BasePayments_insufficientBalance",
+        "inputs": [
+            {
+                "name": "token",
+                "type": "address",
+                "internalType": "contract IERC20Upgradeable"
+            },
+            {
+                "name": "paymentAmount",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "amount",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ]
+    },
+    {
+        "type": "error",
+        "name": "BasePayments_transferFailed",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DataConsumerWithSequencerCheck_GracePeriodNotOver",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DataConsumerWithSequencerCheck_SequencerDown",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "InvalidPayload",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "InvalidSignature",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "InvalidSignatureLength",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "PaymentProcessor_invalidPaymentType",
+        "inputs": [
+            {
+                "name": "paymentType",
+                "type": "uint8",
+                "internalType": "enum Datastructures.PaymentType"
+            }
+        ]
+    },
+    {
+        "type": "error",
+        "name": "ReentrancyGuardDiamond_notCalledThroughMulticall",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "ReentrancyGuardDiamond_reentrantCall",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "SRC_invalidNode",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "XmasSRC_usedVoucher",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "senderNotAuthorized",
+        "inputs": [
+            {
+                "name": "sender",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "node",
+                "type": "bytes32",
+                "internalType": "bytes32"
+            }
+        ]
+    },
+    {
+        "type": "error",
+        "name": "sponsorShield_alreadySponsored",
+        "inputs": []
+    }
+]

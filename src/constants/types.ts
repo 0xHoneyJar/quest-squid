@@ -42,6 +42,7 @@ import * as uniswapV3PoolAbi from "../abi/uniswapV3pool";
 import * as borrowerOperationsAbi from "../abi/BorrowerOperations";
 import * as bgtStakingAbi from "../abi/BGTStaking";
 import * as rootsV2Abi from "../abi/rootsV2";
+import * as xmasBoxAbi from "../abi/xmasBox";
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 
 export const EXTENSION_DURATION = 60 * 60 * 24 * 2;
@@ -123,6 +124,7 @@ export enum QUESTS {
   ITS_RAINING_MONEYCOMB = "It's Raining Moneycomb!",
   INTERPOL_AGENT_ACADEMY = "InterPoL Agent Academy",
   LIQUID_PLUG = "Liquid Plug",
+  XMAS_BOX = "XMAS BOX ADVENTURE",
 }
 
 export enum MISSIONS {
@@ -183,6 +185,7 @@ export enum QUEST_TYPES {
   BGT_REWARD_PAID = "BGT_REWARD_PAID",
   BGT_REWARD_CLAIMED = "BGT_REWARD_CLAIMED",
   TROVE_UPDATED_V2 = "TROVE_UPDATED_V2",
+  XMAS_SRC_MINTED = "XMAS_SRC_MINTED",
 }
 
 export enum MISSION_TYPES {
@@ -418,6 +421,10 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.BGT_REWARD_CLAIMED]: {
     eventName: "RewardClaimed",
     abi: bgtStakingAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.XMAS_SRC_MINTED]: {
+    eventName: "XmasSRC_minted",
+    abi: xmasBoxAbi as AbiWithEvents,
   },
 } as const;
 
