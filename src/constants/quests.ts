@@ -750,7 +750,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           includeTransaction: true,
         },
       ],
-      startTime: 1734120000,
+      startTime: 1734120000 - EXTENSION_DURATION,
       endTime: 1735675200,
     },
     [QUESTS.LIQUID_PLUG]: {
@@ -764,7 +764,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           includeTransaction: true,
         },
       ],
-      startTime: 1734026400,
+      startTime: 1734026400 - EXTENSION_DURATION,
       endTime: 1734631200,
     },
     [QUESTS.BULLA_BULLSHIT]: {
