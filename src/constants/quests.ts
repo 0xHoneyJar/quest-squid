@@ -757,9 +757,9 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
       steps: [
         {
           types: [QUEST_TYPES.ETH_TRANSFER],
-          addresses: ["0x95A4fa3E03760f984BF058ba11e8e19f3537D9C9"],
+          addresses: ["0x00000694208Bc9eecB8A39ad6A67314ef7a8929B"],
           requiredAmount: parseEther("0.006"),
-          startBlock: 23054079,
+          startBlock: 23627568,
           revshareTracking: true,
           includeTransaction: true,
         },

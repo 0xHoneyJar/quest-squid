@@ -42,6 +42,21 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
       }, {} as typeof questConfig)
     : questConfig;
 
+  // Find the earliest start block from the quest steps if testing specific quests
+  let startBlock: number = BLOCK_RANGES[chain].from;
+  if (quests?.length === 1) {
+    const questSteps = Object.values(filteredQuestConfig)[0].steps;
+    const earliestStepBlock = Math.min(
+      ...questSteps
+        .filter((step) => step.startBlock !== undefined)
+        .map((step) => step.startBlock!)
+    );
+    if (earliestStepBlock && !isNaN(earliestStepBlock)) {
+      startBlock = earliestStepBlock;
+      console.log(`Using quest start block: ${startBlock}`);
+    }
+  }
+
   // Collect relevant addresses and topics
   for (const quest of Object.values(filteredQuestConfig)) {
     for (const step of quest.steps) {
@@ -127,9 +142,10 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
         callValue: true,
         callFrom: true,
         callTo: true,
+        transactionHash: true
       },
     })
-    .setBlockRange({ from: BLOCK_RANGES[chain].from });
+    .setBlockRange({ from: startBlock as number });
 
   // Add logs for each address with all its topics
   for (const [address, topics] of Object.entries(addressToTopics)) {
@@ -152,6 +168,7 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
       processor.addTrace({
         type: ["call"],
         callTo: [address],
+        transaction: true,
       });
     }
   }

@@ -174,7 +174,7 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       (trace as any).action?.to &&
       (trace as any).action?.from
     ) {
-      console.log(trace);
+      console.log("FUll trace", trace);
       const toAddress = (trace as any).action.to.toLowerCase();
       console.log(`Processing ETH transfer to: ${toAddress}`);
       console.log(questsArray);
@@ -214,7 +214,8 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
               },
               (trace as any).action.from,
               "ETH_Transfer",
-              QUEST_TYPES.ETH_TRANSFER
+              QUEST_TYPES.ETH_TRANSFER,
+              matchingStep.revshareTracking ? trace.transaction?.hash : undefined
             );
           }
         }
@@ -409,12 +410,12 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
 
       // Handle revshare tracking
       if (step.revshareTracking) {
-        console.log(
-          "Revshare tracking enabled for step:",
-          step.id,
-          quest,
-          step
-        );
+        // console.log(
+        //   "Revshare tracking enabled for step:",
+        //   step.id,
+        //   quest,
+        //   step
+        // );
         const revshareEvent = await revshareEventDeferred.getOrInsert(() => {
           return new RevshareEvent({
             id: revshareEventId,
