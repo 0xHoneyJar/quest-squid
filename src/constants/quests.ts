@@ -84,6 +84,7 @@ import {
   URSAROLL2_ADDRESS,
   BULLA_BULLSHIT_ADDRESS,
   XMAS_BOX_ADDRESS,
+  KIZUNA_ADDRESS,
 } from "./address";
 import {
   CHAINS,
@@ -740,6 +741,21 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.THE_CALL_OF_KIZUNA]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: [KIZUNA_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+        },
+      ],
+      startTime: 1734236400 - EXTENSION_DURATION,
+      endTime: 1734821400,
+    },
     [QUESTS.XMAS_BOX]: {
       steps: [
         {

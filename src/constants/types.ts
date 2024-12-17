@@ -125,6 +125,7 @@ export enum QUESTS {
   INTERPOL_AGENT_ACADEMY = "InterPoL Agent Academy",
   LIQUID_PLUG = "Liquid Plug",
   XMAS_BOX = "XMAS BOX ADVENTURE",
+  THE_CALL_OF_KIZUNA = "The Call of Kizuna",
 }
 
 export enum MISSIONS {
