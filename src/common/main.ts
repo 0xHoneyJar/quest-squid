@@ -467,6 +467,18 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
           );
         }
         break;
+      case QUEST_TYPES.ERC1155_KIZUNA_MINT:
+        userAddress = decodedLog.to.toLowerCase();
+        if (eventName === "TransferSingle") {
+          amount = decodedLog.value;
+        } else if (eventName === "TransferBatch") {
+          // Sum up all amounts in the batch
+          amount = decodedLog.values.reduce(
+            (sum: bigint, val: bigint) => sum + val,
+            0n
+          );
+        }
+        break;
       case QUEST_TYPES.UNISWAP_SWAP:
         userAddress = decodedLog.recipient.toLowerCase();
         break;

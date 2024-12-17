@@ -43,6 +43,7 @@ import * as borrowerOperationsAbi from "../abi/BorrowerOperations";
 import * as bgtStakingAbi from "../abi/BGTStaking";
 import * as rootsV2Abi from "../abi/rootsV2";
 import * as xmasBoxAbi from "../abi/xmasBox";
+import * as erc1155KizunaAbi from "../abi/erc1155Kizuna";
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 
 export const EXTENSION_DURATION = 60 * 60 * 24 * 2;
@@ -135,6 +136,7 @@ export enum MISSIONS {
 export enum QUEST_TYPES {
   ERC721_MINT = "ERC721_MINT",
   ERC1155_MINT = "ERC1155_MINT",
+  ERC1155_KIZUNA_MINT = "ERC1155_KIZUNA_MINT",
   ERC20_MINT = "ERC20_MINT",
   ERC20_TRANSFER = "ERC20_TRANSFER",
   UNISWAP_SWAP = "UNISWAP_SWAP",
@@ -212,6 +214,10 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.ERC721_MINT]: {
     eventName: "Transfer",
     abi: erc721Abi,
+  },
+  [QUEST_TYPES.ERC1155_KIZUNA_MINT]: {
+    eventName: ["TransferSingle", "TransferBatch"],
+    abi: erc1155KizunaAbi as AbiWithEvents,
   },
   [QUEST_TYPES.ERC1155_MINT]: {
     eventName: ["TransferSingle", "TransferBatch"],

@@ -744,13 +744,14 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.THE_CALL_OF_KIZUNA]: {
       steps: [
         {
-          types: [QUEST_TYPES.ERC721_MINT],
+          types: [QUEST_TYPES.ERC1155_KIZUNA_MINT],
           addresses: [KIZUNA_ADDRESS],
           filterCriteria: {
-            [QUEST_TYPES.ERC721_MINT]: {
+            [QUEST_TYPES.ERC1155_KIZUNA_MINT]: {
               from: zeroAddress,
             },
           },
+          startBlock: 23800071,
         },
       ],
       startTime: 1734236400 - EXTENSION_DURATION,
