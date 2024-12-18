@@ -741,6 +741,22 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.ENTER_APIOLOGY]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: ["0x7b0dc935dcad8361ce1311d8fb4233e6db92b441"],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 23825765,
+        },
+      ],
+      startTime: 1734372751 - EXTENSION_DURATION,
+      endTime: 1735156800,
+    },
     [QUESTS.THE_CALL_OF_KIZUNA]: {
       steps: [
         {

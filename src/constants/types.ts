@@ -127,6 +127,7 @@ export enum QUESTS {
   LIQUID_PLUG = "Liquid Plug",
   XMAS_BOX = "XMAS BOX ADVENTURE",
   THE_CALL_OF_KIZUNA = "The Call of Kizuna",
+  ENTER_APIOLOGY = "Enter Apiology DAO",
 }
 
 export enum MISSIONS {
