@@ -741,6 +741,21 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.COLLECT_THE_JARS]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: ["0x9C94E5831654F987406ABe71301b6dDabD11b339"],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 23839798,
+        },
+      ],
+      endTime: 1735416000,
+    },
     [QUESTS.ENTER_APIOLOGY]: {
       steps: [
         {

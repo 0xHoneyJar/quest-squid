@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "build": "rm -rf lib && tsc",
-    "get-nearest-block": "ts-node scripts/get-nearest-block.ts"
+    "get-nearest-block": "ts-node scripts/get-nearest-block.ts",
+    "sqdbuild": "sqd down && sqd up && sqd build && sqd migration:generate"
   },
   "dependencies": {
     "@belopash/typeorm-store": "^1.5.0",
