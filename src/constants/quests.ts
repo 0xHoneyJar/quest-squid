@@ -775,13 +775,13 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
       steps: [
         {
           types: [QUEST_TYPES.ERC721_MINT],
-          addresses: ["0x26e2373018DaE2A4Eca1b228D00831e68D98872B"],
+          addresses: [ "0x9C94E5831654F987406ABe71301b6dDabD11b339", "0x26e2373018DaE2A4Eca1b228D00831e68D98872B", "0xADE6d3d77350343B87140A018AE78AA3fbFD49cD"],
           filterCriteria: {
             [QUEST_TYPES.ERC721_MINT]: {
               from: zeroAddress,
             },
           },
-          startBlock: 23839798,
+          startBlock: 23739798,
         },
       ],
       endTime: 1735416000,
