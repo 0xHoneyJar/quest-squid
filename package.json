@@ -4,7 +4,8 @@
   "scripts": {
     "build": "rm -rf lib && tsc",
     "get-nearest-block": "ts-node scripts/get-nearest-block.ts",
-    "sqdbuild": "sqd down && sqd up && sqd build && sqd migration:generate"
+    "sqdbuild": "sqd down && sqd up && sqd build && sqd migration:generate",
+    "tag-when-synced": "ts-node scripts/check-and-tag.ts"
   },
   "dependencies": {
     "@belopash/typeorm-store": "^1.5.0",

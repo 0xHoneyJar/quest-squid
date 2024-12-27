@@ -741,11 +741,41 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.SECOND_TRIAL_CULTURE]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: ["0x654493E528f1fb9B68841F6a63E348376B109f65"],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 24184602,
+        },
+      ],
+      endTime: 1735934400,
+    },
+    [QUESTS.FIRST_TRIAL_BEARS_ASCENDANT]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: ["0x5B14A5C38B82986be47F093B96b2022e9308eaDc"],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 24074582,
+        },
+      ],
+      endTime: 1735675200,
+    },
     [QUESTS.COLLECT_THE_JARS]: {
       steps: [
         {
           types: [QUEST_TYPES.ERC721_MINT],
-          addresses: ["0x9C94E5831654F987406ABe71301b6dDabD11b339"],
+          addresses: ["0x26e2373018DaE2A4Eca1b228D00831e68D98872B"],
           filterCriteria: {
             [QUEST_TYPES.ERC721_MINT]: {
               from: zeroAddress,

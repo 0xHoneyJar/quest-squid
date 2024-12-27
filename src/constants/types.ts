@@ -129,6 +129,8 @@ export enum QUESTS {
   THE_CALL_OF_KIZUNA = "The Call of Kizuna",
   ENTER_APIOLOGY = "Enter Apiology DAO",
   COLLECT_THE_JARS = "Collect the Jars",
+  FIRST_TRIAL_BEARS_ASCENDANT = "The First Trial: Bears Ascendant",
+  SECOND_TRIAL_CULTURE = "The Second Trial: When Culture Becomes Power",
 }
 
 export enum MISSIONS {
