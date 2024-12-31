@@ -17,35 +17,34 @@ import {
 } from "../constants/quests";
 import { CHAINS, QUEST_TYPE_INFO, QUEST_TYPES } from "../constants/types";
 
+interface LogRequest {
+  topic0: string[];
+  topic1?: string;
+  topic2?: string;
+  addresses: string[];
+  includeTransaction: boolean;
+  includeTransactionLogs: boolean;
+  range?: { from: number; to?: number };
+}
+
 export function createProcessor(chain: CHAINS, quests?: string[]) {
   const questConfig = QUESTS_CONFIG[chain];
-  const addressToTopics: Record<
-    string,
-    {
-      topic0: string[];
-      topic1?: string;
-      topic2?: string;
-      range?: { from: number; to?: number };
-      includeTransaction: boolean;
-      includeTransactionLogs: boolean;
-      isEthTransfer: boolean;
-    }
-  > = {};
-
-  // Filter for the specified quests or use all quests if none specified
-  const filteredQuestConfig = quests
-    ? quests.reduce((acc, questName) => {
-        if (questConfig[questName]) {
-          acc[questName] = questConfig[questName];
-        }
-        return acc;
-      }, {} as typeof questConfig)
-    : questConfig;
+  const logRequests: LogRequest[] = [];
+  const ethTransferAddresses: string[] = [];
 
   // Find the earliest start block from the quest steps if testing specific quests
   let startBlock: number = BLOCK_RANGES[chain].from;
   if (quests?.length === 1) {
-    const questSteps = Object.values(filteredQuestConfig)[0].steps;
+    const questSteps = Object.values(
+      quests
+        ? quests.reduce((acc, questName) => {
+            if (questConfig[questName]) {
+              acc[questName] = questConfig[questName];
+            }
+            return acc;
+          }, {} as typeof questConfig)
+        : questConfig
+    )[0].steps;
     const earliestStepBlock = Math.min(
       ...questSteps
         .filter((step) => step.startBlock !== undefined)
@@ -57,39 +56,31 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
     }
   }
 
-  // Collect relevant addresses and topics
+  // Filter for the specified quests or use all quests if none specified
+  const filteredQuestConfig = quests
+    ? quests.reduce((acc, questName) => {
+        if (questConfig[questName]) {
+          acc[questName] = questConfig[questName];
+        }
+        return acc;
+      }, {} as typeof questConfig)
+    : questConfig;
+
+  // Group similar log requests
   for (const quest of Object.values(filteredQuestConfig)) {
     for (const step of quest.steps) {
       const questTypes = step.types;
       for (const address of step.addresses) {
         const lowerCaseAddress = address.toLowerCase();
-        if (!addressToTopics[lowerCaseAddress]) {
-          addressToTopics[lowerCaseAddress] = {
-            topic0: [],
-            includeTransaction: false,
-            includeTransactionLogs: false,
-            isEthTransfer: false,
-          };
-        }
-
-        if (step.startBlock) {
-          addressToTopics[lowerCaseAddress].range = { from: step.startBlock };
-        }
-
-        if (step.includeTransaction) {
-          addressToTopics[lowerCaseAddress].includeTransaction = true;
-        }
-
-        if (step.includeTransactionLogs) {
-          addressToTopics[lowerCaseAddress].includeTransactionLogs = true;
-        }
 
         for (const questType of questTypes) {
           const questTypeInfo = QUEST_TYPE_INFO[questType];
 
           // Special handling for ETH_TRANSFER
           if (questType === QUEST_TYPES.ETH_TRANSFER) {
-            addressToTopics[lowerCaseAddress].isEthTransfer = true;
+            if (!ethTransferAddresses.includes(lowerCaseAddress)) {
+              ethTransferAddresses.push(lowerCaseAddress);
+            }
             continue;
           }
 
@@ -97,25 +88,35 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
             ? questTypeInfo.eventName
             : [questTypeInfo.eventName];
 
-          for (const eventName of eventNames) {
-            const topic0 =
-              questTypeInfo.abi.events[eventName].topic.toLowerCase();
+          const topics = eventNames.map(
+            (eventName) => questTypeInfo.abi.events[eventName].topic.toLowerCase()
+          );
 
-            if (!addressToTopics[lowerCaseAddress].topic0.includes(topic0)) {
-              addressToTopics[lowerCaseAddress].topic0.push(topic0);
+          // Find existing matching log request or create new one
+          const matchingRequest = logRequests.find(
+            (req) =>
+              JSON.stringify(req.topic0.sort()) === JSON.stringify(topics.sort()) &&
+              req.topic1 === (questTypeInfo.topic1 ? formatAddressTopic(questTypeInfo.topic1) : undefined) &&
+              req.topic2 === (questTypeInfo.topic2 ? formatAddressTopic(questTypeInfo.topic2) : undefined) &&
+              req.includeTransaction === !!step.includeTransaction &&
+              req.includeTransactionLogs === !!step.includeTransactionLogs &&
+              JSON.stringify(req.range) === JSON.stringify(step.startBlock ? { from: step.startBlock } : undefined)
+          );
+
+          if (matchingRequest) {
+            if (!matchingRequest.addresses.includes(lowerCaseAddress)) {
+              matchingRequest.addresses.push(lowerCaseAddress);
             }
-          }
-
-          if (questTypeInfo.topic1) {
-            addressToTopics[lowerCaseAddress].topic1 = formatAddressTopic(
-              questTypeInfo.topic1
-            );
-          }
-
-          if (questTypeInfo.topic2) {
-            addressToTopics[lowerCaseAddress].topic2 = formatAddressTopic(
-              questTypeInfo.topic2
-            );
+          } else {
+            logRequests.push({
+              topic0: topics,
+              topic1: questTypeInfo.topic1 ? formatAddressTopic(questTypeInfo.topic1) : undefined,
+              topic2: questTypeInfo.topic2 ? formatAddressTopic(questTypeInfo.topic2) : undefined,
+              addresses: [lowerCaseAddress],
+              includeTransaction: !!step.includeTransaction,
+              includeTransactionLogs: !!step.includeTransactionLogs,
+              range: step.startBlock ? { from: step.startBlock } : undefined,
+            });
           }
         }
       }
@@ -147,30 +148,26 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
     })
     .setBlockRange({ from: startBlock as number });
 
-  // Add logs for each address with all its topics
-  for (const [address, topics] of Object.entries(addressToTopics)) {
-    if (!topics.isEthTransfer) {
-      processor.addLog({
-        address: [address],
-        topic0: topics.topic0,
-        topic1: topics.topic1 ? [topics.topic1] : undefined,
-        topic2: topics.topic2 ? [topics.topic2] : undefined,
-        range: topics.range,
-        transaction: topics.includeTransaction,
-        transactionLogs: topics.includeTransactionLogs,
-      });
-    }
+  // Add consolidated log requests
+  for (const request of logRequests) {
+    processor.addLog({
+      address: request.addresses,
+      topic0: request.topic0,
+      topic1: request.topic1 ? [request.topic1] : undefined,
+      topic2: request.topic2 ? [request.topic2] : undefined,
+      range: request.range,
+      transaction: request.includeTransaction,
+      transactionLogs: request.includeTransactionLogs,
+    });
   }
 
   // Add traces for ETH transfers
-  for (const [address, topics] of Object.entries(addressToTopics)) {
-    if (topics.isEthTransfer) {
-      processor.addTrace({
-        type: ["call"],
-        callTo: [address],
-        transaction: true,
-      });
-    }
+  if (ethTransferAddresses.length > 0) {
+    processor.addTrace({
+      type: ["call"],
+      callTo: ethTransferAddresses,
+      transaction: true,
+    });
   }
 
   return processor;

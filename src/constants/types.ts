@@ -131,6 +131,7 @@ export enum QUESTS {
   COLLECT_THE_JARS = "Collect the Jars",
   FIRST_TRIAL_BEARS_ASCENDANT = "The First Trial: Bears Ascendant",
   SECOND_TRIAL_CULTURE = "The Second Trial: When Culture Becomes Power",
+  THIRD_TRIAL_POWER = "The Third Trial: Real Power is the frens we made along the way"
 }
 
 export enum MISSIONS {
