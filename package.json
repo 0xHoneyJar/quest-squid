@@ -5,6 +5,7 @@
     "build": "rm -rf lib && tsc",
     "get-nearest-block": "ts-node scripts/get-nearest-block.ts",
     "sqdbuild": "sqd down && sqd up && sqd build && sqd migration:generate",
+    "sqdrestart": "sqd down && sqd typegen && sqd codegen && sqd up && sqd build && sqd migration:generate",
     "tag-when-synced": "ts-node scripts/check-and-tag.ts"
   },
   "dependencies": {

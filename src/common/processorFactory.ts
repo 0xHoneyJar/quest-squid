@@ -66,7 +66,8 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
       }, {} as typeof questConfig)
     : questConfig;
 
-  // Group similar log requests
+  // First pass: Collect all requests
+  const initialRequests: LogRequest[] = [];
   for (const quest of Object.values(filteredQuestConfig)) {
     for (const step of quest.steps) {
       const questTypes = step.types;
@@ -92,44 +93,164 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
             (eventName) => questTypeInfo.abi.events[eventName].topic.toLowerCase()
           );
 
-          // Find existing matching log request or create new one
-          const matchingRequest = logRequests.find(
-            (req) =>
-              JSON.stringify(req.topic0.sort()) === JSON.stringify(topics.sort()) &&
-              req.topic1 === (questTypeInfo.topic1 ? formatAddressTopic(questTypeInfo.topic1) : undefined) &&
-              req.topic2 === (questTypeInfo.topic2 ? formatAddressTopic(questTypeInfo.topic2) : undefined) &&
-              req.includeTransaction === !!step.includeTransaction &&
-              req.includeTransactionLogs === !!step.includeTransactionLogs &&
-              JSON.stringify(req.range) === JSON.stringify(step.startBlock ? { from: step.startBlock } : undefined)
-          );
-
-          if (matchingRequest) {
-            if (!matchingRequest.addresses.includes(lowerCaseAddress)) {
-              matchingRequest.addresses.push(lowerCaseAddress);
-            }
-          } else {
-            logRequests.push({
-              topic0: topics,
-              topic1: questTypeInfo.topic1 ? formatAddressTopic(questTypeInfo.topic1) : undefined,
-              topic2: questTypeInfo.topic2 ? formatAddressTopic(questTypeInfo.topic2) : undefined,
-              addresses: [lowerCaseAddress],
-              includeTransaction: !!step.includeTransaction,
-              includeTransactionLogs: !!step.includeTransactionLogs,
-              range: step.startBlock ? { from: step.startBlock } : undefined,
-            });
-          }
+          initialRequests.push({
+            topic0: topics,
+            topic1: questTypeInfo.topic1 ? formatAddressTopic(questTypeInfo.topic1) : undefined,
+            topic2: questTypeInfo.topic2 ? formatAddressTopic(questTypeInfo.topic2) : undefined,
+            addresses: [lowerCaseAddress],
+            includeTransaction: !!step.includeTransaction,
+            includeTransactionLogs: !!step.includeTransactionLogs,
+            range: step.startBlock ? { from: step.startBlock } : undefined,
+          });
         }
       }
     }
   }
 
+  // Second pass: Consolidate requests with same topics and flags
+  const topicMap = new Map<string, LogRequest>();
+  for (const request of initialRequests) {
+    const key = JSON.stringify({
+      topics: request.topic0.sort(),
+      topic1: request.topic1,
+      topic2: request.topic2,
+      includeTransaction: request.includeTransaction,
+      includeTransactionLogs: request.includeTransactionLogs,
+    });
+
+    if (topicMap.has(key)) {
+      const existing = topicMap.get(key)!;
+      // Add new addresses
+      for (const addr of request.addresses) {
+        if (!existing.addresses.includes(addr)) {
+          existing.addresses.push(addr);
+        }
+      }
+      // Update range to earliest start block
+      if (request.range?.from !== undefined) {
+        if (existing.range?.from === undefined) {
+          existing.range = { from: request.range.from };
+        } else {
+          existing.range.from = Math.min(existing.range.from, request.range.from);
+        }
+      }
+    } else {
+      topicMap.set(key, { ...request });
+    }
+  }
+
+  // Third pass: Try to combine requests with unique address-topic pairs
+  const flagGroups = new Map<string, LogRequest[]>();
+  for (const request of topicMap.values()) {
+    const key = JSON.stringify({
+      includeTransaction: request.includeTransaction,
+      includeTransactionLogs: request.includeTransactionLogs,
+    });
+    
+    if (!flagGroups.has(key)) {
+      flagGroups.set(key, []);
+    }
+    flagGroups.get(key)!.push(request);
+  }
+
+  // Combine requests where possible
+  for (const [_, group] of flagGroups) {
+    const addressTopicMap = new Map<string, Set<string>>();
+    const addressRangeMap = new Map<string, number>();
+    
+    // Build address to topic mapping and track start blocks
+    for (const request of group) {
+      for (const addr of request.addresses) {
+        if (!addressTopicMap.has(addr)) {
+          addressTopicMap.set(addr, new Set());
+        }
+        request.topic0.forEach(topic => addressTopicMap.get(addr)!.add(topic));
+        
+        // Track the earliest start block for each address
+        if (request.range?.from !== undefined) {
+          const currentEarliest = addressRangeMap.get(addr);
+          if (currentEarliest === undefined) {
+            addressRangeMap.set(addr, request.range.from);
+          } else {
+            addressRangeMap.set(addr, Math.min(currentEarliest, request.range.from));
+          }
+        }
+      }
+    }
+
+    // Find addresses that have unique topic sets
+    const topicToAddresses = new Map<string, string[]>();
+    for (const [addr, topics] of addressTopicMap) {
+      const topicKey = Array.from(topics).sort().join(',');
+      if (!topicToAddresses.has(topicKey)) {
+        topicToAddresses.set(topicKey, []);
+      }
+      topicToAddresses.get(topicKey)!.push(addr);
+    }
+
+    // Create consolidated requests
+    const consolidatedRequests: LogRequest[] = [];
+    const processedAddresses = new Set<string>();
+
+    // First, handle unique topic sets
+    for (const [topicKey, addresses] of topicToAddresses) {
+      if (addresses.length > 1) {
+        const topics = topicKey.split(',');
+        const firstRequest = group.find(r => 
+          r.addresses.includes(addresses[0]) && 
+          r.topic0.some(t => topics.includes(t))
+        )!;
+
+        // Find earliest start block among all addresses being combined
+        let earliestBlock: number | undefined;
+        for (const addr of addresses) {
+          const blockNum = addressRangeMap.get(addr);
+          if (blockNum !== undefined) {
+            earliestBlock = earliestBlock === undefined ? blockNum : Math.min(earliestBlock, blockNum);
+          }
+        }
+
+        consolidatedRequests.push({
+          ...firstRequest,
+          topic0: topics,
+          addresses,
+          range: earliestBlock !== undefined ? { from: earliestBlock } : undefined,
+        });
+        addresses.forEach(addr => processedAddresses.add(addr));
+      }
+    }
+
+    // Add remaining requests that couldn't be consolidated
+    for (const request of group) {
+      const remainingAddresses = request.addresses.filter(addr => !processedAddresses.has(addr));
+      if (remainingAddresses.length > 0) {
+        // Find earliest start block for remaining addresses
+        let earliestBlock: number | undefined;
+        for (const addr of remainingAddresses) {
+          const blockNum = addressRangeMap.get(addr);
+          if (blockNum !== undefined) {
+            earliestBlock = earliestBlock === undefined ? blockNum : Math.min(earliestBlock, blockNum);
+          }
+        }
+
+        consolidatedRequests.push({
+          ...request,
+          addresses: remainingAddresses,
+          range: earliestBlock !== undefined ? { from: earliestBlock } : undefined,
+        });
+      }
+    }
+
+    logRequests.push(...consolidatedRequests);
+  }
+
   const processor = new EvmBatchProcessor()
     // TODO: Uncomment this and remove setGateway to switch to portals
-    // .setPortal(assertNotNull(
-    //   PORTAL_URLS[chain],
-    //   `Required env variable ${PORTAL_URLS[chain]} is missing`
-    // ))
-    .setGateway(ARCHIVE_GATEWAYS[chain])
+    .setPortal(assertNotNull(
+      PORTAL_URLS[chain],
+      `Required env variable ${PORTAL_URLS[chain]} is missing`
+    ))
+    // .setGateway(ARCHIVE_GATEWAYS[chain])
 
     .setRpcEndpoint({
       url: assertNotNull(RPC_ENDPOINTS[chain], "No RPC endpoint supplied"),

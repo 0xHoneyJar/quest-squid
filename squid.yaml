@@ -1,17 +1,17 @@
 manifestVersion: subsquid.io/v0.1
 name: quest-squid
-version: 149
+version: 150
 description: A squid that indexes quest events for Cub Scouts
 build:
 deploy:
   env:
     # Portal URLs for cloud deployment. COMMENT out if running locally to switch to local env public portals
-    # BERA_PORTAL_URL: ${{ addons.portal.berachain_bartio.http }}
-    # ARB_PORTAL_URL: ${{ addons.portal.arbitrum_one.http }}
-    # OP_PORTAL_URL: ${{ addons.portal.optimism_mainnet.http }}
-    # BASE_PORTAL_URL: ${{ addons.portal.base_mainnet.http }}
-    # ZORA_PORTAL_URL: ${{ addons.portal.zora_mainnet.http }}
-    # ETH_PORTAL_URL: ${{ addons.portal.ethereum_mainnet.http }}
+    BERA_PORTAL_URL: ${{ addons.portal.berachain_bartio.http }}
+    ARB_PORTAL_URL: ${{ addons.portal.arbitrum_one.http }}
+    OP_PORTAL_URL: ${{ addons.portal.optimism_mainnet.http }}
+    BASE_PORTAL_URL: ${{ addons.portal.base_mainnet.http }}
+    ZORA_PORTAL_URL: ${{ addons.portal.zora_mainnet.http }}
+    ETH_PORTAL_URL: ${{ addons.portal.ethereum_mainnet.http }}
 
     # RPC endpoints
     RPC_ZORA_HTTP: ${{ secrets.RPC_ZORA_HTTP }}

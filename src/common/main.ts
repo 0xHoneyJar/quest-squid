@@ -97,7 +97,6 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
 
   for (let log of block.logs) {
     const logAddress = log.address.toLowerCase();
-    console.log(`Processing log for address: ${logAddress}`);
 
     const matchingQuests = questsArray.filter(
       (quest) =>
@@ -108,9 +107,7 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         (!quest.endTime || currentTimestamp <= quest.endTime)
     );
 
-    console.log(
-      `Matching quests: ${matchingQuests.map((q) => q.name).join(", ")}`
-    );
+    
 
     for (const matchingQuest of matchingQuests) {
       const matchingSteps = matchingQuest.steps.filter((step) =>
@@ -165,8 +162,6 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
 
   // Process traces for ETH transfers
   for (let trace of block.traces) {
-    console.log(trace);
-
     if (
       trace.type === "call" &&
       (trace as any).action?.value &&
@@ -174,10 +169,7 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       (trace as any).action?.to &&
       (trace as any).action?.from
     ) {
-      console.log("FUll trace", trace);
       const toAddress = (trace as any).action.to.toLowerCase();
-      console.log(`Processing ETH transfer to: ${toAddress}`);
-      console.log(questsArray);
 
       const matchingQuests = questsArray.filter(
         (quest) =>
@@ -190,11 +182,6 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
           (!quest.endTime || currentTimestamp <= quest.endTime)
       );
 
-      console.log(
-        `Matching quests for ETH transfer: ${matchingQuests
-          .map((q) => q.name)
-          .join(", ")}`
-      );
 
       for (const matchingQuest of matchingQuests) {
         const matchingSteps = matchingQuest.steps.filter((step) =>
@@ -235,10 +222,6 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
     transactionLogs?: Log[],
     logIndex?: number
   ): Promise<void> {
-    console.log(
-      `Handling event for quest: ${quest.name}, step: ${step.stepNumber}, event: ${eventName}`
-    );
-
     if (step.filterCriteria) {
       const filterCriteria = step.filterCriteria as Record<string, any>;
 
@@ -334,11 +317,13 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       amount = result.amount;
     }
 
-    console.log(`User address: ${userAddress}, amount: ${amount}`);
-
     if (!userAddress) {
       return;
     }
+
+    console.log(
+      `Processing valid quest event - Quest: ${quest.name}, Step: ${step.stepNumber}, Event: ${eventName}, User: ${userAddress}, Amount: ${amount}`
+    );
 
     const userQuestProgressId = `${userAddress}-${quest.id}`;
     const stepProgressId = `${userQuestProgressId}-step-${step.stepNumber}`;

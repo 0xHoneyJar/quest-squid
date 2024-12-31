@@ -1046,6 +1046,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           types: [QUEST_TYPES.TOKENS_DEPOSITED],
           addresses: [HOOK_VAULT_ADDRESS],
           requiredAmount: parseEther("0.025"),
+          startBlock: 12694135,
         },
       ],
     },
@@ -1443,6 +1444,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           types: [QUEST_TYPES.ETH_TRANSFER],
           addresses: ["0xf6c3De06D433D48bc984c1aF76Ae6871960396D3"], // Replace with the actual address
           requiredAmount: parseEther("0.00042"), // Set the required amount, e.g., 0.1 ETH
+          startBlock: 19819036,
         },
       ],
       startTime: 1725566400 - EXTENSION_DURATION,

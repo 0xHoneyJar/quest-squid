@@ -59,6 +59,31 @@
       "deps": ["build", "migration:apply"],
       "cmd": ["node", "--require=dotenv/config", "lib/bsc/main.js"]
     },
+    "process:bera": {
+      "description": "Load .env and start the BERA squid processor",
+      "deps": ["build", "migration:apply"],
+      "cmd": ["node", "--require=dotenv/config", "lib/bera/main.js"]
+    },
+    "process:op": {
+      "description": "Load .env and start the OP squid processor",
+      "deps": ["build", "migration:apply"],
+      "cmd": ["node", "--require=dotenv/config", "lib/op/main.js"]
+    },
+    "process:zora": {
+      "description": "Load .env and start the ZORA squid processor",
+      "deps": ["build", "migration:apply"],
+      "cmd": ["node", "--require=dotenv/config", "lib/zora/main.js"]
+    },
+    "process:base": {
+      "description": "Load .env and start the BASE squid processor",
+      "deps": ["build", "migration:apply"],
+      "cmd": ["node", "--require=dotenv/config", "lib/base/main.js"]
+    },
+    "process:arb": {
+      "description": "Load .env and start the ARB squid processor",
+      "deps": ["build", "migration:apply"],
+      "cmd": ["node", "--require=dotenv/config", "lib/arb/main.js"]
+    },
     "process:prod:eth": {
       "description": "Start the squid processor",
       "deps": ["migration:apply"],
