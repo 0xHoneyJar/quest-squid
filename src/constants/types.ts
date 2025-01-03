@@ -131,7 +131,13 @@ export enum QUESTS {
   COLLECT_THE_JARS = "Collect the Jars",
   FIRST_TRIAL_BEARS_ASCENDANT = "The First Trial: Bears Ascendant",
   SECOND_TRIAL_CULTURE = "The Second Trial: When Culture Becomes Power",
-  THIRD_TRIAL_POWER = "The Third Trial: Real Power is the frens we made along the way"
+  THIRD_TRIAL_POWER = "The Third Trial: Real Power is the frens we made along the way",
+  HENLO_OBB = "Henlo, OBB!",
+  HENLO_BADDIES = "Henlo, Baddies!",
+  HENLO_BULLAS = "Henlo, Bullas!",
+  HENLO_MIBERA = "Henlo, Mibera!",
+  HENLO_WORLD = "Henlo, World!",
+  HENLO_ELEMENTALS = "Henlo, Elementals!",
 }
 
 export enum MISSIONS {

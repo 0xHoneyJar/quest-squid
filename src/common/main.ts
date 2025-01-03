@@ -107,51 +107,51 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         (!quest.endTime || currentTimestamp <= quest.endTime)
     );
 
-    
+    if (matchingQuests.length > 0) {
+      for (const matchingQuest of matchingQuests) {
+        const matchingSteps = matchingQuest.steps.filter((step) =>
+          step.addresses.includes(logAddress)
+        );
 
-    for (const matchingQuest of matchingQuests) {
-      const matchingSteps = matchingQuest.steps.filter((step) =>
-        step.addresses.includes(logAddress)
-      );
+        for (const matchingStep of matchingSteps) {
+          const questTypes = matchingStep.types;
 
-      for (const matchingStep of matchingSteps) {
-        const questTypes = matchingStep.types;
+          for (const questType of questTypes) {
+            const questTypeInfo = QUEST_TYPE_INFO[questType as QUEST_TYPES];
+            const eventNames = Array.isArray(questTypeInfo.eventName)
+              ? questTypeInfo.eventName
+              : [questTypeInfo.eventName];
 
-        for (const questType of questTypes) {
-          const questTypeInfo = QUEST_TYPE_INFO[questType as QUEST_TYPES];
-          const eventNames = Array.isArray(questTypeInfo.eventName)
-            ? questTypeInfo.eventName
-            : [questTypeInfo.eventName];
+            for (const eventName of eventNames) {
+              if (
+                questTypeInfo.abi.events &&
+                eventName in questTypeInfo.abi.events
+              ) {
+                const event = questTypeInfo.abi.events[
+                  eventName
+                ] as AbiEvent<any>;
+                if (event.is(log)) {
+                  const decodedLog = event.decode(log);
+                  const sender = matchingStep.includeTransaction
+                    ? log.getTransaction().from
+                    : undefined;
 
-          for (const eventName of eventNames) {
-            if (
-              questTypeInfo.abi.events &&
-              eventName in questTypeInfo.abi.events
-            ) {
-              const event = questTypeInfo.abi.events[
-                eventName
-              ] as AbiEvent<any>;
-              if (event.is(log)) {
-                const decodedLog = event.decode(log);
-                const sender = matchingStep.includeTransaction
-                  ? log.getTransaction().from
-                  : undefined;
-
-                handleQuestEvent(
-                  ctx,
-                  matchingQuest,
-                  matchingStep,
-                  decodedLog,
-                  sender,
-                  eventName,
-                  questType as QUEST_TYPES,
-                  matchingStep.revshareTracking
-                    ? log.transaction?.hash
-                    : undefined,
-                  log.transaction?.logs,
-                  log.logIndex
-                );
-                break; // Exit the loop if we've found a matching event
+                  handleQuestEvent(
+                    ctx,
+                    matchingQuest,
+                    matchingStep,
+                    decodedLog,
+                    sender,
+                    eventName,
+                    questType as QUEST_TYPES,
+                    matchingStep.revshareTracking
+                      ? log.transaction?.hash
+                      : undefined,
+                    log.transaction?.logs,
+                    log.logIndex
+                  );
+                  break; // Exit the loop if we've found a matching event
+                }
               }
             }
           }
@@ -182,28 +182,29 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
           (!quest.endTime || currentTimestamp <= quest.endTime)
       );
 
+      if (matchingQuests.length > 0) {
+        for (const matchingQuest of matchingQuests) {
+          const matchingSteps = matchingQuest.steps.filter((step) =>
+            step.addresses.includes(toAddress)
+          );
 
-      for (const matchingQuest of matchingQuests) {
-        const matchingSteps = matchingQuest.steps.filter((step) =>
-          step.addresses.includes(toAddress)
-        );
-
-        for (const matchingStep of matchingSteps) {
-          if (matchingStep.types.includes(QUEST_TYPES.ETH_TRANSFER)) {
-            handleQuestEvent(
-              ctx,
-              matchingQuest,
-              matchingStep,
-              {
-                from: (trace as any).action.from,
-                to: (trace as any).action.to,
-                value: (trace as any).action.value,
-              },
-              (trace as any).action.from,
-              "ETH_Transfer",
-              QUEST_TYPES.ETH_TRANSFER,
-              matchingStep.revshareTracking ? trace.transaction?.hash : undefined
-            );
+          for (const matchingStep of matchingSteps) {
+            if (matchingStep.types.includes(QUEST_TYPES.ETH_TRANSFER)) {
+              handleQuestEvent(
+                ctx,
+                matchingQuest,
+                matchingStep,
+                {
+                  from: (trace as any).action.from,
+                  to: (trace as any).action.to,
+                  value: (trace as any).action.value,
+                },
+                (trace as any).action.from,
+                "ETH_Transfer",
+                QUEST_TYPES.ETH_TRANSFER,
+                matchingStep.revshareTracking ? trace.transaction?.hash : undefined
+              );
+            }
           }
         }
       }

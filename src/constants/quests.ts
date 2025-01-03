@@ -97,6 +97,114 @@ import {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
+    [QUESTS.HENLO_WORLD]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT, QUEST_TYPES.ERC1155_MINT],
+          addresses: ["0x681cec8837a31c9de841bb0ac49532679c9f14b3"],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 8841283,
+        },
+      ],
+      endTime: 1736107200,
+    },
+    [QUESTS.HENLO_ELEMENTALS]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT, QUEST_TYPES.ERC1155_MINT],
+          addresses: ["0x70f45b4f1cbe8965bd615bd66a353ac6fcdda6c7"],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 8841469,
+        },
+      ],
+      endTime: 1736193600,
+    },
+    [QUESTS.HENLO_MIBERA]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT, QUEST_TYPES.ERC1155_MINT],
+          addresses: ["0x97317156bd38fde8df108e4b6dc131a33c85d72f"],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 8856683,
+        },
+      ],
+      endTime: 1736193600,
+    },
+    [QUESTS.HENLO_BULLAS]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT, QUEST_TYPES.ERC1155_MINT],
+          addresses: ["0xe5386adbb43f2bd84d0d0862c740f9c90a641f9a"],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 8856704,
+        },
+      ],
+      endTime: 1736193600,
+    },
+    [QUESTS.HENLO_BADDIES]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT, QUEST_TYPES.ERC1155_MINT],
+          addresses: ["0x39d841385c7105d556ac40d35ace4b4ce5bfdde2"],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 8841625,
+        },
+      ],
+      endTime: 1736193600,
+    },
+    [QUESTS.HENLO_OBB]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT, QUEST_TYPES.ERC1155_MINT],
+          addresses: ["0xD861Da9b8e7104B5D0ce4EE7ccAe0DFF5d7d9461"],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+            [QUEST_TYPES.ERC1155_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 8856493,
+        },
+      ],
+      endTime: 1736193600,
+    },
     [QUESTS.THE_ROOT_OF_ALL_DEFI]: {
       steps: [
         {
@@ -595,11 +703,13 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           types: [QUEST_TYPES.FTO_DEPOSIT, QUEST_TYPES.ERC20_MINT],
           addresses: [HONEYPOT_JANI_ADDRESS, JANI_ADDRESS],
           path: "Jani",
+          startBlock: 3617024,
         },
         {
           types: [QUEST_TYPES.FTO_DEPOSIT, QUEST_TYPES.ERC20_MINT],
           addresses: [HONEYPOT_POT_ADDRESS, POT_ADDRESS],
           path: "Pot",
+          startBlock: 3616975,
         },
       ],
       startTime: 1724673600 - EXTENSION_DURATION,
@@ -873,6 +983,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           },
           revshareTracking: true,
           includeTransaction: true,
+          startBlock: 22542690,
         },
       ],
       startTime: 1731873600,
@@ -890,6 +1001,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           },
           revshareTracking: true,
           includeTransaction: true,
+          startBlock: 13803165,
         },
       ],
       // startTime: 1731342000,
@@ -939,6 +1051,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 20521993,
         },
       ],
       // startTime: 1727899200,
@@ -949,6 +1062,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         {
           types: [QUEST_TYPES.GOVERNOR_PROPOSE],
           addresses: [JOKERACE_GOVERNOR_ADDRESS],
+          startBlock: 20280189,
         },
       ],
       endTime: 1727989200,
@@ -963,6 +1077,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 19658040,
         },
         {
           types: [QUEST_TYPES.ERC1155_MINT],
@@ -972,6 +1087,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 18516857,
         },
       ],
       // startTime: 1727121600 - EXTENSION_DURATION,
@@ -987,6 +1103,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               id: 5n,
             },
           },
+          startBlock: 13803165,
         },
       ],
       startTime: 1725912000 - EXTENSION_DURATION,
@@ -998,6 +1115,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           types: [QUEST_TYPES.ETH_TRANSFER],
           addresses: ["0xf6c3De06D433D48bc984c1aF76Ae6871960396D3"], // Replace with the actual address
           requiredAmount: parseEther("0.00042"), // Set the required amount, e.g., 0.1 ETH
+          startBlock: 14218440,
         },
       ],
       startTime: 1725566400 - EXTENSION_DURATION,
@@ -1013,6 +1131,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               id: 4n,
             },
           },
+          startBlock: 13803165,
         },
       ],
       startTime: 1725364800,
@@ -1027,6 +1146,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 19071502,
         },
       ],
     },
@@ -1036,6 +1156,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           types: [QUEST_TYPES.ERC1155_MINT],
           addresses: [MYSTERY_BOX_ADDRESS],
           requiredAmount: 1n,
+          startBlock: 17522624,
         },
       ],
       endTime: 1723226400,
@@ -1061,6 +1182,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
             },
           },
           requiredAmount: 1n,
+          startBlock: 15898282,
         },
         {
           types: [QUEST_TYPES.ERC1155_MINT],
@@ -1071,6 +1193,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
             },
           },
           requiredAmount: 5n,
+          startBlock: 15898282,
         },
       ],
       endTime: 1721160000,
@@ -1086,6 +1209,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
             },
           },
           requiredAmount: 1n,
+          startBlock: 16797642,
         },
         {
           types: [QUEST_TYPES.ERC1155_MINT],
@@ -1096,6 +1220,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
             },
           },
           requiredAmount: 10n,
+          startBlock: 16797642,
         },
       ],
       endTime: 1722880800,
@@ -1110,6 +1235,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 16978235,
         },
       ],
       endTime: 1722103200,
@@ -1124,6 +1250,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 13803165,
         },
       ],
       endTime: 1718554800,
@@ -1138,6 +1265,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 13803165,
         },
       ],
       endTime: 1717690800,
@@ -1209,6 +1337,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           stepNumber: 2,
           revshareTracking: true,
           includeTransaction: true,
+          startBlock: 263885551,
         },
       ],
       // startTime: 1729080000 - EXTENSION_DURATION,
@@ -1226,6 +1355,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           },
           revshareTracking: true,
           includeTransaction: true,
+          startBlock: 262111589,
         },
       ],
       endTime: 1729274400,
@@ -1254,6 +1384,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           types: [QUEST_TYPES.ETH_TRANSFER],
           addresses: ["0x79D08e5Aa6b0E61F56A7FE2c6B8a8d3326589E6C"], // Replace with the actual address
           requiredAmount: parseEther("0.00042"), // Set the required amount, e.g., 0.1 ETH
+          startBlock: 182750867,
         },
       ],
       startTime: 1726423200 - EXTENSION_DURATION,
@@ -1265,6 +1396,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           types: [QUEST_TYPES.ETH_TRANSFER],
           addresses: ["0xf6c3De06D433D48bc984c1aF76Ae6871960396D3"], // Replace with the actual address
           requiredAmount: parseEther("0.00042"), // Set the required amount, e.g., 0.1 ETH
+          startBlock: 208817786,
         },
       ],
       startTime: 1725566400 - EXTENSION_DURATION,
@@ -1280,6 +1412,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               id: 2n,
             },
           },
+          startBlock: 240212237,
         },
       ],
       startTime: 1725480000 - EXTENSION_DURATION,
@@ -1291,6 +1424,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           types: [QUEST_TYPES.TOKENS_MINTED],
           addresses: [BOOGA_BEARS_ADDRESS],
           requiredAmount: 1n,
+          startBlock: 207361208,
         },
       ],
       startTime: 1725393600,
@@ -1306,6 +1440,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 240212237,
         },
       ],
       endTime: 1723917600,
@@ -1316,6 +1451,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           types: [QUEST_TYPES.TOKENS_MINTED],
           addresses: [BOOGA_BEARS_ADDRESS],
           requiredAmount: 1n,
+          startBlock:  207361208,
         },
       ],
     },
@@ -1331,6 +1467,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 125855095,
           revshareTracking: true,
           includeTransaction: true,
         },
@@ -1362,6 +1499,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 125752663,
         },
       ],
       endTime: 1727985600,
@@ -1376,6 +1514,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 124787109,
         },
       ],
       endTime: 1727640000,
@@ -1390,6 +1529,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
               from: zeroAddress,
             },
           },
+          startBlock: 120304360,
         },
       ],
     },
@@ -1406,6 +1546,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
             },
           },
           requiredAmount: 1n,
+          startBlock: 17506625,
         },
         {
           types: [QUEST_TYPES.ERC1155_MINT],
@@ -1416,6 +1557,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
             },
           },
           requiredAmount: 3n,
+          startBlock: 17506625,
         },
       ],
       endTime: 1722183600,
