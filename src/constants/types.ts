@@ -138,6 +138,7 @@ export enum QUESTS {
   HENLO_MIBERA = "Henlo, Mibera!",
   HENLO_WORLD = "Henlo, World!",
   HENLO_ELEMENTALS = "Henlo, Elementals!",
+  FOURTH_TRIAL_BEYOND_TRIFORCE = "The Fourth Trial: Beyond the Triforce",
 }
 
 export enum MISSIONS {

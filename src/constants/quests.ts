@@ -851,6 +851,21 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.FOURTH_TRIAL_BEYOND_TRIFORCE]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: ["0x2d71c82aaf1ff977a3a2b8a5698113bb9744133d"],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 24541408,
+        },
+      ],
+      endTime: 1736625600,
+    },
     [QUESTS.THIRD_TRIAL_POWER]: {
       steps: [
         {
