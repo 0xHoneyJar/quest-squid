@@ -851,20 +851,21 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
-    [QUESTS.FOURTH_TRIAL_BEYOND_TRIFORCE]: {
+    [QUESTS.CARNIVAL_AND_CHAOS]: {
       steps: [
         {
-          types: [QUEST_TYPES.ERC721_MINT],
-          addresses: ["0x2d71c82aaf1ff977a3a2b8a5698113bb9744133d"],
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: ["0x4c51768bed7cb3ae10a7a1f44729e2338c4104d1"],
           filterCriteria: {
-            [QUEST_TYPES.ERC721_MINT]: {
+            [QUEST_TYPES.ERC1155_MINT]: {
               from: zeroAddress,
             },
           },
-          startBlock: 24541408,
+          startBlock: 24868191,
         },
       ],
-      endTime: 1736625600,
+      startTime: 1736496000 - EXTENSION_DURATION,
+      endTime: 1736611800,
     },
     [QUESTS.THIRD_TRIAL_POWER]: {
       steps: [
