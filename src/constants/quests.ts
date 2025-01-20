@@ -1473,6 +1473,24 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.OPTIMISM]: {
+    [QUESTS.OPSEC_BERAS]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: ["0x10CdBa9842319211fdcda3358b0aa3a3B9Fd6249"],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 127316927,
+          revshareTracking: true,
+          includeTransaction: true,
+        },
+      ],
+      startTime: 1737201600,
+      endTime: 1738065600,
+    },
     [QUESTS.SHROOMIEZ_SEEK_HONEYCOMB]: {
       steps: [
         {
