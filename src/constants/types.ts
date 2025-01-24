@@ -44,6 +44,7 @@ import * as bgtStakingAbi from "../abi/BGTStaking";
 import * as rootsV2Abi from "../abi/rootsV2";
 import * as xmasBoxAbi from "../abi/xmasBox";
 import * as erc1155KizunaAbi from "../abi/erc1155Kizuna";
+import * as onftAbi from "../abi/onft";
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 
 export const EXTENSION_DURATION = 60 * 60 * 24 * 2;
@@ -141,6 +142,7 @@ export enum QUESTS {
   FOURTH_TRIAL_BEYOND_TRIFORCE = "The Fourth Trial: Beyond the Triforce",
   CARNIVAL_AND_CHAOS = "Carnival and chaos",
   OPSEC_BERAS = "OPSEC for Beras",
+  BRIDGING_BERAS = "Bridging Beras",
 }
 
 export enum MISSIONS {
@@ -202,7 +204,8 @@ export enum QUEST_TYPES {
   BGT_REWARD_PAID = "BGT_REWARD_PAID",
   BGT_REWARD_CLAIMED = "BGT_REWARD_CLAIMED",
   TROVE_UPDATED_V2 = "TROVE_UPDATED_V2",
-  XMAS_SRC_MINTED = "XMAS_SRC_MINTED"
+  XMAS_SRC_MINTED = "XMAS_SRC_MINTED",
+  ONFT_SENT = "ONFT_SENT",
 }
 
 export enum MISSION_TYPES {
@@ -446,6 +449,10 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.XMAS_SRC_MINTED]: {
     eventName: "XmasSRC_minted",
     abi: xmasBoxAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.ONFT_SENT]: {
+    eventName: "ONFTSent",
+    abi: onftAbi as AbiWithEvents,
   },
 } as const;
 

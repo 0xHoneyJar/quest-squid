@@ -624,6 +624,9 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         userAddress = decodedLog.recipient.toLowerCase();
         amount = decodedLog.quantity;
         break;
+      case QUEST_TYPES.ONFT_SENT:
+        userAddress = decodedLog.fromAddress.toLowerCase();
+        break;
       default:
         return { userAddress: null, amount: 0n };
     }
