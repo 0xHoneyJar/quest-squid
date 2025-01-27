@@ -143,6 +143,7 @@ export enum QUESTS {
   CARNIVAL_AND_CHAOS = "Carnival and chaos",
   OPSEC_BERAS = "OPSEC for Beras",
   BRIDGING_BERAS = "Bridging Beras",
+  SECRETS_OF_APDAO = "Secrets of Apiology DAO (Entry to the Organization)",
 }
 
 export enum MISSIONS {
@@ -454,6 +455,7 @@ export const QUEST_TYPE_INFO: Record<
     eventName: "ONFTSent",
     abi: onftAbi as AbiWithEvents,
   },
+  
 } as const;
 
 const MISSION_TYPE_INFO: Record<

@@ -872,6 +872,21 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.BASE]: {
+    [QUESTS.SECRETS_OF_APDAO]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: ["0xd4c25ba48fd3032078daad4fe0f349f9fbe7af8e"],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 25455225,
+        },
+      ],
+      endTime: 1739188800,
+    },
     [QUESTS.CARNIVAL_AND_CHAOS]: {
       steps: [
         {
