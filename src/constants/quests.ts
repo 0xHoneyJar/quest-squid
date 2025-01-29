@@ -97,27 +97,6 @@ import {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
-    [QUESTS.BRIDGING_BERAS]: {
-      steps: [
-        {
-          types: [QUEST_TYPES.ERC721_MINT],
-          addresses: ["0xE09Bf41Ec5F56bF269Fe32f61484748576156974"],
-          filterCriteria: {
-            [QUEST_TYPES.ERC721_MINT]: {
-              from: zeroAddress,
-            },
-          },
-          startBlock: 9609326,
-        },
-        {
-          types: [QUEST_TYPES.ONFT_SENT],
-          addresses: ["0xe3Fe899eDf19081088BbC164bCa8a7d6D1e60DcA"],
-          startBlock: 9609326,
-        },
-      ],
-      startTime: 1737748800,
-      endTime: 1738612800,
-    },
     [QUESTS.HENLO_WORLD]: {
       steps: [
         {
@@ -1324,6 +1303,27 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     },
   },
   [CHAINS.ARBITRUM]: {
+    [QUESTS.BRIDGING_BERAS]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: ["0xB188c257EED115Ff68dE568D56b376B10aB6f526"],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          startBlock: 300107447,
+        },
+        {
+          types: [QUEST_TYPES.ONFT_SENT],
+          addresses: ["0x9ea7E45a7c01a3B4d7af48fCEB81f6c916179aE0"],
+          startBlock: 300114627,
+        },
+      ],
+      startTime: 1738094400,
+      endTime: 1738958400,
+    },
     [QUESTS.INTERPOL_AGENT_ACADEMY]: {
       steps: [
         {
