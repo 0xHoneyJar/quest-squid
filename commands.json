@@ -110,6 +110,11 @@
       "cmd": ["node", "lib/bera/main.js"],
       "hidden": true
     },
+    "process:prod:berachain": {
+      "description": "Start the squid processor",
+      "cmd": ["node", "lib/berachain/main.js"],
+      "hidden": true
+    },
     "process:prod:op": {
       "description": "Start the squid processor",
       "cmd": ["node", "lib/op/main.js"],

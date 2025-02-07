@@ -2,17 +2,22 @@ import { parseEther, zeroAddress } from "viem";
 import {
   APICULTURE_ADDRESS,
   AQUABERA_ADDRESS,
+  BEARS_BRIDGE_ADDRESS,
   BEBOP_ADDRESS,
   BERABORROW_BORROWER_OPERATIONS_ADDRESS,
   BERABORROW_LIQUID_STABILITY_POOL_ADDRESS,
   BERACPOL_2_ADDRESS,
   BERAMONIUM_ADDRESS,
   BGT_ADDRESS,
+  BGT_STAKING_ADDRESS,
+  BHONEY_ADDRESS,
   BOARDING_PASS_ADDRESS,
   BOOGA_BEARS_ADDRESS,
   BOOGA_BEARS_TESTNET_ADDRESS,
+  BORROWER_OPERATIONS_ADDRESS,
   BROWN_HOLE_ADDRESS,
   BRUUVVPRINT_ADDRESS,
+  BULLA_BULLSHIT_ADDRESS,
   BULLAS_ADDRESS,
   BV_ADDRESS,
   DIRAC_USDC_ADDRESS,
@@ -20,13 +25,17 @@ import {
   ELEMENTAL_JANI_ADDRESS,
   FABLE_BERAS_ADDRESS,
   GOLDILOCKS_ADDRESS,
+  GOLDILOCKS_MAINNET_ADDRESS,
   GOLDISWAP_ADDRESS,
+  GOLDISWAP_MAINNET_ADDRESS,
   HENLO_CULT_ADDRESS,
   HENLO_CULT_DASHBOARD_ADDRESS,
   HONEY_ADDRESS,
   HONEY_FLIP_ADDRESS,
   HONEY_JAR_GEN_4_ADDRESS,
   HONEY_SITE_ADDRESS,
+  HONEY_USDC_LP_ADDRESS,
+  HONEY_WBERA_LP_ADDRESS,
   HONEY_WBERA_REWARDS_VAULT_ADDRESS,
   HONEY_ZERU_LP_ADDRESS,
   HONEY_ZERU_REWARDS_VAULT_ADDRESS,
@@ -40,9 +49,10 @@ import {
   JANI_ADDRESS,
   JOKERACE_GOVERNOR_ADDRESS,
   JUNKY_SLOTS_ADDRESS,
-  JUNKY_URSAS_TOKEN_ADDRESS,
+  KIZUNA_ADDRESS,
   KODIAK_NECT_HONEY_POOL,
   KODIAK_POOL_ADDRESS,
+  KODIAK_ROUTER_ADDRESS,
   LEFT_CURVE_ADDRESS,
   LV_ADDRESS,
   MEMESWAP_JANI_ADDRESS,
@@ -61,6 +71,7 @@ import {
   THJ_VALIDATOR_ADDRESS,
   URSA_ROLL_ADDRESS,
   URSA_VAULT_ADDRESS,
+  URSAROLL2_ADDRESS,
   VAULT_MANAGER_ADDRESS,
   WAGMI_BELAND_ADDRESS,
   WAGMI_BULLAS_ADDRESS,
@@ -71,20 +82,11 @@ import {
   WAGMIBERA_ADDRESS,
   WBERA_ADDRESS,
   WEBERA_ADDRESS,
+  XMAS_BOX_ADDRESS,
   YEET_BOND_ADDRESS,
   ZERU_LENDING_POOL,
   ZERU_STRATEGIES_CONTROLLER,
   ZORB_ADDRESS,
-  MEAD_TOKEN_ADDRESS,
-  BORROWER_OPERATIONS_ADDRESS,
-  BGT_STAKING_ADDRESS,
-  HONEY_USDC_LP_ADDRESS,
-  HONEY_WBERA_LP_ADDRESS,
-  BHONEY_ADDRESS,
-  URSAROLL2_ADDRESS,
-  BULLA_BULLSHIT_ADDRESS,
-  XMAS_BOX_ADDRESS,
-  KIZUNA_ADDRESS,
 } from "./address";
 import {
   CHAINS,
@@ -97,6 +99,58 @@ import {
 
 export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
   [CHAINS.BERACHAIN]: {
+    [QUESTS.KODIAK_ENJOYOOOR]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ETH_TRANSFER],
+          addresses: [KODIAK_ROUTER_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ETH_TRANSFER]: {
+              from: zeroAddress,
+            },
+          },
+          requiredAmount: 0n,
+          includeTransaction: true,
+          startBlock: 822739,
+        },
+      ],
+      startTime: 1738353600,
+      endTime: 1739204400,
+    },
+    [QUESTS.STIR_THE_POT]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.GOLDILOCKS_BUY],
+          addresses: [GOLDISWAP_MAINNET_ADDRESS],
+          startBlock: 822739,
+        },
+        {
+          types: [QUEST_TYPES.GOLDILOCKS_STAKE],
+          addresses: [GOLDILOCKS_MAINNET_ADDRESS],
+          startBlock: 822739,
+        },
+      ],
+      startTime: 1738353600,
+      endTime: 1740772800,
+    },
+    [QUESTS.THE_BERAS_ENTER_BERACHAIN]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: [BEARS_BRIDGE_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+          stepNumber: 5,
+        },
+      ],
+      startTime: 1738353600,
+      endTime: 1740772800,
+    },
+  },
+  [CHAINS.BERACHAIN_TESTNET]: {
     [QUESTS.HENLO_WORLD]: {
       steps: [
         {
@@ -916,7 +970,10 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
       steps: [
         {
           types: [QUEST_TYPES.ERC721_MINT],
-          addresses: ["0x5B14A5C38B82986be47F093B96b2022e9308eaDc", "0xacb72A6617F04Bd7DC9f3BDF4179C92e1bc0b8fE"],
+          addresses: [
+            "0x5B14A5C38B82986be47F093B96b2022e9308eaDc",
+            "0xacb72A6617F04Bd7DC9f3BDF4179C92e1bc0b8fE",
+          ],
           filterCriteria: {
             [QUEST_TYPES.ERC721_MINT]: {
               from: zeroAddress,
@@ -931,7 +988,11 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
       steps: [
         {
           types: [QUEST_TYPES.ERC721_MINT],
-          addresses: [ "0x9C94E5831654F987406ABe71301b6dDabD11b339", "0x26e2373018DaE2A4Eca1b228D00831e68D98872B", "0xADE6d3d77350343B87140A018AE78AA3fbFD49cD"],
+          addresses: [
+            "0x9C94E5831654F987406ABe71301b6dDabD11b339",
+            "0x26e2373018DaE2A4Eca1b228D00831e68D98872B",
+            "0xADE6d3d77350343B87140A018AE78AA3fbFD49cD",
+          ],
           filterCriteria: {
             [QUEST_TYPES.ERC721_MINT]: {
               from: zeroAddress,
@@ -1503,7 +1564,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           types: [QUEST_TYPES.TOKENS_MINTED],
           addresses: [BOOGA_BEARS_ADDRESS],
           requiredAmount: 1n,
-          startBlock:  207361208,
+          startBlock: 207361208,
         },
       ],
     },
@@ -1666,7 +1727,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
 } as const;
 
 export const MISSIONS_CONFIG: Record<string, Record<string, MissionConfig>> = {
-  [CHAINS.BERACHAIN]: {},
+  [CHAINS.BERACHAIN_TESTNET]: {},
 };
 
 export const BLOCK_RANGES = {
@@ -1680,6 +1741,9 @@ export const BLOCK_RANGES = {
     from: 201662549,
   },
   [CHAINS.BERACHAIN]: {
+    from: 0,
+  },
+  [CHAINS.BERACHAIN_TESTNET]: {
     from: 607983,
   },
   [CHAINS.OPTIMISM]: {
@@ -1693,7 +1757,8 @@ export const BLOCK_RANGES = {
 export const RPC_ENDPOINTS = {
   [CHAINS.BASE]: process.env.RPC_BASE_HTTP,
   [CHAINS.ARBITRUM]: process.env.RPC_ARBITRUM_ONE_HTTP,
-  [CHAINS.BERACHAIN]: process.env.RPC_BERA_HTTP,
+  [CHAINS.BERACHAIN_TESTNET]: process.env.RPC_BERACHAIN_TESTNET_HTTP,
+  [CHAINS.BERACHAIN]: process.env.RPC_BERACHAIN_HTTP,
   [CHAINS.OPTIMISM]: process.env.RPC_OPTIMISM_HTTP,
   [CHAINS.ZORA]: process.env.RPC_ZORA_HTTP,
   [CHAINS.ETHEREUM]: process.env.RPC_ETH_HTTP,
@@ -1704,14 +1769,16 @@ export const ARCHIVE_GATEWAYS = {
   [CHAINS.ARBITRUM]: "https://v2.archive.subsquid.io/network/arbitrum-one",
   [CHAINS.OPTIMISM]: "https://v2.archive.subsquid.io/network/optimism-mainnet",
   [CHAINS.ZORA]: "https://v2.archive.subsquid.io/network/zora-mainnet",
-  [CHAINS.BERACHAIN]: "https://v2.archive.subsquid.io/network/berachain-bartio",
+  [CHAINS.BERACHAIN_TESTNET]:
+    "https://v2.archive.subsquid.io/network/berachain-bartio",
   [CHAINS.ETHEREUM]: "https://v2.archive.subsquid.io/network/ethereum-mainnet",
 } as const;
 
 export const PORTAL_URLS = {
   [CHAINS.BASE]: process.env.BASE_PORTAL_URL,
   [CHAINS.ARBITRUM]: process.env.ARB_PORTAL_URL,
-  [CHAINS.BERACHAIN]: process.env.BERA_PORTAL_URL,
+  [CHAINS.BERACHAIN_TESTNET]: process.env.BERA_PORTAL_URL,
+  [CHAINS.BERACHAIN]: process.env.BERACHAIN_PORTAL_URL,
   [CHAINS.OPTIMISM]: process.env.OP_PORTAL_URL,
   [CHAINS.ZORA]: process.env.ZORA_PORTAL_URL,
   [CHAINS.ETHEREUM]: process.env.ETH_PORTAL_URL,

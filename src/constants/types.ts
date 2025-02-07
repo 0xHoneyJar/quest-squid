@@ -4,10 +4,13 @@ import * as beraborrowBorrowerOperationsAbi from "../abi/beraborrowBorrowerOpera
 import * as beramoniumAbi from "../abi/beramoniumGemhunters";
 import * as beraborrowLiquidStabilityPoolAbi from "../abi/berraborrowLiquidStabilityPoolAbi";
 import * as bgtAbi from "../abi/bgt";
+import * as bgtStakingAbi from "../abi/BGTStaking";
 import * as boogaBearsAbi from "../abi/boogaBears";
+import * as borrowerOperationsAbi from "../abi/BorrowerOperations";
 import * as bvaultAbi from "../abi/bvault";
 import * as diracVaultAbi from "../abi/diracVault";
 import * as erc1155Abi from "../abi/erc1155";
+import * as erc1155KizunaAbi from "../abi/erc1155Kizuna";
 import * as erc20Abi from "../abi/erc20";
 import * as erc721Abi from "../abi/erc721";
 import * as ftoPairAbi from "../abi/ftoPair";
@@ -21,8 +24,10 @@ import * as junkySlotsAbi from "../abi/junkySlots";
 import * as lendingPoolAbi from "../abi/lendingPool";
 import * as lvaultAbi from "../abi/lvault";
 import * as memeswapDeployerAbi from "../abi/memeswapDeployer";
+import * as onftAbi from "../abi/onft";
 import * as pretzelBridgeAbi from "../abi/pretzelBridge";
 import * as rewardsVaultAbi from "../abi/rewardsVault";
+import * as rootsV2Abi from "../abi/rootsV2";
 import * as smileeFinancePositionManagerAbi from "../abi/smileeFinanceAbiPositionManager";
 import * as smileeFinanceFaucetAbi from "../abi/smileeFinanceFaucetAbi";
 import * as spookyAbi from "../abi/spooky";
@@ -30,21 +35,16 @@ import * as stationXFactoryAbi from "../abi/stationXFactory";
 import * as strategiesControllerAbi from "../abi/strategiesController";
 import * as simplifiedUniswapAbi from "../abi/uniswap";
 import * as uniswapAbi from "../abi/uniswap";
+import * as uniswapV3PoolAbi from "../abi/uniswapV3pool";
 import * as ursaRollAbi from "../abi/ursaRoll";
 import * as ursaRoll2Abi from "../abi/ursaroll2";
 import * as ursaVaultAbi from "../abi/ursaVault";
 import * as vaultManagerAbi from "../abi/vaultManager";
 import * as vaultRouterAbi from "../abi/vaultRouter";
 import * as wagmiAbi from "../abi/wagmibera";
+import * as xmasBoxAbi from "../abi/xmasBox";
 import * as yeetBondAbi from "../abi/yeetBond";
 import * as yeetStakeAbi from "../abi/yeetStake";
-import * as uniswapV3PoolAbi from "../abi/uniswapV3pool";
-import * as borrowerOperationsAbi from "../abi/BorrowerOperations";
-import * as bgtStakingAbi from "../abi/BGTStaking";
-import * as rootsV2Abi from "../abi/rootsV2";
-import * as xmasBoxAbi from "../abi/xmasBox";
-import * as erc1155KizunaAbi from "../abi/erc1155Kizuna";
-import * as onftAbi from "../abi/onft";
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 
 export const EXTENSION_DURATION = 60 * 60 * 24 * 2;
@@ -53,9 +53,10 @@ export enum CHAINS {
   BASE = "base",
   ARBITRUM = "arbitrum",
   OPTIMISM = "optimism",
-  BERACHAIN = "berachain",
+  BERACHAIN_TESTNET = "berachain-testnet",
   ZORA = "zora",
   ETHEREUM = "ethereum",
+  BERACHAIN = "berachain",
 }
 
 export enum QUESTS {
@@ -144,6 +145,9 @@ export enum QUESTS {
   OPSEC_BERAS = "OPSEC for Beras",
   BRIDGING_BERAS = "Bridging Beras",
   SECRETS_OF_APDAO = "Secrets of Apiology DAO (Entry to the Organization)",
+  KODIAK_ENJOYOOOR = "Kodiak Enjoyooor",
+  STIR_THE_POT = "Stir the Pot",
+  THE_BERAS_ENTER_BERACHAIN = "The Beras Enter Berachain",
 }
 
 export enum MISSIONS {
@@ -455,7 +459,6 @@ export const QUEST_TYPE_INFO: Record<
     eventName: "ONFTSent",
     abi: onftAbi as AbiWithEvents,
   },
-  
 } as const;
 
 const MISSION_TYPE_INFO: Record<
