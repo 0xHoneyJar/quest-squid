@@ -26,34 +26,34 @@ deploy:
       - eth.http
 
   processor:
-    - name: berachain-testnet-processor
-      cmd:
-        - sqd
-        - process:prod:bera
     - name: berachain-processor
       cmd:
         - sqd
         - process:prod:berachain
-    - name: arb-processor
-      cmd:
-        - sqd
-        - process:prod:arb
-    - name: optimism-processor
-      cmd:
-        - sqd
-        - process:prod:op
-    - name: base-processor
-      cmd:
-        - sqd
-        - process:prod:base
-    - name: zora-processor
-      cmd:
-        - sqd
-        - process:prod:zora
-    - name: eth-processor
-      cmd:
-        - sqd
-        - process:prod:eth
+    # - name: berachain-testnet-processor
+    #   cmd:
+    #     - sqd
+    #     - process:prod:bera
+    # - name: arb-processor
+    #   cmd:
+    #     - sqd
+    #     - process:prod:arb
+    # - name: optimism-processor
+    #   cmd:
+    #     - sqd
+    #     - process:prod:op
+    # - name: base-processor
+    #   cmd:
+    #     - sqd
+    #     - process:prod:base
+    # - name: zora-processor
+    #   cmd:
+    #     - sqd
+    #     - process:prod:zora
+    # - name: eth-processor
+    #   cmd:
+    #     - sqd
+    #     - process:prod:eth
   api:
     cmd:
       - sqd

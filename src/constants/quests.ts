@@ -2,7 +2,8 @@ import { parseEther, zeroAddress } from "viem";
 import {
   APICULTURE_ADDRESS,
   AQUABERA_ADDRESS,
-  BEARS_BRIDGE_ADDRESS,
+  BABY_BEARS_ADDRESS,
+  BAND_BEARS_ADDRESS,
   BEBOP_ADDRESS,
   BERABORROW_BORROWER_OPERATIONS_ADDRESS,
   BERABORROW_LIQUID_STABILITY_POOL_ADDRESS,
@@ -11,7 +12,11 @@ import {
   BGT_ADDRESS,
   BGT_STAKING_ADDRESS,
   BHONEY_ADDRESS,
+  BIT_BEARS_ADDRESS,
   BOARDING_PASS_ADDRESS,
+  BOND_BEARS_ADDRESS,
+  BONG_BEARS_ADDRESS,
+  BOO_BEARS_ADDRESS,
   BOOGA_BEARS_ADDRESS,
   BOOGA_BEARS_TESTNET_ADDRESS,
   BORROWER_OPERATIONS_ADDRESS,
@@ -122,12 +127,10 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         {
           types: [QUEST_TYPES.GOLDILOCKS_BUY],
           addresses: [GOLDISWAP_MAINNET_ADDRESS],
-          startBlock: 822739,
         },
         {
           types: [QUEST_TYPES.GOLDILOCKS_STAKE],
           addresses: [GOLDILOCKS_MAINNET_ADDRESS],
-          startBlock: 822739,
         },
       ],
       startTime: 1738353600,
@@ -137,7 +140,14 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
       steps: [
         {
           types: [QUEST_TYPES.ERC721_MINT],
-          addresses: [BEARS_BRIDGE_ADDRESS],
+          addresses: [
+            BIT_BEARS_ADDRESS,
+            BABY_BEARS_ADDRESS,
+            BAND_BEARS_ADDRESS,
+            BOND_BEARS_ADDRESS,
+            BONG_BEARS_ADDRESS,
+            BOO_BEARS_ADDRESS,
+          ],
           filterCriteria: {
             [QUEST_TYPES.ERC721_MINT]: {
               from: zeroAddress,
@@ -1741,7 +1751,7 @@ export const BLOCK_RANGES = {
     from: 201662549,
   },
   [CHAINS.BERACHAIN]: {
-    from: 0,
+    from: 800000,
   },
   [CHAINS.BERACHAIN_TESTNET]: {
     from: 607983,
@@ -1771,8 +1781,6 @@ export const ARCHIVE_GATEWAYS = {
   [CHAINS.ZORA]: "https://v2.archive.subsquid.io/network/zora-mainnet",
   [CHAINS.BERACHAIN_TESTNET]:
     "https://v2.archive.subsquid.io/network/berachain-bartio",
-  [CHAINS.BERACHAIN]:
-    "https://v2.archive.subsquid.io/network/berachain-mainnet",
   [CHAINS.ETHEREUM]: "https://v2.archive.subsquid.io/network/ethereum-mainnet",
 } as const;
 
