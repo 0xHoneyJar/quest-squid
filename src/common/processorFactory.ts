@@ -9,10 +9,10 @@ import {
 } from "@subsquid/evm-processor";
 import { assertNotNull } from "@subsquid/util-internal";
 import {
+  ARCHIVE_GATEWAYS,
   BLOCK_RANGES,
-  PORTAL_URLS,
   QUESTS_CONFIG,
-  RPC_ENDPOINTS
+  RPC_ENDPOINTS,
 } from "../constants/quests";
 import { CHAINS, QUEST_TYPE_INFO, QUEST_TYPES } from "../constants/types";
 
@@ -88,14 +88,18 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
             ? questTypeInfo.eventName
             : [questTypeInfo.eventName];
 
-          const topics = eventNames.map(
-            (eventName) => questTypeInfo.abi.events[eventName].topic.toLowerCase()
+          const topics = eventNames.map((eventName) =>
+            questTypeInfo.abi.events[eventName].topic.toLowerCase()
           );
 
           initialRequests.push({
             topic0: topics,
-            topic1: questTypeInfo.topic1 ? formatAddressTopic(questTypeInfo.topic1) : undefined,
-            topic2: questTypeInfo.topic2 ? formatAddressTopic(questTypeInfo.topic2) : undefined,
+            topic1: questTypeInfo.topic1
+              ? formatAddressTopic(questTypeInfo.topic1)
+              : undefined,
+            topic2: questTypeInfo.topic2
+              ? formatAddressTopic(questTypeInfo.topic2)
+              : undefined,
             addresses: [lowerCaseAddress],
             includeTransaction: !!step.includeTransaction,
             includeTransactionLogs: !!step.includeTransactionLogs,
@@ -130,7 +134,10 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
         if (existing.range?.from === undefined) {
           existing.range = { from: request.range.from };
         } else {
-          existing.range.from = Math.min(existing.range.from, request.range.from);
+          existing.range.from = Math.min(
+            existing.range.from,
+            request.range.from
+          );
         }
       }
     } else {
@@ -145,7 +152,7 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
       includeTransaction: request.includeTransaction,
       includeTransactionLogs: request.includeTransactionLogs,
     });
-    
+
     if (!flagGroups.has(key)) {
       flagGroups.set(key, []);
     }
@@ -156,22 +163,27 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
   for (const [_, group] of flagGroups) {
     const addressTopicMap = new Map<string, Set<string>>();
     const addressRangeMap = new Map<string, number>();
-    
+
     // Build address to topic mapping and track start blocks
     for (const request of group) {
       for (const addr of request.addresses) {
         if (!addressTopicMap.has(addr)) {
           addressTopicMap.set(addr, new Set());
         }
-        request.topic0.forEach(topic => addressTopicMap.get(addr)!.add(topic));
-        
+        request.topic0.forEach((topic) =>
+          addressTopicMap.get(addr)!.add(topic)
+        );
+
         // Track the earliest start block for each address
         if (request.range?.from !== undefined) {
           const currentEarliest = addressRangeMap.get(addr);
           if (currentEarliest === undefined) {
             addressRangeMap.set(addr, request.range.from);
           } else {
-            addressRangeMap.set(addr, Math.min(currentEarliest, request.range.from));
+            addressRangeMap.set(
+              addr,
+              Math.min(currentEarliest, request.range.from)
+            );
           }
         }
       }
@@ -180,7 +192,7 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
     // Find addresses that have unique topic sets
     const topicToAddresses = new Map<string, string[]>();
     for (const [addr, topics] of addressTopicMap) {
-      const topicKey = Array.from(topics).sort().join(',');
+      const topicKey = Array.from(topics).sort().join(",");
       if (!topicToAddresses.has(topicKey)) {
         topicToAddresses.set(topicKey, []);
       }
@@ -194,10 +206,11 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
     // First, handle unique topic sets
     for (const [topicKey, addresses] of topicToAddresses) {
       if (addresses.length > 1) {
-        const topics = topicKey.split(',');
-        const firstRequest = group.find(r => 
-          r.addresses.includes(addresses[0]) && 
-          r.topic0.some(t => topics.includes(t))
+        const topics = topicKey.split(",");
+        const firstRequest = group.find(
+          (r) =>
+            r.addresses.includes(addresses[0]) &&
+            r.topic0.some((t) => topics.includes(t))
         )!;
 
         // Find earliest start block among all addresses being combined
@@ -205,7 +218,10 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
         for (const addr of addresses) {
           const blockNum = addressRangeMap.get(addr);
           if (blockNum !== undefined) {
-            earliestBlock = earliestBlock === undefined ? blockNum : Math.min(earliestBlock, blockNum);
+            earliestBlock =
+              earliestBlock === undefined
+                ? blockNum
+                : Math.min(earliestBlock, blockNum);
           }
         }
 
@@ -213,29 +229,36 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
           ...firstRequest,
           topic0: topics,
           addresses,
-          range: earliestBlock !== undefined ? { from: earliestBlock } : undefined,
+          range:
+            earliestBlock !== undefined ? { from: earliestBlock } : undefined,
         });
-        addresses.forEach(addr => processedAddresses.add(addr));
+        addresses.forEach((addr) => processedAddresses.add(addr));
       }
     }
 
     // Add remaining requests that couldn't be consolidated
     for (const request of group) {
-      const remainingAddresses = request.addresses.filter(addr => !processedAddresses.has(addr));
+      const remainingAddresses = request.addresses.filter(
+        (addr) => !processedAddresses.has(addr)
+      );
       if (remainingAddresses.length > 0) {
         // Find earliest start block for remaining addresses
         let earliestBlock: number | undefined;
         for (const addr of remainingAddresses) {
           const blockNum = addressRangeMap.get(addr);
           if (blockNum !== undefined) {
-            earliestBlock = earliestBlock === undefined ? blockNum : Math.min(earliestBlock, blockNum);
+            earliestBlock =
+              earliestBlock === undefined
+                ? blockNum
+                : Math.min(earliestBlock, blockNum);
           }
         }
 
         consolidatedRequests.push({
           ...request,
           addresses: remainingAddresses,
-          range: earliestBlock !== undefined ? { from: earliestBlock } : undefined,
+          range:
+            earliestBlock !== undefined ? { from: earliestBlock } : undefined,
         });
       }
     }
@@ -243,14 +266,21 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
     logRequests.push(...consolidatedRequests);
   }
 
-  const processor = new EvmBatchProcessor()
-    // TODO: Uncomment this and remove setGateway to switch to portals
-    // .setPortal(assertNotNull(
-    //   PORTAL_URLS[chain],
-    //   `Required env variable ${PORTAL_URLS[chain]} is missing`
-    // ))
-    // .setGateway(ARCHIVE_GATEWAYS[chain])
+  const processor = new EvmBatchProcessor();
+  // TODO: Uncomment this and remove setGateway to switch to portals
+  // .setPortal(assertNotNull(
+  //   PORTAL_URLS[chain],
+  //   `Required env variable ${PORTAL_URLS[chain]} is missing`
+  // ))
 
+  const gateway = ARCHIVE_GATEWAYS[chain as keyof typeof ARCHIVE_GATEWAYS];
+  if (gateway) {
+    processor.setGateway(
+      assertNotNull(gateway, `No archive gateway for chain ${chain}`)
+    );
+  }
+
+  processor
     .setRpcEndpoint({
       url: assertNotNull(RPC_ENDPOINTS[chain], "No RPC endpoint supplied"),
     })
@@ -263,7 +293,7 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
         callValue: true,
         callFrom: true,
         callTo: true,
-        transactionHash: true
+        transactionHash: true,
       },
     })
     .setBlockRange({ from: startBlock as number });

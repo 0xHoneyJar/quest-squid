@@ -16,6 +16,7 @@ deploy:
     # RPC endpoints
     RPC_ZORA_HTTP: ${{ secrets.RPC_ZORA_HTTP }}
     RPC_BERACHAIN_TESTNET_HTTP: ${{ secrets.RPC_BERACHAIN_TESTNET_HTTP }}
+    RPC_BERACHAIN_HTTP: ${{ secrets.RPC_BERACHAIN_HTTP }}
   addons:
     postgres:
     rpc:
@@ -25,10 +26,14 @@ deploy:
       - eth.http
 
   processor:
-    - name: berachain-processor
+    - name: berachain-testnet-processor
       cmd:
         - sqd
         - process:prod:bera
+    - name: berachain-processor
+      cmd:
+        - sqd
+        - process:prod:berachain
     - name: arb-processor
       cmd:
         - sqd

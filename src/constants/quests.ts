@@ -1771,6 +1771,8 @@ export const ARCHIVE_GATEWAYS = {
   [CHAINS.ZORA]: "https://v2.archive.subsquid.io/network/zora-mainnet",
   [CHAINS.BERACHAIN_TESTNET]:
     "https://v2.archive.subsquid.io/network/berachain-bartio",
+  [CHAINS.BERACHAIN]:
+    "https://v2.archive.subsquid.io/network/berachain-mainnet",
   [CHAINS.ETHEREUM]: "https://v2.archive.subsquid.io/network/ethereum-mainnet",
 } as const;
 
