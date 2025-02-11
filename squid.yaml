@@ -1,6 +1,6 @@
 manifestVersion: subsquid.io/v0.1
 name: quest-squid
-version: 159
+version: 160
 description: A squid that indexes quest events for Cub Scouts
 build:
 deploy:
@@ -30,30 +30,30 @@ deploy:
       cmd:
         - sqd
         - process:prod:berachain
-    # - name: berachain-testnet-processor
-    #   cmd:
-    #     - sqd
-    #     - process:prod:bera
-    # - name: arb-processor
-    #   cmd:
-    #     - sqd
-    #     - process:prod:arb
-    # - name: optimism-processor
-    #   cmd:
-    #     - sqd
-    #     - process:prod:op
-    # - name: base-processor
-    #   cmd:
-    #     - sqd
-    #     - process:prod:base
-    # - name: zora-processor
-    #   cmd:
-    #     - sqd
-    #     - process:prod:zora
-    # - name: eth-processor
-    #   cmd:
-    #     - sqd
-    #     - process:prod:eth
+    - name: berachain-testnet-processor
+      cmd:
+        - sqd
+        - process:prod:bera
+    - name: arb-processor
+      cmd:
+        - sqd
+        - process:prod:arb
+    - name: optimism-processor
+      cmd:
+        - sqd
+        - process:prod:op
+    - name: base-processor
+      cmd:
+        - sqd
+        - process:prod:base
+    - name: zora-processor
+      cmd:
+        - sqd
+        - process:prod:zora
+    - name: eth-processor
+      cmd:
+        - sqd
+        - process:prod:eth
   api:
     cmd:
       - sqd
@@ -65,4 +65,4 @@ scale:
   addons:
     postgres:
       profile: medium
-      storage: 15G
+      storage: 20G

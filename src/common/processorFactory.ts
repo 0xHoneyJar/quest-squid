@@ -9,7 +9,6 @@ import {
 } from "@subsquid/evm-processor";
 import { assertNotNull } from "@subsquid/util-internal";
 import {
-  ARCHIVE_GATEWAYS,
   BLOCK_RANGES,
   QUESTS_CONFIG,
   RPC_ENDPOINTS,
@@ -266,21 +265,8 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
     logRequests.push(...consolidatedRequests);
   }
 
-  const processor = new EvmBatchProcessor();
-  // TODO: Uncomment this and remove setGateway to switch to portals
-  // .setPortal(assertNotNull(
-  //   PORTAL_URLS[chain],
-  //   `Required env variable ${PORTAL_URLS[chain]} is missing`
-  // ))
+  const processor = new EvmBatchProcessor()
 
-  const gateway = ARCHIVE_GATEWAYS[chain as keyof typeof ARCHIVE_GATEWAYS];
-  if (gateway) {
-    processor.setGateway(
-      assertNotNull(gateway, `No archive gateway for chain ${chain}`)
-    );
-  }
-
-  processor
     .setRpcEndpoint({
       url: assertNotNull(RPC_ENDPOINTS[chain], "No RPC endpoint supplied"),
     })

@@ -202,7 +202,9 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
                 (trace as any).action.from,
                 "ETH_Transfer",
                 QUEST_TYPES.ETH_TRANSFER,
-                matchingStep.revshareTracking ? trace.transaction?.hash : undefined
+                matchingStep.revshareTracking
+                  ? trace.transaction?.hash
+                  : undefined
               );
             }
           }
@@ -626,6 +628,12 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         break;
       case QUEST_TYPES.ONFT_SENT:
         userAddress = decodedLog.fromAddress.toLowerCase();
+        break;
+      case QUEST_TYPES.GOLDILOCKS_MAINNET_BUY:
+        userAddress = decodedLog.user.toLowerCase();
+        break;
+      case QUEST_TYPES.GOLDILOCKS_MAINNET_STAKE:
+        userAddress = decodedLog.from.toLowerCase();
         break;
       default:
         return { userAddress: null, amount: 0n };

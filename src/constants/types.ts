@@ -45,6 +45,7 @@ import * as wagmiAbi from "../abi/wagmibera";
 import * as xmasBoxAbi from "../abi/xmasBox";
 import * as yeetBondAbi from "../abi/yeetBond";
 import * as yeetStakeAbi from "../abi/yeetStake";
+import * as customAbi from "../abi/custom";
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 
 export const EXTENSION_DURATION = 60 * 60 * 24 * 2;
@@ -180,6 +181,8 @@ export enum QUEST_TYPES {
   GOVERNOR_PROPOSE = "GOVERNOR_PROPOSE",
   GOLDILOCKS_STAKE = "GOLDILOCKS_STAKE",
   GOLDILOCKS_BUY = "GOLDILOCKS_BUY",
+  GOLDILOCKS_MAINNET_STAKE = "GOLDILOCKS_MAINNET_STAKE",
+  GOLDILOCKS_MAINNET_BUY = "GOLDILOCKS_MAINNET_BUY",  
   AQUABERA_DEPOSIT = "AQUABERA_DEPOSIT",
   SPOOKY_MINTED = "SPOOKY_MINTED",
   PRETZEL_BRIDGE = "PRETZEL_BRIDGE",
@@ -458,6 +461,14 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.ONFT_SENT]: {
     eventName: "ONFTSent",
     abi: onftAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.GOLDILOCKS_MAINNET_STAKE]: {
+    eventName: "Stake",
+    abi: customAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.GOLDILOCKS_MAINNET_BUY]: {
+    eventName: "Buy",
+    abi: customAbi as AbiWithEvents,
   },
 } as const;
 
