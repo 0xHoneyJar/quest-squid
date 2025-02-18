@@ -635,6 +635,12 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       case QUEST_TYPES.GOLDILOCKS_MAINNET_STAKE:
         userAddress = decodedLog.from.toLowerCase();
         break;
+      case QUEST_TYPES.BERO_TOKEN_BUY:
+        userAddress = decodedLog.to.toLowerCase();
+        break;
+      case QUEST_TYPES.YEET_STAKE_V2:
+        userAddress = decodedLog.addr.toLowerCase();
+        break;
       default:
         return { userAddress: null, amount: 0n };
     }

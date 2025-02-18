@@ -9,6 +9,7 @@ import {
 } from "@subsquid/evm-processor";
 import { assertNotNull } from "@subsquid/util-internal";
 import {
+  ARCHIVE_GATEWAYS,
   BLOCK_RANGES,
   QUESTS_CONFIG,
   RPC_ENDPOINTS,
@@ -266,7 +267,9 @@ export function createProcessor(chain: CHAINS, quests?: string[]) {
   }
 
   const processor = new EvmBatchProcessor()
-
+    .setGateway(
+      assertNotNull(ARCHIVE_GATEWAYS[chain], "No archive gateway supplied")
+    )
     .setRpcEndpoint({
       url: assertNotNull(RPC_ENDPOINTS[chain], "No RPC endpoint supplied"),
     })

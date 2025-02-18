@@ -23,7 +23,7 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "address", 
+        "internalType": "address",
         "name": "from",
         "type": "address"
       },
@@ -35,6 +35,31 @@
       }
     ],
     "name": "Stake",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "TOKEN__Buy",
     "type": "event"
   }
 ]

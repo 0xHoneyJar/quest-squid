@@ -8,6 +8,7 @@ import * as bgtStakingAbi from "../abi/BGTStaking";
 import * as boogaBearsAbi from "../abi/boogaBears";
 import * as borrowerOperationsAbi from "../abi/BorrowerOperations";
 import * as bvaultAbi from "../abi/bvault";
+import * as customAbi from "../abi/custom";
 import * as diracVaultAbi from "../abi/diracVault";
 import * as erc1155Abi from "../abi/erc1155";
 import * as erc1155KizunaAbi from "../abi/erc1155Kizuna";
@@ -45,7 +46,7 @@ import * as wagmiAbi from "../abi/wagmibera";
 import * as xmasBoxAbi from "../abi/xmasBox";
 import * as yeetBondAbi from "../abi/yeetBond";
 import * as yeetStakeAbi from "../abi/yeetStake";
-import * as customAbi from "../abi/custom";
+import * as stakeV2Abi from "../abi/stakeV2";
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 
 export const EXTENSION_DURATION = 60 * 60 * 24 * 2;
@@ -149,6 +150,11 @@ export enum QUESTS {
   KODIAK_ENJOYOOOR = "Kodiak Enjoyooor",
   STIR_THE_POT = "Stir the Pot",
   THE_BERAS_ENTER_BERACHAIN = "The Beras Enter Berachain",
+  THE_GREAT_MIGRATION = "The Great Migration",
+  BERAKIN_BREAKOUT = "Berakin Breakout!",
+  TALES_OF_HONEY = "Tales of Honey, Perks and DAOs  - A Honeycomb Story",
+  LAWSUIT_LIFESTYLE = "Lawsuit Lifestyle",
+  YEET_IT = "Yeet It!",
 }
 
 export enum MISSIONS {
@@ -182,7 +188,7 @@ export enum QUEST_TYPES {
   GOLDILOCKS_STAKE = "GOLDILOCKS_STAKE",
   GOLDILOCKS_BUY = "GOLDILOCKS_BUY",
   GOLDILOCKS_MAINNET_STAKE = "GOLDILOCKS_MAINNET_STAKE",
-  GOLDILOCKS_MAINNET_BUY = "GOLDILOCKS_MAINNET_BUY",  
+  GOLDILOCKS_MAINNET_BUY = "GOLDILOCKS_MAINNET_BUY",
   AQUABERA_DEPOSIT = "AQUABERA_DEPOSIT",
   SPOOKY_MINTED = "SPOOKY_MINTED",
   PRETZEL_BRIDGE = "PRETZEL_BRIDGE",
@@ -214,6 +220,8 @@ export enum QUEST_TYPES {
   TROVE_UPDATED_V2 = "TROVE_UPDATED_V2",
   XMAS_SRC_MINTED = "XMAS_SRC_MINTED",
   ONFT_SENT = "ONFT_SENT",
+  BERO_TOKEN_BUY = "BERO_TOKEN_BUY",
+  YEET_STAKE_V2 = "YEET_STAKE_V2",
 }
 
 export enum MISSION_TYPES {
@@ -469,6 +477,14 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.GOLDILOCKS_MAINNET_BUY]: {
     eventName: "Buy",
     abi: customAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.BERO_TOKEN_BUY]: {
+    eventName: "TOKEN__Buy",
+    abi: customAbi as AbiWithEvents,
+  },
+  [QUEST_TYPES.YEET_STAKE_V2]: {
+    eventName: "Stake",
+    abi: stakeV2Abi as AbiWithEvents,
   },
 } as const;
 
