@@ -636,7 +636,7 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         userAddress = decodedLog.from.toLowerCase();
         break;
       case QUEST_TYPES.BERO_TOKEN_BUY:
-        userAddress = decodedLog.to.toLowerCase();
+        userAddress = sender?.toLowerCase() || "";
         break;
       case QUEST_TYPES.YEET_STAKE_V2:
         userAddress = decodedLog.addr.toLowerCase();

@@ -3,6 +3,7 @@ import {
   BERAKIN_ADDRESS,
   BERO_ADDRESS,
   CUB_ADDRESS,
+  DIRAC_REPORT_ADDRESS,
   TALES_ARTICLE_ADDRESS,
   YEET_ADDRESS,
 } from "./address";
@@ -96,8 +97,9 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.LAWSUIT_LIFESTYLE]: {
       steps: [
         {
-          types: [QUEST_TYPES.BERO_TOKEN_BUY],
+          types: [QUEST_TYPES.BERO_TOKEN_BUY, QUEST_TYPES.BERO_TOKEN_SELL],
           addresses: [BERO_ADDRESS],
+          includeTransaction: true,
         },
       ],
       endTime: 1740686400,
@@ -123,6 +125,20 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           addresses: [TALES_ARTICLE_ADDRESS],
           filterCriteria: {
             [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+        },
+      ],
+      endTime: 1740859200,
+    },
+    [QUESTS.S_AND_P_DIRAC]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC1155_MINT],
+          addresses: [DIRAC_REPORT_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC1155_MINT]: {
               from: zeroAddress,
             },
           },

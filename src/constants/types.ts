@@ -32,6 +32,7 @@ import * as rootsV2Abi from "../abi/rootsV2";
 import * as smileeFinancePositionManagerAbi from "../abi/smileeFinanceAbiPositionManager";
 import * as smileeFinanceFaucetAbi from "../abi/smileeFinanceFaucetAbi";
 import * as spookyAbi from "../abi/spooky";
+import * as stakeV2Abi from "../abi/stakeV2";
 import * as stationXFactoryAbi from "../abi/stationXFactory";
 import * as strategiesControllerAbi from "../abi/strategiesController";
 import * as simplifiedUniswapAbi from "../abi/uniswap";
@@ -46,7 +47,6 @@ import * as wagmiAbi from "../abi/wagmibera";
 import * as xmasBoxAbi from "../abi/xmasBox";
 import * as yeetBondAbi from "../abi/yeetBond";
 import * as yeetStakeAbi from "../abi/yeetStake";
-import * as stakeV2Abi from "../abi/stakeV2";
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 
 export const EXTENSION_DURATION = 60 * 60 * 24 * 2;
@@ -155,6 +155,7 @@ export enum QUESTS {
   TALES_OF_HONEY = "Tales of Honey, Perks and DAOs  - A Honeycomb Story",
   LAWSUIT_LIFESTYLE = "Lawsuit Lifestyle",
   YEET_IT = "Yeet It!",
+  S_AND_P_DIRAC = "S&P - THJ partners report: Dirac Finance",
 }
 
 export enum MISSIONS {
@@ -221,6 +222,7 @@ export enum QUEST_TYPES {
   XMAS_SRC_MINTED = "XMAS_SRC_MINTED",
   ONFT_SENT = "ONFT_SENT",
   BERO_TOKEN_BUY = "BERO_TOKEN_BUY",
+  BERO_TOKEN_SELL = "BERO_TOKEN_SELL",
   YEET_STAKE_V2 = "YEET_STAKE_V2",
 }
 
@@ -485,6 +487,10 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.YEET_STAKE_V2]: {
     eventName: "Stake",
     abi: stakeV2Abi as AbiWithEvents,
+  },
+  [QUEST_TYPES.BERO_TOKEN_SELL]: {
+    eventName: "TOKEN__Sell",
+    abi: customAbi as AbiWithEvents,
   },
 } as const;
 
