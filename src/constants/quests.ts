@@ -135,10 +135,10 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.S_AND_P_DIRAC]: {
       steps: [
         {
-          types: [QUEST_TYPES.ERC1155_MINT],
+          types: [QUEST_TYPES.ERC721_MINT],
           addresses: [DIRAC_REPORT_ADDRESS],
           filterCriteria: {
-            [QUEST_TYPES.ERC1155_MINT]: {
+            [QUEST_TYPES.ERC721_MINT]: {
               from: zeroAddress,
             },
           },
