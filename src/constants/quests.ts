@@ -5,6 +5,7 @@ import {
   CUB_ADDRESS,
   DIRAC_REPORT_ADDRESS,
   TALES_ARTICLE_ADDRESS,
+  TALES_ARTICLE_ADDRESS_2,
   YEET_ADDRESS,
 } from "./address";
 import {
@@ -122,7 +123,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
       steps: [
         {
           types: [QUEST_TYPES.ERC721_MINT],
-          addresses: [TALES_ARTICLE_ADDRESS],
+          addresses: [TALES_ARTICLE_ADDRESS, TALES_ARTICLE_ADDRESS_2],
           filterCriteria: {
             [QUEST_TYPES.ERC721_MINT]: {
               from: zeroAddress,
