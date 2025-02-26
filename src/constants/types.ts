@@ -25,6 +25,7 @@ import * as junkySlotsAbi from "../abi/junkySlots";
 import * as lendingPoolAbi from "../abi/lendingPool";
 import * as lvaultAbi from "../abi/lvault";
 import * as memeswapDeployerAbi from "../abi/memeswapDeployer";
+import * as routerAbi from "../abi/obRouter";
 import * as onftAbi from "../abi/onft";
 import * as pretzelBridgeAbi from "../abi/pretzelBridge";
 import * as rewardsVaultAbi from "../abi/rewardsVault";
@@ -47,6 +48,7 @@ import * as wagmiAbi from "../abi/wagmibera";
 import * as xmasBoxAbi from "../abi/xmasBox";
 import * as yeetBondAbi from "../abi/yeetBond";
 import * as yeetStakeAbi from "../abi/yeetStake";
+
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 
 export const EXTENSION_DURATION = 60 * 60 * 24 * 2;
@@ -224,6 +226,7 @@ export enum QUEST_TYPES {
   BERO_TOKEN_BUY = "BERO_TOKEN_BUY",
   BERO_TOKEN_SELL = "BERO_TOKEN_SELL",
   YEET_STAKE_V2 = "YEET_STAKE_V2",
+  ROUTER_SWAP = "ROUTER_SWAP",
 }
 
 export enum MISSION_TYPES {
@@ -492,6 +495,10 @@ export const QUEST_TYPE_INFO: Record<
     eventName: "TOKEN__Sell",
     abi: customAbi as AbiWithEvents,
   },
+  [QUEST_TYPES.ROUTER_SWAP]: {
+    eventName: "Swap",
+    abi: routerAbi as AbiWithEvents,
+  },
 } as const;
 
 const MISSION_TYPE_INFO: Record<
@@ -508,16 +515,16 @@ const MISSION_TYPE_INFO: Record<
   },
 };
 
+export type FilterCriteria = Partial<Record<QUEST_TYPES, Record<string, any>>>;
+
 export type QuestStepConfig = {
   types: QUEST_TYPES[];
   addresses: string[];
-  filterCriteria?: {
-    [K in QUEST_TYPES]?: Record<string, any>;
-  };
+  filterCriteria?: FilterCriteria | FilterCriteria[];
   requiredAmount?: bigint;
   includeTransaction?: boolean;
   includeTransactionLogs?: boolean;
-  siblingTypes?: QUEST_TYPES[]; // Add this new field
+  siblingTypes?: QUEST_TYPES[];
   path?: string;
   startBlock?: number;
   revshareTracking?: boolean;

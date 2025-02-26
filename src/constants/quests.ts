@@ -4,6 +4,7 @@ import {
   BERO_ADDRESS,
   CUB_ADDRESS,
   DIRAC_REPORT_ADDRESS,
+  ROUTER_ADDRESS,
   TALES_ARTICLE_ADDRESS,
   YEET_ADDRESS,
 } from "./address";
@@ -97,9 +98,20 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.LAWSUIT_LIFESTYLE]: {
       steps: [
         {
-          types: [QUEST_TYPES.BERO_TOKEN_BUY, QUEST_TYPES.BERO_TOKEN_SELL],
-          addresses: [BERO_ADDRESS],
-          includeTransaction: true,
+          types: [QUEST_TYPES.ROUTER_SWAP],
+          addresses: [ROUTER_ADDRESS],
+          filterCriteria: [
+            {
+              [QUEST_TYPES.ROUTER_SWAP]: {
+                inputToken: BERO_ADDRESS,
+              },
+            },
+            {
+              [QUEST_TYPES.ROUTER_SWAP]: {
+                outputToken: BERO_ADDRESS,
+              },
+            },
+          ],
         },
       ],
       endTime: 1740686400,

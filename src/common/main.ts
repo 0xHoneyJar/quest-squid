@@ -226,41 +226,43 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
     logIndex?: number
   ): Promise<void> {
     if (step.filterCriteria) {
-      const filterCriteria = step.filterCriteria as Record<string, any>;
+      const filterCriteria = Array.isArray(step.filterCriteria)
+        ? step.filterCriteria
+        : [step.filterCriteria];
 
-      if (filterCriteria[questType as QUEST_TYPES]) {
-        const criteria = filterCriteria[questType as QUEST_TYPES];
-        for (const [key, value] of Object.entries(criteria)) {
-          let logValue = decodedLog[key];
-          let criteriaValue = value;
+      // Check if ANY of the criteria match
+      const anyMatch = filterCriteria.some((criteria) => {
+        if (criteria[questType as QUEST_TYPES]) {
+          const criteriaSet = criteria[questType as QUEST_TYPES];
+          return Object.entries(criteriaSet).every(([key, value]) => {
+            let logValue = decodedLog[key];
+            let criteriaValue = value;
 
-          if (typeof logValue === "bigint") {
-            logValue = logValue.toString();
-          }
-          if (typeof criteriaValue === "bigint") {
-            criteriaValue = criteriaValue.toString();
-          }
+            if (typeof logValue === "bigint") {
+              logValue = logValue.toString();
+            }
+            if (typeof criteriaValue === "bigint") {
+              criteriaValue = criteriaValue.toString();
+            }
 
-          if (Array.isArray(criteriaValue)) {
-            if (
-              !criteriaValue.some(
+            if (Array.isArray(criteriaValue)) {
+              return criteriaValue.some(
                 (v) => v.toLowerCase() === logValue.toLowerCase()
-              )
+              );
+            } else if (
+              typeof logValue === "string" &&
+              typeof criteriaValue === "string"
             ) {
-              return;
+              return logValue.toLowerCase() === criteriaValue.toLowerCase();
             }
-          } else if (
-            typeof logValue === "string" &&
-            typeof criteriaValue === "string"
-          ) {
-            if (logValue.toLowerCase() !== criteriaValue.toLowerCase()) {
-              return;
-            }
-          } else {
-            // If types don't match, consider it a failure
-            return;
-          }
+            return false;
+          });
         }
+        return false;
+      });
+
+      if (!anyMatch) {
+        return;
       }
     }
 
@@ -640,6 +642,9 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         break;
       case QUEST_TYPES.YEET_STAKE_V2:
         userAddress = decodedLog.addr.toLowerCase();
+        break;
+      case QUEST_TYPES.ROUTER_SWAP:
+        userAddress = decodedLog.sender.toLowerCase();
         break;
       default:
         return { userAddress: null, amount: 0n };
