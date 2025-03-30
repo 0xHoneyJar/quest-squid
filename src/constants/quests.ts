@@ -1,4 +1,4 @@
-import { zeroAddress } from "viem";
+import { parseEther, zeroAddress } from "viem";
 import {
   BERAKIN_ADDRESS,
   BERO_ADDRESS,
@@ -74,6 +74,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         {
           types: [QUEST_TYPES.FAT_BERA],
           addresses: [FAT_BERA_ADDRESS],
+          requiredAmount: parseEther("1"),
         },
       ],
     },
