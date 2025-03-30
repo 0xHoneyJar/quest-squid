@@ -4,6 +4,7 @@ import {
   BERO_ADDRESS,
   CUB_ADDRESS,
   DIRAC_REPORT_ADDRESS,
+  FAT_BERA_ADDRESS,
   ROUTER_ADDRESS,
   TALES_ARTICLE_ADDRESS,
   TALES_ARTICLE_ADDRESS_2,
@@ -68,6 +69,14 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     //   startTime: 1738353600,
     //   endTime: 1740772800,
     // },
+    [QUESTS.BERA_GOTTA_EAT]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.FAT_BERA],
+          addresses: [FAT_BERA_ADDRESS],
+        },
+      ],
+    },
     [QUESTS.THE_GREAT_MIGRATION]: {
       steps: [
         {
@@ -80,7 +89,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           },
         },
       ],
-      endTime: 1740600000,
+      endTime: 1741954800,
     },
     [QUESTS.BERAKIN_BREAKOUT]: {
       steps: [

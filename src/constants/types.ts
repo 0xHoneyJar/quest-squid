@@ -48,7 +48,7 @@ import * as wagmiAbi from "../abi/wagmibera";
 import * as xmasBoxAbi from "../abi/xmasBox";
 import * as yeetBondAbi from "../abi/yeetBond";
 import * as yeetStakeAbi from "../abi/yeetStake";
-
+import * as fatberaAbi from "../abi/fatbera";
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 
 export const EXTENSION_DURATION = 60 * 60 * 24 * 2;
@@ -158,6 +158,7 @@ export enum QUESTS {
   LAWSUIT_LIFESTYLE = "Lawsuit Lifestyle",
   YEET_IT = "Yeet It!",
   S_AND_P_DIRAC = "S&P - THJ partners report: Dirac Finance",
+  BERA_GOTTA_EAT = "Bera Gotta Eat",
 }
 
 export enum MISSIONS {
@@ -227,6 +228,7 @@ export enum QUEST_TYPES {
   BERO_TOKEN_SELL = "BERO_TOKEN_SELL",
   YEET_STAKE_V2 = "YEET_STAKE_V2",
   ROUTER_SWAP = "ROUTER_SWAP",
+  FAT_BERA = "FAT_BERA",
 }
 
 export enum MISSION_TYPES {
@@ -249,6 +251,10 @@ export const QUEST_TYPE_INFO: Record<
     topic2?: string;
   }
 > = {
+  [QUEST_TYPES.FAT_BERA]: {
+    eventName: "Deposit",
+    abi: fatberaAbi as AbiWithEvents,
+  },
   [QUEST_TYPES.ERC721_MINT]: {
     eventName: "Transfer",
     abi: erc721Abi,

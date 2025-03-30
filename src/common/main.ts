@@ -646,6 +646,10 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
       case QUEST_TYPES.ROUTER_SWAP:
         userAddress = decodedLog.sender.toLowerCase();
         break;
+      case QUEST_TYPES.FAT_BERA:
+        userAddress = decodedLog.sender.toLowerCase();
+        amount = decodedLog.assets;
+        break;
       default:
         return { userAddress: null, amount: 0n };
     }
