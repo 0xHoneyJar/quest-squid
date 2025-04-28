@@ -5,6 +5,7 @@ import {
   CUB_ADDRESS,
   DIRAC_REPORT_ADDRESS,
   FAT_BERA_ADDRESS,
+  MIBERA_VM_ADDRESS,
   ROUTER_ADDRESS,
   TALES_ARTICLE_ADDRESS,
   TALES_ARTICLE_ADDRESS_2,
@@ -69,6 +70,21 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     //   startTime: 1738353600,
     //   endTime: 1740772800,
     // },
+    [QUESTS.MIBERA_DISPENSERY]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.MIBERA_DISPENSERY],
+          addresses: [MIBERA_VM_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.MIBERA_DISPENSERY]: {
+              from: zeroAddress,
+            },
+          },
+        },
+      ],
+      startTime: 1745634000,
+      endTime: 1747771200,
+    },
     [QUESTS.BERA_GOTTA_EAT]: {
       steps: [
         {

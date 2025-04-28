@@ -49,6 +49,7 @@ import * as xmasBoxAbi from "../abi/xmasBox";
 import * as yeetBondAbi from "../abi/yeetBond";
 import * as yeetStakeAbi from "../abi/yeetStake";
 import * as fatberaAbi from "../abi/fatbera";
+import * as miberaVendingAbi from "../abi/miberavending";
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 
 export const EXTENSION_DURATION = 60 * 60 * 24 * 2;
@@ -159,6 +160,7 @@ export enum QUESTS {
   YEET_IT = "Yeet It!",
   S_AND_P_DIRAC = "S&P - THJ partners report: Dirac Finance",
   BERA_GOTTA_EAT = "Bera Gotta Eat",
+  MIBERA_DISPENSERY = "Mibera Dispensery",
 }
 
 export enum MISSIONS {
@@ -229,6 +231,7 @@ export enum QUEST_TYPES {
   YEET_STAKE_V2 = "YEET_STAKE_V2",
   ROUTER_SWAP = "ROUTER_SWAP",
   FAT_BERA = "FAT_BERA",
+  MIBERA_DISPENSERY = "MIBERA_DISPENSERY",
 }
 
 export enum MISSION_TYPES {
@@ -251,6 +254,10 @@ export const QUEST_TYPE_INFO: Record<
     topic2?: string;
   }
 > = {
+  [QUEST_TYPES.MIBERA_DISPENSERY]: {
+    eventName: "Transfer",
+    abi: miberaVendingAbi as AbiWithEvents,
+  },
   [QUEST_TYPES.FAT_BERA]: {
     eventName: "Deposit",
     abi: fatberaAbi as AbiWithEvents,

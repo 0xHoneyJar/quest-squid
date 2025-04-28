@@ -434,6 +434,7 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
 
     switch (questType) {
       case QUEST_TYPES.ERC721_MINT:
+      case QUEST_TYPES.MIBERA_DISPENSERY:
       case QUEST_TYPES.ERC20_MINT:
         userAddress = decodedLog.to.toLowerCase();
         if (questType === QUEST_TYPES.ERC20_MINT) amount = decodedLog.value;
