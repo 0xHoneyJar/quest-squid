@@ -5,6 +5,8 @@ import {
   CUB_ADDRESS,
   DIRAC_REPORT_ADDRESS,
   FAT_BERA_ADDRESS,
+  HENLO_AQUABERA_ADDRESS,
+  HENLO_AQUABERA_VAULT_ADDRESS,
   MIBERA_VM_ADDRESS,
   ROUTER_ADDRESS,
   TALES_ARTICLE_ADDRESS,
@@ -13,6 +15,7 @@ import {
 } from "./address";
 import {
   CHAINS,
+  EXTENSION_DURATION,
   MissionConfig,
   QUEST_TYPES,
   QuestConfig,
@@ -70,6 +73,22 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     //   startTime: 1738353600,
     //   endTime: 1740772800,
     // },
+    [QUESTS.HENLO_VS_THE_WORLD]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.HENLO_VS_THE_WORLD],
+          addresses: [HENLO_AQUABERA_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.HENLO_VS_THE_WORLD]: {
+              vault: HENLO_AQUABERA_VAULT_ADDRESS,
+            },
+          },
+          requiredAmount: parseEther("15"),
+        },
+      ],
+      startTime: 1746216000 - EXTENSION_DURATION,
+      endTime: 1746907200,
+    },
     [QUESTS.MIBERA_DISPENSERY]: {
       steps: [
         {

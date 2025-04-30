@@ -651,6 +651,10 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         userAddress = decodedLog.sender.toLowerCase();
         amount = decodedLog.assets;
         break;
+      case QUEST_TYPES.HENLO_VS_THE_WORLD:
+        userAddress = decodedLog.sender.toLowerCase();
+        amount = decodedLog.amount;
+        break;
       default:
         return { userAddress: null, amount: 0n };
     }
