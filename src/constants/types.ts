@@ -162,7 +162,7 @@ export enum QUESTS {
   S_AND_P_DIRAC = "S&P - THJ partners report: Dirac Finance",
   BERA_GOTTA_EAT = "Bera Gotta Eat",
   MIBERA_DISPENSERY = "Mibera Dispensery",
-  HENLO_VS_THE_WORLD = "Henlo vs the World",
+  HENLO_VS_THE_WORLD = "Henlo vs The World",
 }
 
 export enum MISSIONS {
