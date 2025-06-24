@@ -52,6 +52,7 @@ import * as fatberaAbi from "../abi/fatbera";
 import * as miberaVendingAbi from "../abi/miberavending";
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 import * as aquaberaHenloAbi from "../abi/aquaberahenlo";
+import * as bgtV2Abi from "../abi/bgtV2";
 
 export const EXTENSION_DURATION = 60 * 60 * 24 * 2;
 
@@ -163,6 +164,7 @@ export enum QUESTS {
   BERA_GOTTA_EAT = "Bera Gotta Eat",
   MIBERA_DISPENSERY = "Mibera Dispensery",
   HENLO_VS_THE_WORLD = "Henlo vs The World",
+  MIBOOSTED_MIBERA = "Miboosted Mibera",
 }
 
 export enum MISSIONS {
@@ -235,6 +237,7 @@ export enum QUEST_TYPES {
   FAT_BERA = "FAT_BERA",
   MIBERA_DISPENSERY = "MIBERA_DISPENSERY",
   HENLO_VS_THE_WORLD = "HENLO_VS_THE_WORLD",
+  MIBOOSTED_MIBERA = "MIBOOSTED_MIBERA",
 }
 
 export enum MISSION_TYPES {
@@ -257,6 +260,10 @@ export const QUEST_TYPE_INFO: Record<
     topic2?: string;
   }
 > = {
+  [QUEST_TYPES.MIBOOSTED_MIBERA]: {
+    eventName: "QueueBoost",
+    abi: bgtV2Abi as AbiWithEvents,
+  },
   [QUEST_TYPES.HENLO_VS_THE_WORLD]: {
     eventName: "DepositForwarded",
     abi: aquaberaHenloAbi as AbiWithEvents,

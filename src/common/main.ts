@@ -655,6 +655,10 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         userAddress = decodedLog.sender.toLowerCase();
         amount = decodedLog.amount;
         break;
+      case QUEST_TYPES.MIBOOSTED_MIBERA:
+        userAddress = decodedLog.user.toLowerCase();
+        amount = decodedLog.amount;
+        break;
       default:
         return { userAddress: null, amount: 0n };
     }
