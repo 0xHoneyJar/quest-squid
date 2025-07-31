@@ -8,6 +8,9 @@ import {
   FAT_BERA_ADDRESS,
   HENLO_AQUABERA_ADDRESS,
   HENLO_AQUABERA_VAULT_ADDRESS,
+  MIBERA_MILADIES_ADDRESS,
+  MIBERA_MIPARCEL_ADDRESS,
+  MIBERA_MIREVEAL_ADDRESS,
   MIBERA_VALIDATOR_PUBKEY,
   MIBERA_VM_ADDRESS,
   ROUTER_ADDRESS,
@@ -75,6 +78,28 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     //   startTime: 1738353600,
     //   endTime: 1740772800,
     // },
+    [QUESTS.THROUGH_THE_LOOKING_GLASS]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.MIBERA_MINT],
+          addresses: [MIBERA_VM_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.MIBERA_MINT],
+          addresses: [MIBERA_MILADIES_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.MIBERA_MINT],
+          addresses: [MIBERA_MIREVEAL_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.MIBERA_MINT],
+          addresses: [MIBERA_MIPARCEL_ADDRESS],
+        },
+      ],
+      startTime: 1754251200 - EXTENSION_DURATION,
+      endTime: 1755115200,
+    },
     [QUESTS.MIBOOSTED_MIBERA]: {
       steps: [
         {
@@ -108,13 +133,8 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.MIBERA_DISPENSERY]: {
       steps: [
         {
-          types: [QUEST_TYPES.MIBERA_DISPENSERY],
+          types: [QUEST_TYPES.MIBERA_MINT],
           addresses: [MIBERA_VM_ADDRESS],
-          filterCriteria: {
-            [QUEST_TYPES.MIBERA_DISPENSERY]: {
-              from: zeroAddress,
-            },
-          },
         },
       ],
       startTime: 1745634000,

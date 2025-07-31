@@ -53,6 +53,7 @@ import * as miberaVendingAbi from "../abi/miberavending";
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 import * as aquaberaHenloAbi from "../abi/aquaberahenlo";
 import * as bgtV2Abi from "../abi/bgtV2";
+import { zeroAddress } from "viem";
 
 export const EXTENSION_DURATION = 60 * 60 * 24 * 2;
 
@@ -165,6 +166,7 @@ export enum QUESTS {
   MIBERA_DISPENSERY = "Mibera Dispensery",
   HENLO_VS_THE_WORLD = "Henlo vs The World",
   MIBOOSTED_MIBERA = "Miboosted Mibera",
+  THROUGH_THE_LOOKING_GLASS = "Through The Looking Glass",
 }
 
 export enum MISSIONS {
@@ -235,9 +237,9 @@ export enum QUEST_TYPES {
   YEET_STAKE_V2 = "YEET_STAKE_V2",
   ROUTER_SWAP = "ROUTER_SWAP",
   FAT_BERA = "FAT_BERA",
-  MIBERA_DISPENSERY = "MIBERA_DISPENSERY",
   HENLO_VS_THE_WORLD = "HENLO_VS_THE_WORLD",
   MIBOOSTED_MIBERA = "MIBOOSTED_MIBERA",
+  MIBERA_MINT = "MIBERA_MINT",
 }
 
 export enum MISSION_TYPES {
@@ -260,6 +262,11 @@ export const QUEST_TYPE_INFO: Record<
     topic2?: string;
   }
 > = {
+  [QUEST_TYPES.MIBERA_MINT]: {
+    eventName: "Transfer",
+    topic1: zeroAddress,
+    abi: erc721Abi as AbiWithEvents,
+  },
   [QUEST_TYPES.MIBOOSTED_MIBERA]: {
     eventName: "QueueBoost",
     abi: bgtV2Abi as AbiWithEvents,
@@ -267,10 +274,6 @@ export const QUEST_TYPE_INFO: Record<
   [QUEST_TYPES.HENLO_VS_THE_WORLD]: {
     eventName: "DepositForwarded",
     abi: aquaberaHenloAbi as AbiWithEvents,
-  },
-  [QUEST_TYPES.MIBERA_DISPENSERY]: {
-    eventName: "Transfer",
-    abi: miberaVendingAbi as AbiWithEvents,
   },
   [QUEST_TYPES.FAT_BERA]: {
     eventName: "Deposit",
