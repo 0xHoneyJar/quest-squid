@@ -49,7 +49,6 @@ import * as xmasBoxAbi from "../abi/xmasBox";
 import * as yeetBondAbi from "../abi/yeetBond";
 import * as yeetStakeAbi from "../abi/yeetStake";
 import * as fatberaAbi from "../abi/fatbera";
-import * as miberaVendingAbi from "../abi/miberavending";
 import { THJ_VALIDATOR_ADDRESS } from "./address";
 import * as aquaberaHenloAbi from "../abi/aquaberahenlo";
 import * as bgtV2Abi from "../abi/bgtV2";
@@ -264,7 +263,6 @@ export const QUEST_TYPE_INFO: Record<
 > = {
   [QUEST_TYPES.MIBERA_MINT]: {
     eventName: "Transfer",
-    topic1: zeroAddress,
     abi: erc721Abi as AbiWithEvents,
   },
   [QUEST_TYPES.MIBOOSTED_MIBERA]: {

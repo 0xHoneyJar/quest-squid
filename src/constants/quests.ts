@@ -86,15 +86,15 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
         {
           types: [QUEST_TYPES.MIBERA_MINT],
+          addresses: [MIBERA_MIPARCEL_ADDRESS],
+        },
+        {
+          types: [QUEST_TYPES.MIBERA_MINT],
           addresses: [MIBERA_MILADIES_ADDRESS],
         },
         {
           types: [QUEST_TYPES.MIBERA_MINT],
           addresses: [MIBERA_MIREVEAL_ADDRESS],
-        },
-        {
-          types: [QUEST_TYPES.MIBERA_MINT],
-          addresses: [MIBERA_MIPARCEL_ADDRESS],
         },
       ],
       startTime: 1754251200 - EXTENSION_DURATION,
