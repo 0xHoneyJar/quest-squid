@@ -81,20 +81,40 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     [QUESTS.THROUGH_THE_LOOKING_GLASS]: {
       steps: [
         {
-          types: [QUEST_TYPES.MIBERA_MINT],
+          types: [QUEST_TYPES.ERC721_MINT],
           addresses: [MIBERA_VM_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
         },
         {
-          types: [QUEST_TYPES.MIBERA_MINT],
+          types: [QUEST_TYPES.ERC721_MINT],
           addresses: [MIBERA_MIPARCEL_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
         },
         {
-          types: [QUEST_TYPES.MIBERA_MINT],
+          types: [QUEST_TYPES.ERC721_MINT],
           addresses: [MIBERA_MILADIES_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
         },
         {
-          types: [QUEST_TYPES.MIBERA_MINT],
+          types: [QUEST_TYPES.ERC721_MINT],
           addresses: [MIBERA_MIREVEAL_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
         },
       ],
       startTime: 1754251200 - EXTENSION_DURATION,

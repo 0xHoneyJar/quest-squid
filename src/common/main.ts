@@ -36,6 +36,17 @@ async function mapBlocks(ctx: MappingContext, chain: CHAINS, quests: string[]) {
 
   const questsArray = Array.from(questsMap.values());
 
+  // Initialize quests and steps in database if they don't exist
+  for (const quest of questsArray) {
+    const existingQuest = await ctx.store.get(Quest, quest.id);
+    if (!existingQuest) {
+      await ctx.store.insert(quest);
+      for (const step of quest.steps) {
+        await ctx.store.insert(step);
+      }
+    }
+  }
+
   for (const block of ctx.blocks) {
     mapBlock(ctx, block, questsArray);
   }
