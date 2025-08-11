@@ -91,15 +91,6 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
         {
           types: [QUEST_TYPES.ERC721_MINT],
-          addresses: [MIBERA_MIPARCEL_ADDRESS],
-          filterCriteria: {
-            [QUEST_TYPES.ERC721_MINT]: {
-              from: zeroAddress,
-            },
-          },
-        },
-        {
-          types: [QUEST_TYPES.ERC721_MINT],
           addresses: [MIBERA_MILADIES_ADDRESS],
           filterCriteria: {
             [QUEST_TYPES.ERC721_MINT]: {
@@ -110,6 +101,15 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         {
           types: [QUEST_TYPES.ERC721_MINT],
           addresses: [MIBERA_MIREVEAL_ADDRESS],
+          filterCriteria: {
+            [QUEST_TYPES.ERC721_MINT]: {
+              from: zeroAddress,
+            },
+          },
+        },
+        {
+          types: [QUEST_TYPES.ERC721_MINT],
+          addresses: [MIBERA_MIPARCEL_ADDRESS],
           filterCriteria: {
             [QUEST_TYPES.ERC721_MINT]: {
               from: zeroAddress,
