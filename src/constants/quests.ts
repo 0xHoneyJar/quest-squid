@@ -8,11 +8,13 @@ import {
   FAT_BERA_ADDRESS,
   HENLO_AQUABERA_ADDRESS,
   HENLO_AQUABERA_VAULT_ADDRESS,
+  HENLO_TOKEN_ADDRESS,
   MIBERA_MILADIES_ADDRESS,
   MIBERA_MIPARCEL_ADDRESS,
   MIBERA_MIREVEAL_ADDRESS,
   MIBERA_VALIDATOR_PUBKEY,
   MIBERA_VM_ADDRESS,
+  RELAY_CONTRACT_ADDRESS,
   ROUTER_ADDRESS,
   TALES_ARTICLE_ADDRESS,
   TALES_ARTICLE_ADDRESS_2,
@@ -228,6 +230,20 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
       ],
       startTime: 1739908800,
       endTime: 1740772800,
+    },
+    [QUESTS.HENLO_500K_SWAP]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC20_TRANSFER],
+          addresses: [HENLO_TOKEN_ADDRESS], // Track Transfer events on the Henlo token contract
+          filterCriteria: {
+            [QUEST_TYPES.ERC20_TRANSFER]: {
+              from: RELAY_CONTRACT_ADDRESS.toLowerCase(), // Transfers FROM the relay contract
+            },
+          },
+          requiredAmount: parseEther("500000"), // 500k Henlo tokens minimum
+        },
+      ],
     },
   },
   [CHAINS.BERACHAIN_TESTNET]: {},
