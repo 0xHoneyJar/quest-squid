@@ -166,7 +166,7 @@ export enum QUESTS {
   HENLO_VS_THE_WORLD = "Henlo vs The World",
   MIBOOSTED_MIBERA = "Miboosted Mibera",
   THROUGH_THE_LOOKING_GLASS = "Through The Looking Glass",
-  HENLO_500K_SWAP = "henlo-500k-swap", // Now uses ERC20_TRANSFER events instead
+  BOUNTIFUL_BERAS_BOOTY = "Bountiful Beras Booty", // NFT holders + 500K Henlo quest
 }
 
 export enum MISSIONS {

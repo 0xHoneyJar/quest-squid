@@ -110,7 +110,7 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
 
   for (let log of block.logs) {
     const logAddress = log.address.toLowerCase();
-
+    
     const matchingQuests = questsArray.filter(
       (quest) =>
         quest.steps.some((step) =>
