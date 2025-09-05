@@ -125,7 +125,7 @@ export interface NetAmountQuestConfig {
 export function isNetAmountQuest(questName: string): boolean {
   // List of quests that use net amount tracking
   const netAmountQuests = [
-    "Beras On the OpenSea",
+    "Beras On the Opensea",
     "Bountiful Beras Booty",
     // Add more net amount tracking quests here
   ];
