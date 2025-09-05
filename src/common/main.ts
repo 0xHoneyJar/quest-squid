@@ -2,7 +2,7 @@ import { StoreWithCache } from "@belopash/typeorm-store";
 import { AbiEvent } from "@subsquid/evm-abi";
 import { BlockData, Log } from "@subsquid/evm-processor";
 import { QUESTS_CONFIG } from "../constants/quests";
-import { CHAINS, QUEST_TYPE_INFO, QUEST_TYPES } from "../constants/types";
+import { CHAINS, QUEST_TYPE_INFO, QUEST_TYPES, QUESTS } from "../constants/types";
 import {
   Quest,
   QuestStep,
@@ -12,6 +12,8 @@ import {
 } from "../model";
 import { TaskQueue } from "../utils/queue";
 import { Context, ProcessorContext } from "./processorFactory";
+import { NetAmountTracker, isNetAmountQuest } from "../utils/netAmountTracker";
+import { RELAY_CONTRACT_ADDRESS } from "../constants/address";
 
 type MappingContext = ProcessorContext<StoreWithCache> & { queue: TaskQueue };
 
@@ -315,7 +317,8 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
               matchingQuestType as QUEST_TYPES,
               decodedTransactionLog,
               sender,
-              matchingEventName
+              matchingEventName,
+              quest
             );
             userAddress = result.userAddress;
             amount = result.amount;
@@ -327,7 +330,8 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         questType as QUEST_TYPES,
         decodedLog,
         sender,
-        eventName
+        eventName,
+        quest
       );
       userAddress = result.userAddress;
       amount = result.amount;
@@ -392,16 +396,27 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         stepProgress.lastTransactionHash = transactionHash;
       }
 
-      if (
-        stepProgress.progressAmount >= step.requiredAmount &&
-        !stepProgress.completed
-      ) {
+      // For net amount tracking, completion status can change in both directions
+      const wasCompleted = stepProgress.completed;
+      const isNowCompleted = stepProgress.progressAmount >= step.requiredAmount;
+      
+      if (isNowCompleted && !wasCompleted) {
+        // User just reached the threshold
         stepProgress.completed = true;
         userQuestProgress.completedSteps += 1;
 
         if (userQuestProgress.completedSteps === quest.steps.length) {
           userQuestProgress.completed = true;
           quest.totalCompletions += 1;
+        }
+      } else if (!isNowCompleted && wasCompleted) {
+        // User dropped below threshold (for net amount tracking quests)
+        stepProgress.completed = false;
+        userQuestProgress.completedSteps -= 1;
+        
+        if (userQuestProgress.completed) {
+          userQuestProgress.completed = false;
+          quest.totalCompletions -= 1;
         }
       }
 
@@ -438,7 +453,8 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
     questType: QUEST_TYPES,
     decodedLog: any,
     sender?: string,
-    eventName?: string
+    eventName?: string,
+    quest?: Quest
   ): { userAddress: string | null; amount: bigint } {
     let userAddress: string | null = null;
     let amount: bigint = 1n;
@@ -451,8 +467,33 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         if (questType === QUEST_TYPES.ERC20_MINT) amount = decodedLog.value;
         break;
       case QUEST_TYPES.ERC20_TRANSFER:
-        userAddress = decodedLog.to.toLowerCase();
-        amount = decodedLog.value;
+        // For net amount tracking quests (like HENLO_500K_SWAP), we need to track both directions
+        const fromAddress = decodedLog.from.toLowerCase();
+        const toAddress = decodedLog.to.toLowerCase();
+        
+        // Check if this is a net amount tracking quest
+        if (quest && isNetAmountQuest(quest.name)) {
+          const relayLower = RELAY_CONTRACT_ADDRESS.toLowerCase();
+          
+          // Inbound: FROM relay TO user
+          if (fromAddress === relayLower) {
+            userAddress = toAddress;
+            amount = decodedLog.value; // Positive amount (user receives)
+          }
+          // Outbound: FROM user TO relay  
+          else if (toAddress === relayLower) {
+            userAddress = fromAddress;
+            amount = BigInt(0) - BigInt(decodedLog.value); // Negative amount (user sends back)
+          }
+          // Not a relevant transfer for this quest
+          else {
+            return { userAddress: null, amount: 0n };
+          }
+        } else {
+          // Original behavior for non-net-amount quests
+          userAddress = toAddress;
+          amount = decodedLog.value;
+        }
         break;
       case QUEST_TYPES.UNISWAP_MINT:
         userAddress = sender?.toLowerCase() || "";

@@ -80,6 +80,19 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     //   startTime: 1738353600,
     //   endTime: 1740772800,
     // },
+    [QUESTS.HENLO_500K_SWAP]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC20_TRANSFER],
+          addresses: [HENLO_TOKEN_ADDRESS], // Track Transfer events on the Henlo token contract
+          // No filter criteria needed - we now track both directions (in and out)
+          // to calculate net amount (swaps in - swaps out)
+          requiredAmount: parseEther("500000"), // 500k Henlo tokens NET minimum
+        },
+      ],
+      startTime: 1754251200, // Sept 4, 2025 00:00:00 UTC
+      endTime: 1758610800, // Sept 23, 2025 23:59:59 UTC (2 weeks after Sept 9)
+    },
     [QUESTS.THROUGH_THE_LOOKING_GLASS]: {
       steps: [
         {
@@ -230,20 +243,6 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
       ],
       startTime: 1739908800,
       endTime: 1740772800,
-    },
-    [QUESTS.HENLO_500K_SWAP]: {
-      steps: [
-        {
-          types: [QUEST_TYPES.ERC20_TRANSFER],
-          addresses: [HENLO_TOKEN_ADDRESS], // Track Transfer events on the Henlo token contract
-          filterCriteria: {
-            [QUEST_TYPES.ERC20_TRANSFER]: {
-              from: RELAY_CONTRACT_ADDRESS.toLowerCase(), // Transfers FROM the relay contract
-            },
-          },
-          requiredAmount: parseEther("500000"), // 500k Henlo tokens minimum
-        },
-      ],
     },
   },
   [CHAINS.BERACHAIN_TESTNET]: {},
