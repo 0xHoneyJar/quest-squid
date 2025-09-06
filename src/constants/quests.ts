@@ -81,7 +81,6 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
     //   endTime: 1740772800,
     // },
     [QUESTS.BERAS_ON_THE_OPENSEA]: {
-      // Quest 1: Pure 500K Henlo net swap quest
       steps: [
         {
           types: [QUEST_TYPES.ERC20_TRANSFER],
@@ -91,11 +90,9 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       startTime: 1756969200, // Sept 4, 2025 00:00:00 UTC
-      endTime: 1758697199,   // Sept 23, 2025 23:59:59 UTC
+      endTime: 1758697199, // Sept 23, 2025 23:59:59 UTC
     },
     [QUESTS.BOUNTIFUL_BERAS_BOOTY]: {
-      // Quest 2: NFT holder bonus - only tracks Henlo here
-      // NFT holdings check is handled entirely on frontend via RPC
       steps: [
         {
           types: [QUEST_TYPES.ERC20_TRANSFER],
@@ -104,7 +101,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
         },
       ],
       startTime: 1756969200, // Sept 4, 2025
-      endTime: 1758697199,   // Sept 23, 2025
+      endTime: 1758697199, // Sept 23, 2025
     },
     [QUESTS.THROUGH_THE_LOOKING_GLASS]: {
       steps: [

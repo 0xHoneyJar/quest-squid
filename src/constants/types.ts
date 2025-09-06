@@ -166,8 +166,8 @@ export enum QUESTS {
   HENLO_VS_THE_WORLD = "Henlo vs The World",
   MIBOOSTED_MIBERA = "Miboosted Mibera",
   THROUGH_THE_LOOKING_GLASS = "Through The Looking Glass",
-  BERAS_ON_THE_OPENSEA = "Beras On the Opensea", // 500K Henlo net swap quest
-  BOUNTIFUL_BERAS_BOOTY = "Bountiful Beras Booty", // NFT holders + 500K Henlo quest
+  BERAS_ON_THE_OPENSEA = "Beras On the OpenSea",
+  BOUNTIFUL_BERAS_BOOTY = "Bountiful Beras Booty",
 }
 
 export enum MISSIONS {
