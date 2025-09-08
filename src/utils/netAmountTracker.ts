@@ -138,10 +138,19 @@ export function isNetAmountQuest(questName: string): boolean {
  * Helper to identify quests that should fail on any outbound transfer
  */
 export function isNoNegativeSwapQuest(questName: string): boolean {
-  // List of quests that fail if user swaps out
-  const noNegativeQuests = [
+  // List of quests that fail if user swaps out (diamond-holders)
+  const noNegativeQuests: string[] = [
     "Beras Treasure Trove",
   ];
   
   return noNegativeQuests.includes(questName);
+}
+
+/**
+ * Helper to identify quests that should only count inbound swaps (no subtraction on sell)
+ * Still relies on RELAY inbound detection for correctness.
+ */
+export function isInboundOnlyQuest(questName: string): boolean {
+  // None: first two quests use net tracking now
+  return false;
 }

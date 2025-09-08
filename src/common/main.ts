@@ -12,7 +12,7 @@ import {
 } from "../model";
 import { TaskQueue } from "../utils/queue";
 import { Context, ProcessorContext } from "./processorFactory";
-import { NetAmountTracker, isNetAmountQuest, isNoNegativeSwapQuest } from "../utils/netAmountTracker";
+import { NetAmountTracker, isNetAmountQuest, isNoNegativeSwapQuest, isInboundOnlyQuest } from "../utils/netAmountTracker";
 import { RELAY_CONTRACT_ADDRESS } from "../constants/address";
 
 type MappingContext = ProcessorContext<StoreWithCache> & { queue: TaskQueue };
@@ -422,8 +422,13 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         
         // Only process positive amounts (inbound transfers)
         stepProgress.progressAmount += amount;
+      } else if (quest && isInboundOnlyQuest(quest.name)) {
+        // Count only inbound (positive) amounts; ignore outbound
+        if (amount > 0n) {
+          stepProgress.progressAmount += amount;
+        }
       } else {
-        // Normal net amount tracking for other quests
+        // Normal net amount tracking for other quests (can decrease on outbound)
         stepProgress.progressAmount += amount;
       }
       
