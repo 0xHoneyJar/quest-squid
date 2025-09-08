@@ -168,6 +168,7 @@ export enum QUESTS {
   THROUGH_THE_LOOKING_GLASS = "Through The Looking Glass",
   BERAS_ON_THE_OPENSEA = "Beras On the OpenSea",
   BOUNTIFUL_BERAS_BOOTY = "Bountiful Beras Booty",
+  BERAS_TREASURE_TROVE = "Beras Treasure Trove",
 }
 
 export enum MISSIONS {

@@ -127,8 +127,21 @@ export function isNetAmountQuest(questName: string): boolean {
   const netAmountQuests = [
     "Beras On the Opensea",
     "Bountiful Beras Booty",
+    "Beras Treasure Trove",
     // Add more net amount tracking quests here
   ];
   
   return netAmountQuests.includes(questName);
+}
+
+/**
+ * Helper to identify quests that should fail on any outbound transfer
+ */
+export function isNoNegativeSwapQuest(questName: string): boolean {
+  // List of quests that fail if user swaps out
+  const noNegativeQuests = [
+    "Beras Treasure Trove",
+  ];
+  
+  return noNegativeQuests.includes(questName);
 }

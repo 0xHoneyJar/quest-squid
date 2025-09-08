@@ -12,7 +12,7 @@ import {
 } from "../model";
 import { TaskQueue } from "../utils/queue";
 import { Context, ProcessorContext } from "./processorFactory";
-import { NetAmountTracker, isNetAmountQuest } from "../utils/netAmountTracker";
+import { NetAmountTracker, isNetAmountQuest, isNoNegativeSwapQuest } from "../utils/netAmountTracker";
 import { RELAY_CONTRACT_ADDRESS } from "../constants/address";
 
 type MappingContext = ProcessorContext<StoreWithCache> & { queue: TaskQueue };
@@ -389,11 +389,54 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         });
       });
 
-      stepProgress.progressAmount += amount;
+      // Special handling for BERA's Treasure Trove quest - no negative swaps allowed
+      if (quest && isNoNegativeSwapQuest(quest.name)) {
+        // If user is already disqualified (progressAmount = -1), skip
+        if (stepProgress.progressAmount === BigInt(-1)) {
+          return; // User is permanently disqualified
+        }
+        
+        // If this is an outbound transfer (negative amount), disqualify the user
+        if (amount < 0n) {
+          stepProgress.progressAmount = BigInt(-1); // Mark as disqualified
+          stepProgress.completed = false;
+          stepProgress.lastUpdateTimestamp = BigInt(block.header.timestamp);
+          if (transactionHash) {
+            stepProgress.lastTransactionHash = transactionHash;
+          }
+          
+          // Update user quest progress if they were previously marked as complete
+          if (userQuestProgress.completed) {
+            userQuestProgress.completed = false;
+            userQuestProgress.completedSteps = 0;
+            quest.totalCompletions -= 1;
+          } else if (stepProgress.completed) {
+            userQuestProgress.completedSteps -= 1;
+          }
+          
+          await ctx.store.upsert(quest);
+          await ctx.store.upsert(userQuestProgress);
+          await ctx.store.upsert(stepProgress);
+          return; // Exit early for disqualified users
+        }
+        
+        // Only process positive amounts (inbound transfers)
+        stepProgress.progressAmount += amount;
+      } else {
+        // Normal net amount tracking for other quests
+        stepProgress.progressAmount += amount;
+      }
+      
       stepProgress.lastUpdateTimestamp = BigInt(block.header.timestamp);
 
       if (transactionHash) {
         stepProgress.lastTransactionHash = transactionHash;
+      }
+
+      // Skip completion check if user is disqualified
+      if (stepProgress.progressAmount === BigInt(-1)) {
+        await ctx.store.upsert(stepProgress);
+        return;
       }
 
       // For net amount tracking, completion status can change in both directions

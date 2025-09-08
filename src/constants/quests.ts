@@ -102,6 +102,17 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
       startTime: 1757448000,
       endTime: 1758657600,
     },
+    [QUESTS.BERAS_TREASURE_TROVE]: {
+      steps: [
+        {
+          types: [QUEST_TYPES.ERC20_TRANSFER],
+          addresses: [HENLO_TOKEN_ADDRESS],
+          requiredAmount: parseEther("500000"),
+        },
+      ],
+      startTime: 1757448000,
+      endTime: 1758657600,
+    },
     [QUESTS.THROUGH_THE_LOOKING_GLASS]: {
       steps: [
         {
