@@ -88,7 +88,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           requiredAmount: parseEther("500000"),
         },
       ],
-      startTime: 1757448000,
+      startTime: 1757534400,
       endTime: 1758657600,
     },
     [QUESTS.BOUNTIFUL_BERAS_BOOTY]: {
@@ -99,7 +99,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           requiredAmount: parseEther("500000"),
         },
       ],
-      startTime: 1757448000,
+      startTime: 1757534400,
       endTime: 1758657600,
     },
     [QUESTS.BERAS_TREASURE_TROVE]: {
@@ -110,7 +110,7 @@ export const QUESTS_CONFIG: Record<string, Record<string, QuestConfig>> = {
           requiredAmount: parseEther("500000"),
         },
       ],
-      startTime: 1757448000,
+      startTime: 1757534400,
       endTime: 1758657600,
     },
     [QUESTS.THROUGH_THE_LOOKING_GLASS]: {
