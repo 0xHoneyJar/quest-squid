@@ -8,13 +8,9 @@ import {
   EvmBatchProcessorFields,
 } from "@subsquid/evm-processor";
 import { assertNotNull } from "@subsquid/util-internal";
-import {
-  ARCHIVE_GATEWAYS,
-  BLOCK_RANGES,
-  QUESTS_CONFIG,
-  RPC_ENDPOINTS,
-} from "../constants/quests";
+import { ARCHIVE_GATEWAYS, BLOCK_RANGES, RPC_ENDPOINTS } from "../constants/quests";
 import { CHAINS, QUEST_TYPE_INFO, QUEST_TYPES } from "../constants/types";
+import { filterQuests } from "./questFilter";
 
 interface LogRequest {
   topic0: string[];
@@ -27,47 +23,67 @@ interface LogRequest {
 }
 
 export function createProcessor(chain: CHAINS, quests?: string[]) {
-  const questConfig = QUESTS_CONFIG[chain];
+  const { questConfig, questNames, skipped, includeArchived } = filterQuests(
+    chain,
+    quests
+  );
+
+  if (quests && skipped.length > 0) {
+    console.warn(
+      `Requested quest(s) not found for ${chain}: ${skipped
+        .map((s) => s.name)
+        .join(", ")}`
+    );
+  }
+
+  if (!questNames.length) {
+    console.error(`No quests available for chain ${chain}.`);
+    if (!includeArchived) {
+      console.error(
+        "Set INCLUDE_ARCHIVED_QUESTS=true to include archived quests or supply explicit quest names."
+      );
+    }
+    process.exit(1);
+  }
+
+  if (!quests && skipped.length > 0 && !includeArchived) {
+    console.log(
+      `Skipping ${skipped.length} archived quest(s) on ${chain}: ${skipped
+        .slice(0, 5)
+        .map((s) => s.name)
+        .join(", ")}${skipped.length > 5 ? "…" : ""}`
+    );
+  }
+
+  if (!quests) {
+    console.log(
+      `Indexing ${questNames.length} active quest(s) on ${chain}: ${questNames.join(", ")}`
+    );
+  }
+
   const logRequests: LogRequest[] = [];
   const ethTransferAddresses: string[] = [];
 
-  // Find the earliest start block from the quest steps if testing specific quests
-  let startBlock: number = BLOCK_RANGES[chain].from;
-  if (quests?.length === 1) {
-    const questSteps = Object.values(
-      quests
-        ? quests.reduce((acc, questName) => {
-            if (questConfig[questName]) {
-              acc[questName] = questConfig[questName];
-            }
-            return acc;
-          }, {} as typeof questConfig)
-        : questConfig
-    )[0].steps;
+  const defaultStart = BLOCK_RANGES[chain]?.from ?? 0;
+  let startBlock: number = defaultStart;
+
+  const stepsWithStartBlock = Object.values(questConfig)
+    .flatMap((quest) => quest.steps)
+    .filter((step) => step.startBlock !== undefined);
+
+  if (stepsWithStartBlock.length > 0) {
     const earliestStepBlock = Math.min(
-      ...questSteps
-        .filter((step) => step.startBlock !== undefined)
-        .map((step) => step.startBlock!)
+      ...stepsWithStartBlock.map((step) => step.startBlock!)
     );
-    if (earliestStepBlock && !isNaN(earliestStepBlock)) {
-      startBlock = earliestStepBlock;
-      console.log(`Using quest start block: ${startBlock}`);
+
+    if (Number.isFinite(earliestStepBlock)) {
+      startBlock = Math.max(defaultStart, earliestStepBlock);
+      console.log(`Using quest-specific start block: ${startBlock}`);
     }
   }
-
-  // Filter for the specified quests or use all quests if none specified
-  const filteredQuestConfig = quests
-    ? quests.reduce((acc, questName) => {
-        if (questConfig[questName]) {
-          acc[questName] = questConfig[questName];
-        }
-        return acc;
-      }, {} as typeof questConfig)
-    : questConfig;
-
   // First pass: Collect all requests
   const initialRequests: LogRequest[] = [];
-  for (const quest of Object.values(filteredQuestConfig)) {
+  for (const quest of Object.values(questConfig)) {
     for (const step of quest.steps) {
       const questTypes = step.types;
       for (const address of step.addresses) {

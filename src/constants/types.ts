@@ -566,6 +566,7 @@ export type QuestConfig = {
   steps: QuestStepConfig[];
   startTime?: number;
   endTime?: number;
+  archived?: boolean;
 };
 
 export type MissionConfig = {

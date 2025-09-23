@@ -154,3 +154,12 @@ export function isInboundOnlyQuest(questName: string): boolean {
   // None: first two quests use net tracking now
   return false;
 }
+
+export function isVolumeQuest(questName: string): boolean {
+  const volumeQuests = [
+    "Beras On the Opensea",
+    "Bountiful Beras Booty",
+  ];
+
+  return volumeQuests.includes(questName);
+}

@@ -1,8 +1,7 @@
 import { StoreWithCache } from "@belopash/typeorm-store";
 import { AbiEvent } from "@subsquid/evm-abi";
 import { BlockData, Log } from "@subsquid/evm-processor";
-import { QUESTS_CONFIG } from "../constants/quests";
-import { CHAINS, QUEST_TYPE_INFO, QUEST_TYPES, QUESTS } from "../constants/types";
+import { CHAINS, QUEST_TYPE_INFO, QUEST_TYPES, QUESTS, QuestConfig } from "../constants/types";
 import {
   Quest,
   QuestStep,
@@ -12,12 +11,36 @@ import {
 } from "../model";
 import { TaskQueue } from "../utils/queue";
 import { Context, ProcessorContext } from "./processorFactory";
-import { NetAmountTracker, isNetAmountQuest, isNoNegativeSwapQuest, isInboundOnlyQuest } from "../utils/netAmountTracker";
+import { NetAmountTracker, isNetAmountQuest, isNoNegativeSwapQuest, isInboundOnlyQuest, isVolumeQuest } from "../utils/netAmountTracker";
 import { RELAY_CONTRACT_ADDRESS } from "../constants/address";
+import { filterQuests } from "./questFilter";
 
 type MappingContext = ProcessorContext<StoreWithCache> & { queue: TaskQueue };
 
 export function createMain(chain: CHAINS, quests?: string[]) {
+  const { questNames, questConfig, skipped, includeArchived } = filterQuests(
+    chain,
+    quests
+  );
+
+  if (!questNames.length) {
+    throw new Error(
+      `No quests available for chain ${chain}.` +
+        (!includeArchived
+          ? " Set INCLUDE_ARCHIVED_QUESTS=true to include archived quests or provide explicit quest names."
+          : "")
+    );
+  }
+
+  if (!quests && skipped.length > 0 && !includeArchived) {
+    console.log(
+      `Server skipping ${skipped.length} archived quest(s) on ${chain}: ${skipped
+        .slice(0, 5)
+        .map((s) => s.name)
+        .join(", ")}${skipped.length > 5 ? "…" : ""}`
+    );
+  }
+
   return async (ctx: Context) => {
     return await mapBlocks(
       {
@@ -25,16 +48,22 @@ export function createMain(chain: CHAINS, quests?: string[]) {
         queue: new TaskQueue(),
       },
       chain,
-      quests || Object.keys(QUESTS_CONFIG[chain])
+      questNames,
+      questConfig
     );
   };
 }
 
-async function mapBlocks(ctx: MappingContext, chain: CHAINS, quests: string[]) {
+async function mapBlocks(
+  ctx: MappingContext,
+  chain: CHAINS,
+  questNames: string[],
+  questConfigByName: Record<string, QuestConfig>
+) {
   const questsMap: Map<string, Quest> = new Map();
   const questSteps: Map<string, QuestStep> = new Map();
 
-  scheduleInit(chain, questsMap, questSteps, quests);
+  scheduleInit(chain, questsMap, questSteps, questNames, questConfigByName);
 
   const questsArray = Array.from(questsMap.values());
 
@@ -60,10 +89,11 @@ function scheduleInit(
   chain: CHAINS,
   quests: Map<string, Quest>,
   questSteps: Map<string, QuestStep>,
-  questNames: string[]
+  questNames: string[],
+  questConfigByName: Record<string, QuestConfig>
 ) {
   for (const questName of questNames) {
-    const questConfig = QUESTS_CONFIG[chain][questName];
+    const questConfig = questConfigByName[questName];
     if (!questConfig) {
       console.warn(`Quest ${questName} not found for chain ${chain}`);
       continue;
@@ -424,6 +454,11 @@ function mapBlock(ctx: MappingContext, block: BlockData, questsArray: Quest[]) {
         stepProgress.progressAmount += amount;
       } else if (quest && isInboundOnlyQuest(quest.name)) {
         // Count only inbound (positive) amounts; ignore outbound
+        if (amount > 0n) {
+          stepProgress.progressAmount += amount;
+        }
+      } else if (quest && isVolumeQuest(quest.name)) {
+        // Track gross volume by counting only inbound swaps
         if (amount > 0n) {
           stepProgress.progressAmount += amount;
         }
